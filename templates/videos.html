@@ -1,0 +1,895 @@
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="contentription" content="wucskkm,kaagekodamagge,water Society bdvt, kaagekodamaggi, wucs, gondi"/>
+<title>Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://fonts.googleapis.com/css?family=Lato:300|Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href= "{{ url_for('static',filename='styles/all.css') }}">
+
+<link rel="stylesheet" href= "{{ url_for('static',filename='menu.css') }}">
+
+<link rel="stylesheet" href= "{{ url_for('static',filename='styles/semi-transparent-buttons.css') }}">
+<script>
+  window.console = window.console || function(t) {};
+</script>
+
+
+
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+<style>
+
+.moda {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  top:0;
+  left:0;
+
+ /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+}
+
+/* Modal Content/Box */
+.moda-content {
+  background-color: #fefefe;
+
+  margin:auto;
+
+  width: 70%;
+  height:100% /* Could be more or less, depending on screen size */
+}
+
+
+.modaldoc {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 10px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modaldoc-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 80%;
+  height:100%;
+}
+
+.dyn{
+  width:30%;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.container img {
+  width: 70%;
+  height: 70%;
+}
+
+.container .btn {
+  position: absolute;
+  top: 50%;
+  right:1%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.container .btn:hover {
+  background-color: black;
+}
+
+*body {
+  margin: 0;
+}
+
+#navbar {
+  overflow: hidden;
+  background-color: #099;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 20px;
+}
+
+#navbar a {
+  float: left;
+  display: block;
+  color: #666;
+  text-align: center;
+  padding-right: 20px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+#navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+#navbar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.main {
+  padding: 16px;
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+  cursor: grab;
+  cursor: -o-grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.main img {
+  height: auto;
+  width: 60%;
+}
+
+.vid{
+  width:70%;
+  height:100%;
+}
+/* The Modal (background) */
+.modal100 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 0px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content100 {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 40%;
+  height:200%;
+  max-width: 1200px;
+}
+
+
+
+.modalc {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 10px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modalc-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  padding-left:15px;
+  padding-top:15px;
+  width: 50%;
+  height:100%;
+  max-width: 1200px;
+}
+
+.modal6 {
+   display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 10px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal6-content {
+
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  height:800%;
+}
+
+@media screen and (max-width: 500px) {
+
+  .modal6-content {
+
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 100%;
+  height:3000%;
+  max-width: 1200px;
+}
+
+  .modalc-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  padding-left:15px;
+  padding-top:15px;
+  width: 100%;
+  height:100%;
+  max-width: 1200px;
+
+}
+.modal-content100 {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 100%;
+  height:200%;
+  max-width: 1200px;
+}
+}
+
+div.gallery {
+  border: 1px solid #ccc;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: 250px;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.responsive {
+  padding: 0 6px;
+  float: left;
+  width: 24.99999%;
+}
+
+@media only screen and (max-width: 700px) {
+  .responsive {
+    width: 49.99999%;
+    margin: 6px 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .responsive {
+    width: 100%;
+  }
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.topnav a {
+  float: right;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: white;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.column {position: relative;}
+  .topnav.column .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.column a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal1-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 60%;
+  max-width: 1200px;
+}
+
+.modal7 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 0px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal71 Content */
+.modal71-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+
+}
+
+.modal2 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 20px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal2-content {
+
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 80%;
+  max-width: 1200px;
+}
+
+.modal3-content {
+
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 60%;
+  height:200%
+  max-width: 1200px;
+}
+
+.modal7-content {
+
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 80%;
+  height:200%
+  max-width: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 25%;
+  padding: 5px;
+   position: relative;
+}
+.column .content {
+  position: absolute;
+  bottom: 0;
+  background: rgb(0, 0, 0); /* Fallback color */
+  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+  color: #f1f1f1;
+  width: 100%;
+  text-align:center;
+}
+.content1{
+position:absolute
+right:0;
+width:100%;
+text-align:center;
+
+}
+/*text-align:center; Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 25%;
+  top: 5%;
+  width: 50%; /* Full width */
+  height: 70%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: fixed;
+  z-index:9999;
+  right: 25px;
+  top: 0;
+  color:white;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+.mySlides {
+  display: none;
+}
+
+.mySlides1 {
+  display: none;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+img {
+  margin-bottom: -4px;
+}
+
+.caption-container {
+  text-align: center;
+  background-color: black;
+  padding: 2px 16px;
+  color: white;
+}
+
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+
+img.hover-shadow {
+  transition: 0.3s;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+
+
+body {
+  background-image: url('/static/views/14.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment:fixed;
+}
+
+.line{
+
+
+}
+h3{
+
+ font-size: 30px;
+  font-family: "Noto Sans Kannada", sans-serif;
+  padding-bottom: 30px;
+}
+h1 {
+  font-size: 50px;
+  font-family: "Noto Sans Kannada", sans-serif;
+}
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskannada.css);
+
+/* column layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 500px) {
+  .column {
+    width: 100%;
+  }
+
+  .modal3-content {
+
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 100%;
+  height:200%
+  max-width: 1200px;
+}
+
+.modal2-content {
+
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 100%;
+  max-width: 1200px;
+}
+
+.close {
+  position: fixed;
+  z-index:9999;
+  right: 10px;
+  top: 0;
+  color:red;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  top:2%;
+  left: 0%;
+  width: 100%; /* Full width */
+  height: 90%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 20px;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin-top:2px;
+  border: 1px solid #888;
+  width: 100%;
+  height:100% /* Could be more or less, depending on screen size */
+}
+
+h1 {
+  font-size: 20px;
+  font-family: "Noto Sans Kannada", sans-serif;
+}
+
+h3{
+
+ font-size: 15px;
+  font-family: "Noto Sans Kannada", sans-serif;
+  padding-bottom: 30px;
+}
+
+.moda {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  top:0;
+  left:0;
+ /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+}
+
+/* Modal Content/Box */
+.moda-content {
+  background-color: #fefefe;
+  padding-top:30;
+  margin:auto;
+
+  width: 100%;
+  height:100% /* Could be more or less, depending on screen size */
+}
+
+body {
+  background-image: url('/static/views/14.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment:fixed;
+}
+
+.modal1-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 100%;
+  max-width: 1200px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 7px 10px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 60%;
+}
+
+.modal7-content {
+
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 100%;
+  height:200%
+  max-width: 1200px;
+}
+
+.vid{
+  width:100%;
+  height:250px;
+}
+
+.container img {
+  width: 90%;
+  height: 50%;
+}
+
+.dyn{
+  width:90%;
+  top:405;
+}
+
+.main img {
+  height: auto;
+  width: 100%;
+}
+
+}
+  </style>
+  <script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js"></script>
+
+</head>
+<body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+    <div class="imgcontainer">
+      <span onclick="window.location.href='{{ url_for( 'home') }}';" class="close" title="Close Modal">&times;</span>
+<iframe width="340" height="280" src="https://www.youtube.com/embed/QObTgyI4UPY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="340" height="280" src="https://www.youtube.com/embed/hAIDd2zRa0I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="340" height="280" src="https://www.youtube.com/embed/T-mzNhJOAA4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="340" height="280" src="https://www.youtube.com/embed/fAR4wDydRDc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="340" height="280" src="https://www.youtube.com/embed/2FxU3fYC5sY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    </div>
+<center>
+
+</center>
+
+</body>
+</html>

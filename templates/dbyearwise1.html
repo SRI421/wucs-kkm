@@ -1,0 +1,55 @@
+<form action="/dbupdate" method="POST">
+<div style="position:fixed; top:6%; left:6px; padding:0; margin:0;">
+  <input type="submit" class="button" style="background-color:yellow;color:red;padding: 15px 32px ;text-align: center;
+  text-decoration: none;" value="update" name="update"/>
+</div>
+<table style="width:100%">
+  <caption>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</caption>
+<tr>
+
+    <th>ಖಾತೆದಾರರ ಹೆಸರು</th>
+    <th>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+    <th>ಷೇರು ಖಾತೆ ಸಂಖ್ಯೆೆ</th>
+    <th>ವಿಳಾಸ(ಗ್ರಾಮ, ಹಳ್ಳಿ )</th>
+    <th>ಸರ್ವೆ ನಂ.</th>
+    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಬೆಳೆೆ1</th>
+    <th>ಬೆಳೆ1 ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಕರ1</th>
+    <th>ಬೆಳೆೆ2</th>
+    <th>ಬೆಳೆ2 ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಕರ2</th>
+    <th>ನೀರಿನ ಕರ</th>
+    <th>ನಿರ್ವಹಣೆ ಕರ</th>
+    <th>ಒಟ್ಟು ಬೇಡಿಕೆ</th>
+    <th>ವರ್ಷ</th>
+    <th>ನೀರಿನ ವೆಚ್ಚ ಪು.ಪುಟ ಸಂಖ್ಯೆೆ</th>
+    <th>ಮೊಬೈಲ್</th>
+    
+  </tr>
+  {% for i in data %}
+  <tr>
+    <td><input type="text" size=25% value="{{ i['name'] }}" name="{{ i['sid'] }}name" onKeyUp="transcrire(this)"></td>
+<td>{{ i['pass'] }}</td>
+<td><input type="text" size=3% value="{{ i['share'] }}" name="{{ i['sid'] }}share"></td>
+<td><input type="text" size=25% value="{{ i['village'] }}" name="{{ i['sid'] }}village" onKeyUp="transcrire(this)"></td>
+<td><input type="text" size=5%  value="{{ i['sno'] }}" name="{{ i['sid'] }}sno"></td>
+<td><input type="text" size=3%  value="{{ i['acers'] }}" name="{{ i['sid'] }}acers"></td>
+<td><input type="text" size=5%  value="{{ i['crop1'] }}" name="{{ i['sid'] }}crop1" onKeyUp="transcrire(this)"></td>
+<td><input type="text" size=3%  value="{{ i['area1'] }}" name="{{ i['sid'] }}area1"></td>
+<td><input type="text" size=3%  value="{{ i['kara1'] }}" name="{{ i['sid'] }}kara1"></td>
+<td><input type="text" size=5%  value="{{ i['crop2'] }}" name="{{ i['sid'] }}crop2" onKeyUp="transcrire(this)"></td>
+<td><input type="text" size=3%  value="{{ i['area2'] }}" name="{{ i['sid'] }}area2"></td>
+<td><input type="text" size=3%  value="{{ i['kara2'] }}" name="{{ i['sid'] }}kara2"></td>
+<td><input type="text" size=3%  value="{{ i['wtax'] }}" name="{{ i['sid'] }}wtax"></td>
+<td><input type="text" size=3%  value="{{ i['mtax'] }}" name="{{ i['sid'] }}mtax"></td>
+<td><input type="text" size=3%  value="{{ i['total'] }}" name="{{ i['sid'] }}total"></td>
+<input type="text" size=3% hidden value="{{ i['year'] }}" name="year">
+<td>{{ i['year'] }}</td>
+<td><input type="text" size=3%  value="{{ i['pp'] }}" name="{{ i['sid'] }}pp"></td>
+<td><input type="text" size=10%  value="{{ i['phone'] }}" name="{{ i['sid'] }}phone"></td>
+  </tr>
+  {% endfor %}
+</table>
+</form>

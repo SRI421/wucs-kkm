@@ -1,0 +1,44 @@
+div.scrollmenu {
+  background-color: rgba(255, 255, 255, 0.5);
+  overflow: auto;
+  white-space: nowrap;
+}
+
+div.scrollmenu a {
+  display: inline-block;
+  color: white;
+
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  background-color: #4CAF50;
+
+}
+
+div.scrollmenu a:hover {
+  background-color: black;
+}
+
+@media screen and (max-width: 500px) {
+div.scrollmenu {
+  background-color: rgba(255, 255, 255, 0.5);
+  overflow: auto;
+  white-space: nowrap;
+} 
+
+div.scrollmenu a {
+  display: inline-block;
+  color: white;
+
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  background-color: #4CAF50;
+
+}
+
+
+
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: left;
+}
+    body {
+        height: 842px;
+        width: 795px;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+  @media print {
+  
+   h2 {page-break-before:auto;}
+   
+}
+@media print {
+table {page-break-inside:avoid;}
+}
+</style>
+</head>
+<body >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+				<center><img src="static/images/icon1.png" style="width:100px;height:70px;padding-top:50px;"/><h1 style="margin:0;">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ </h1>
+	<h3 style="margin:0;">ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ </h3></center><hr>
+
+{% for i in data %}
+<table style="border: none;">
+  <tr>
+    <th style="border:none ;">ಖಾತೆದಾರರ ಹೆಸರು</th>
+    <th style="border:none ;width:200px;">= {{ i["name"] }}</th>
+    <th style="border:none ;">ವಿಳಾಸ</th>
+    <th style="border:none ;">= {{ i["village"] }}</th>
+  </tr>
+  <tr>
+        <th style="border:none ;">ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+    <th style="border:none ;width:200px;">= {{ i["pass"] }}</th>
+    <th style="border:none ;">ಷೇರು ಖಾತೆ ಸಂಖ್ಯೆ</th>
+    <th style="border:none ;">= {{ i["share"] }}</th>
+  </tr>
+  <tr>
+    <th style="border:none ;">ನೀರಿನ ವೆಚ್ಚ ಪು.ಪುಟ ಸಂಖ್ಯೆ </th>
+    <th style="border:none ;width:200px;">= {{ i["pp"] }}</th>
+    <th style="border:none ;">ಮೊಬೈಲ್ </th>
+    <th style="border:none ;">= {{ i["phone"] }}</th>
+  </tr>
+</table><hr>
+{% for y in data5 %}
+<table style="width:100%">
+  <tr>
+    <th>ಒಟ್ಟು ಬೇಡಿಕೆ={{ y["SUM(total_amount)"] }}</th>
+    <th>ಪಾವತಿಸಿದ ಮೊತ್ತ={{ y["SUM(paid_amount)"] }}</th>
+        <th>ಬಾಕಿ ಮೊತ್ತ={{ y["SUM(balance_amount)"] }}</th>
+  </tr>
+
+</table>
+{% endfor %}
+
+	  			{%for k in data4 %}
+			{% if k["ypass"]==i["pass"] %}
+		
+
+<table style="width:100%">
+  <caption><h2><center>{{ k["year"] }}</center></h2></caption>
+  <tr>
+    <th>ಸರ್ವೆ ನಂ.</th>
+    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಬೆಳೆ</th>
+    <th>ಬೆಳೆ ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಕರ</th>
+        <th>ಬೆಳೆ</th>
+    <th>ಬೆಳೆ ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಕರ</th>
+    <th>ನೀರಿನ ಕರ</th>
+    <th>ನಿರ್ವಹಣೆ ಕರ</th>
+    <th> ಒಟ್ಟು ಬೇಡಿಕೆ</th>
+  </tr>
+  			{% for j in data1 %}
+				{% if k["year"]==j["year"] %}
+  <tr>
+    <td>{{ j["sno"] }}</td>
+    <td>{{ j["acers"] }}</td>
+        <td>{{ j["crop1"] }}</td>
+    <td>{{ j["area1"] }}</td>
+        <td>{{ j["kara1"] }}</td>
+    <td>{{ j["crop2"] }}</td>
+    <td>{{ j["arae2"] }}</td>
+    <td>{{ j["kara2"] }}</td>
+    <td>{{ j["wtax"] }}</td>
+    <td>{{ j["mtax"] }}</td>
+        <td>{{ j["total"] }}</td>
+  </tr>
+			{% endif %}
+			{% endfor %}
+</table>
+<br>
+	  {% for a in data3 %}
+			{% if k["year"]==a["year"] %}
+      <table style="">
+  <tr>
+    <th>ಒಟ್ಟು ಬೇಡಿಕೆ</th>
+    <th>ಪಾವತಿಸಿದ ಮೊತ್ತ</th>
+        <th>ಬಾಕಿ ಮೊತ್ತ</th>
+    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+  </tr>
+  <tr>
+    <td>{{ a["total_amount"] }}</td>
+    <td>{{ a["paid_amount"] }}</td>
+        <td>{{ a["balance_amount"] }}</td>
+    <td>{{ a["total_acers"] }}</td>
+  </tr>
+
+</table><hr>
+{% endif %}
+			{% endfor %}
+
+            {% endif %}
+			{% endfor %}
+{% endfor %}
+</body>
+</html>

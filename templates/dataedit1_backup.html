@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="static/google_jsapi.js">
+    </script>
+<script type="text/javascript">
+
+      // Load the Google Transliterate API
+      google.load("elements", "1", {
+            packages: "transliteration"
+          });
+
+
+    </script>
+
+
+
+    <title>wucskkm database edit</title>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0px;
+  text-align: center;
+}
+@media print {
+td,th,tr {page-break-inside:avoid;}
+}
+@media print
+{
+.noprint {display:none;}
+}
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('/static/ajax-loader.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .modal {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+button{
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding:0;
+  text-align: center;
+  text-decoration: none;
+  display: inline;
+  font-size: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+
+  input {
+    font-weight:bold;
+     width: 100%;
+    height: 100%;
+     box-sizing: border-box;
+     -webkit-box-sizing:border-box;
+     -moz-box-sizing: border-box;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+</style>
+<script src="static/carkan.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+</head>
+
+<body class="container">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+
+  <form action="/datapay" method="post">
+    <select name="year" id="year" onchange="this.form.submit()" style="position:fixed;left:5px;top:5px;width:100px;height:20px;z-index:999;">
+            {% for y in dby %}
+                  {% if year==y%}
+                      <option value="{{y}}" selected>{{y}}</option>
+                  {%endif%}
+                  {% if year!=y%}
+                      <option value="{{y}}" >{{y}}</option>
+                  {%endif%}
+            {% endfor %}
+    </select>
+  </form>
+<form action="/datapayup" onkeydown="return event.key != 'Enter';" method="post">
+<div style="position:sticky;top:0;width:100%;background:#ADD8E6;">
+
+    <center><h4 style="padding:0;margin:0;">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</h4></center>
+ರೈತರ ಹೆಸರು:<input list="browsers" id="searchname" onkeyup="search_animal()" style="width:400px;">
+<datalist id="browsers"> 
+{% for j in data %}
+<option value="{{ j['name']}}">{{ j['name']}}</option>
+{%endfor%}
+</datalist>
+        <script>
+      function onL() {
+        var opt = {
+            sourceLanguage:
+                google.elements.transliteration.LanguageCode.ENGLISH,
+            destinationLanguage:
+                [google.elements.transliteration.LanguageCode.KANNADA],
+            shortcutKey: 'ctrl+g',
+            transliterationEnabled: true
+        };
+        
+        // Create an instance on TransliterationControl with the required
+        // options.
+        var con =
+            new google.elements.transliteration.TransliterationControl(opt);
+
+        // Enable transliteration in the textbox with id
+        // 'transliterateTextarea'.
+          b="searchname"
+          con.makeTransliteratable([b]);        
+
+      }
+      google.setOnLoadCallback(onL);
+
+function search_animal() {
+    let input = document.getElementById('searchname').value
+    input=input.trim()
+    
+    let x = document.getElementsByClassName('animals');
+      
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.includes(input)) {
+            x[i].style.display="none";
+        }
+        else {
+            x[i].style.display="list-item";                 
+        }
+    }
+}          
+        </script>
+  <table class="center" style="width:90%">
+
+    
+    <tr><input type="text" hidden name="year" value="{{year}}"/>
+        <th style="width:2%;" class="noprint">No</th>
+        <th style="width:10%;" class="noprint">
+<input type="button" style="padding-top:10;padding-bottom:10;background:#F4D03F;font-size:20;" id="addnew" name="addnew" value="Add Year" onclick="location.href='/year';"/>
+        </th>
+        <th style="width:4%;">ಪಾಸ್</th>
+      <th style="width:4%;">ಷೇರು</th>
+        <th style="width:31%;">ರೈತರ ಹೆಸರು</th>
+      <!--<th style="width:6%;">ನೀರಿನ ಕರ</th>
+      <th style="width:6%;">ನಿರ್ವಹಣಾ ಕರ</th>-->
+      <th style="width:6%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+      <th style="width:6%;">ಹಿಂದಿನ ಬಾಕಿ</th>
+      <th style="width:6%;">ಒಟ್ಟು ಮೊತ್ತ</th>
+      <th style="width:6%;">ಪಾವತಿ</th>
+      <th style="width:6%;">ಬಾಕಿ ಮೊತ್ತ</th>
+      
+      <th style="width:10%;" class="noprint"><input type="submit" style="padding-top:10;padding-bottom:10;background:#F4D03F;font-size:20;" id="up" name="up" value="UPDATE"/></th>
+    </tr>
+  </table>
+</div>
+  <script>
+$body = $("body");
+$("#up").on("click",()=>{
+$body.addClass("loading")
+});
+</script>
+<div style="width:100%;background:#D3D3D3" id="newone"> 
+
+    <table class="center" style=" width:90%; ">
+      {% for i in data %}
+
+	    <tr class="animals">
+        <th style="width:2%;" class="noprint">{{ i['no'] }}</th>
+        <th style="width:10%;" class="noprint"><input type="submit" style="padding-top:10;padding-bottom:10;background:	#90EE90;" id="{{ i['pass']}}" name="{{ i['pass']}}" value="PrintPreview"/></th>
+        <th style="width:4%;"><input type="number"  value="{{ i['pass']}}" name="pass{{ i['_id']}}" id="pass{{ i['_id']}}"/></th>
+
+        <th style="width:4%;"><input type="number"  value="{{ i['share']}}" name="share{{ i['_id']}}" id="share{{ i['_id']}}"/></th>
+        <th style="width:31%;text-align: left;"><input type="text" name="name{{ i['_id']}}" value="{{ i['name']}}" id="name{{ i['_id']}}"/></th>
+        <script>
+      function onLoad{{ i['_id']}}() {
+        var options{{ i['_id']}} = {
+            sourceLanguage:
+                google.elements.transliteration.LanguageCode.ENGLISH,
+            destinationLanguage:
+                [google.elements.transliteration.LanguageCode.KANNADA],
+            shortcutKey: 'ctrl+g',
+            transliterationEnabled: true
+        };
+        
+        // Create an instance on TransliterationControl with the required
+        // options.
+        var control{{ i['_id']}} =
+            new google.elements.transliteration.TransliterationControl(options{{ i['_id']}});
+
+        // Enable transliteration in the textbox with id
+        // 'transliterateTextarea'.
+          a="name"+"{{ i['_id']}}"
+          control{{ i['_id']}}.makeTransliteratable([a]);        
+
+      }
+      google.setOnLoadCallback(onLoad{{ i['_id']}});
+
+        </script>
+        
+      <!--<th style="width:6%;"><input type="text" disabled name="wtax{{ i['_id']}}" value="{{ i['wtax']}}" id="wtax{{ i['_id']}}"/></th>
+      <th style="width:6%;"><input type="text" disabled name="mtax{{ i['_id']}}" value="{{ i['mtax']}}" id="mtax{{ i['_id']}}" /></th>-->
+      <th style="width:6%;"><input type="text" disabled name="rt{{ i['_id']}}" value="{{ i['rt']}}" id="t1{{ i['_id']}}" /></th>
+      <th style="width:6%;"><input type="text" disabled name="old{{ i['_id']}}" value="{{ i['old']}}" id="bal{{ i['_id']}}" /></th>
+      <th style="width:6%;"><input type="text" disabled name="total{{ i['_id']}}" value="{{ i['total']}}" id="t2{{ i['_id']}}"/></th>
+      <th style="width:6%;"><input type="text" name="paid{{ i['_id']}}" value="{{ i['paid']}}" id="paid{{ i['_id']}}" /></th>
+      <th style="width:6%;"><input type="text" name="tbal{{ i['_id']}}" value="{{ i['balance']}}" id="tbal{{ i['_id']}}"/></th>
+ <th style="width:10%;" class="noprint"><input  type="text" name="pay{{ i['_id']}}" value="{{ i['pay']}}" id="pay{{ i['_id']}}" onchange="my4Function{{ i['_id']}}(this.value)"/></th> 
+      
+    </tr>
+  
+
+
+<script>
+
+
+
+function my4Function{{ i['_id']}}(val) {
+paid=document.getElementById("paid{{ i['_id']}}").value
+bal=document.getElementById("tbal{{ i['_id']}}").value
+p=parseFloat(paid)+parseFloat(val);
+document.getElementById("paid{{ i['_id']}}").value=parseFloat(p).toFixed(2);
+t=parseFloat(bal)-parseFloat(p)
+document.getElementById("tbal{{ i['_id']}}").value=parseFloat(t).toFixed(2);
+}
+  
+
+</script> 
+      {% endfor %}
+    </table>
+</div>
+  <div class="modal"><!-- Place at bottom of page --></div>
+  <script>
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+     ajaxStop: function() { $body.removeClass("loading"); }    
+});
+</script>
+</form>
+
+<script type="text/javascript" src="static/js/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="static/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="static/js/jszip.min.js"></script>
+<script type="text/javascript" src="static/js/pdfmake.min.js"></script>
+<script type="text/javascript" src="static/js/vfs_fonts.js"></script>
+<script type="text/javascript" src="static/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="static/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="static/js/app.js"></script>
+<script type="text/javascript" src="static/js/jquery.mark.min.js"></script>
+<script type="text/javascript" src="static/js/datatables.mark.js"></script>
+<script type="text/javascript" src="static/js/buttons.colVis.min.js"></script>
+
+
+</body>
+
+</html>

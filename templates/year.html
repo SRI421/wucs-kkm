@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="static/google_jsapi.js">
+    </script>
+<script type="text/javascript">
+
+      // Load the Google Transliterate API
+      google.load("elements", "1", {
+            packages: "transliteration"
+          });
+
+
+    </script>
+
+
+    <title>wucskkm database edit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal1-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 95%;
+}
+
+/* The Close Button */
+.close {
+  color: red;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0px;
+  text-align: center;
+}
+@media print {
+td,th,tr {page-break-inside:avoid;}
+}
+
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('/static/ajax-loader.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .modal {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+button{
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding:0;
+  text-align: center;
+  text-decoration: none;
+  display: inline;
+  font-size: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+
+  input {
+    font-weight:bold;
+     width: 100%;
+    height: 100%;
+     box-sizing: border-box;
+     -webkit-box-sizing:border-box;
+     -moz-box-sizing: border-box;
+}
+</style>
+<script src="static/carkan.js"></script>
+</head>
+
+<body class="container">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+
+
+<form action="/datayearup" onkeydown="return event.key != 'Enter';" method="post">
+    <center><h4 style="padding:0;margin:0;">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</h4>
+    <p>ನೀರಿನ ಕರ ಮತ್ತು ನಿರ್ವಹಣಾ ಕರ ಪ್ರತಿ ಗುಂಟೆಗೆ (ಒಂದು ಎಕರೆಗೆ 40 ಗುಂಟೆ)</p></center>
+  <table style="width:70%" class="center">
+
+    <tr style="background-color:#D3D3D3;">
+        <th style="width:10%;">-</th>
+        <th style="width:20%;">Year</th>
+    
+        <th style="width:15%;">ಭತ್ತ</th>
+
+        <th style="width:15%;">ಕಬ್ಬು</th>
+
+      <th style="width:15%;">ತೋಟ</th>
+
+      <th style="width:15%;">ನಿರ್ವಹಣಾ ಕರ</th>
+
+      <th style="width:10%;">-</th>
+    </tr>
+  
+
+ 
+  {%for i in ye%}
+  
+	    <tr>
+
+      
+        <th style="width:10%;">-</th>
+        <th style="width:20%;">{{i['y']}}</th>
+    
+        <th style="width:15%;">{{i['batha']}}</th>
+
+        <th style="width:15%;">{{i['kabbu']}}</th>
+
+      <th style="width:15%;">{{i['tota']}}</th>
+
+      <th style="width:15%;">{{i['mtax']}}</th>
+
+      <th style="width:10%;">        {%if pre!="2020-21"%}
+        {%if pre==i['y']%}
+        <input style="background:#E74C3C;" type="submit" name="del" value="DELETE {{pre}}" id="del"/>
+        {%endif%}
+      {%endif%}
+      </th>
+        
+  <script>
+$body = $("body");
+$("#del").on("click",()=>{
+$body.addClass("loading")
+});
+</script> 
+ 
+    </tr>
+  {%endfor%}
+    <tr >
+        <th style="width:10%;"><input type="button" style="padding-top:10;padding-bottom:10;background:#F4D03F;" id="myBtn" name="myBtn" value="Add {{next}}"/></th>
+  
+        <th style="width:20%;"></th>
+    
+        <th style="width:15%;"></th>
+
+        <th style="width:15%;"></th>
+
+      <th style="width:15%;"></th>
+
+      <th style="width:15%;"></th>
+
+      <th style="width:10%;">
+
+      </th>
+
+            
+    </tr>
+  </table>
+
+
+
+<div id="myModal" class="modal1">
+
+  <!-- Modal content -->
+  <div class="modal1-content">
+    <span class="close">&times;</span>
+    <div>
+      <center><p>ನೀರಿನ ಕರ ಮತ್ತು ನಿರ್ವಹಣಾ ಕರ ಪ್ರತಿ ಗುಂಟೆಗೆ</p></center>
+    <table style="width:70%" class="center">
+
+    
+    <tr>
+        
+        
+        <th style="width:25%;">Year</th>
+    
+        <th style="width:15%;">ಭತ್ತ</th>
+
+        <th style="width:15%;">ಕಬ್ಬು</th>
+
+      <th style="width:15%;">ತೋಟ</th>
+
+      <th style="width:15%;">ನಿರ್ವಹಣಾ ಕರ</th>
+
+      <th style="width:15%;">-</th>
+    </tr>
+
+	    <tr>
+                <input type="text" hidden name="year" value="{{next}}" id="year" />
+        <th style="width:25%;">{{next}}</th>
+    
+        <th style="width:15%;"><input type="text" name="batha" value="5" id="batha" /></th>
+
+        <th style="width:15%;"><input type="text" name="kabbu" value="10" id="kabbu" /></th>
+
+      <th style="width:15%;"><input type="text" name="tota" value="1.5" id="tota" /></th>
+
+      <th style="width:15%;"><input type="text" name="mt" value="1" id="mt" /></th>
+
+      <th style="width:15%;"><input style="background:#E74C3C;" type="Submit" name="submit" value="Submit" id="submit" onclick="moda()"/></th>
+        
+  <script>
+    function moda(){
+    var modal1 = document.getElementById("myModal");
+    modal1.style.display = "none";
+$body = $("body");
+$body.addClass("loading")
+
+    }
+</script>      
+    </tr>
+  </table>
+    </div>
+    <br>
+    <span class="close"><input id="clz" type="button" value="Cancel"/></span>
+  </div>
+
+</div>
+
+<script>
+// Get the modal
+var modal1 = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+var close=document.getElementById("clz");
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal1.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal1.style.display = "none";
+}
+close.onclick = function() {
+  modal1.style.display = "none";
+}
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal1) {
+    modal1.style.display = "none";
+  }
+}
+</script>
+  
+
+  <div class="modal"><!-- Place at bottom of page --></div>
+  <script>
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+     ajaxStop: function() { $body.removeClass("loading"); }    
+});
+</script>
+</form>
+
+<script type="text/javascript" src="static/js/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="static/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="static/js/jszip.min.js"></script>
+<script type="text/javascript" src="static/js/pdfmake.min.js"></script>
+<script type="text/javascript" src="static/js/vfs_fonts.js"></script>
+<script type="text/javascript" src="static/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="static/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="static/js/app.js"></script>
+<script type="text/javascript" src="static/js/jquery.mark.min.js"></script>
+<script type="text/javascript" src="static/js/datatables.mark.js"></script>
+<script type="text/javascript" src="static/js/buttons.colVis.min.js"></script>
+
+
+</body>
+
+</html>

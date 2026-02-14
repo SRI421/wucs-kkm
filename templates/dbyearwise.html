@@ -1,0 +1,48 @@
+<table style="width:100%">
+  <caption>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</caption>
+  <tr>
+
+    <th>ಖಾತೆದಾರರ ಹೆಸರು</th>
+    <th>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+    <th>ಷೇರು ಖಾತೆ ಸಂಖ್ಯೆೆ</th>
+    <th>ವಿಳಾಸ(ಗ್ರಾಮ, ಹಳ್ಳಿ )</th>
+    <th>ಸರ್ವೆ ನಂ.</th>
+    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಬೆಳೆೆ1</th>
+    <th>ಬೆಳೆ1 ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಕರ1</th>
+    <th>ಬೆಳೆೆ2</th>
+    <th>ಬೆಳೆ2 ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಕರ2</th>
+    <th>ನೀರಿನ ಕರ</th>
+    <th>ನಿರ್ವಹಣೆ ಕರ</th>
+    <th>ಒಟ್ಟು ಬೇಡಿಕೆ</th>
+    <th>ವರ್ಷ</th>
+    <th>ನೀರಿನ ವೆಚ್ಚ ಪು.ಪುಟ ಸಂಖ್ಯೆೆ</th>
+    <th>ಮೊಬೈಲ್</th>
+    
+  </tr>
+  {% for i in suggestions %}
+  <tr>
+    <td>{{ i['name'] }}</td>
+<td>{{ i['pass'] }}</td>
+<td>{{ i['share'] }}</td>
+<td>{{ i['village'] }}</td>
+<td>{{ i['sno'] }}</td>
+<td>{{ i['acers'] }}</td>
+<td>{{ i['crop1'] }}</td>
+<td>{{ i['area1'] }}</td>
+<td>{{ i['kara1'] }}</td>
+<td>{{ i['crop2'] }}</td>
+<td>{{ i['area2'] }}</td>
+<td>{{ i['kara2'] }}</td>
+<td>{{ i['wtax'] }}</td>
+<td>{{ i['mtax'] }}</td>
+<td>{{ i['total'] }}</td>
+<td>{{ i['year'] }}</td>
+<td>{{ i['pp'] }}</td>
+<td>{{ i['phone'] }}</td>
+  </tr>
+  {% endfor %}
+</table>

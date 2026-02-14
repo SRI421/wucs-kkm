@@ -1,0 +1,1886 @@
+
+<html>
+<head>
+  <meta name="description" content="water user co-operative society kaagekodamagge bhadravathi">
+  <meta name="keywords" content="wucs, wucskkm, kkm, water, society, kaagekodamagge, kaagekodamaggi, cskm , wuc, wucskm">
+  <meta name="author" content="srikanth">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="contentription" content="wucskkm,kaagekodamagge,water Society bdvt, kaagekodamaggi, wucs, gondi"/>
+<title>Wucskkm-ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ,ಕಾಗೆಕೋಡಮಗ್ಗೆ,ಭದ್ರಾವತಿ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://fonts.googleapis.com/css?family=Lato:300|Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href= "{{ url_for('static',filename='styles/all.css') }}">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href= "{{ url_for('static',filename='menu.css') }}">
+
+<link rel="stylesheet" href= "{{ url_for('static',filename='styles/semi-transparent-buttons.css') }}">
+<script>
+  window.console = window.console || function(t) {};
+</script>
+<script>
+jQuery( document ).ready(function( $ ) {
+
+   //Use this inside your document ready jQuery 
+   $(window).on('popstate', function() {
+      location.reload(true);
+   });
+
+});
+</script>
+  
+  
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+<style>
+.mloader {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('/static/ajax-loader.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .mloader {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .mloader {
+    display: block;
+}
+.noti {
+
+  color: white;
+
+
+  position: relative;
+  display: inline-block;
+
+}
+
+.noti:hover {
+  background: blue;
+}
+
+.noti .badge {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+
+
+.notification2 {
+  background-color: yellow;
+  color: black;
+  text-decoration: none;
+  padding: 0;
+  padding-right:10px;
+  
+  position: relative;
+  display: inline-block;
+  border-radius: 20px;
+}
+.notification1 {
+  background-color: yellow;
+  color: black;
+  text-decoration: none;
+  padding-top: 12px;
+    padding-bottom: 12px;
+    padding-right: 30px;
+    
+  display: inline-block;
+  border-radius: 10px;
+}
+
+
+.notification2 .badge {
+  position: absolute;
+  top: 10px;
+  right: 0px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  color: black;
+}
+
+  .board{
+  width:80%;
+}
+.card {
+	background-color: #fff;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+	border-radius: 20px;
+
+	padding: 20px;
+
+	min-height: 130px;
+
+
+}
+
+.card:hover {
+	box-shadow: 8px 28px 50px rgba(39, 44, 49, 0.07),
+		1px 6px 12px rgba(39, 44, 49, 0.04);
+	transform: translate3D(0, -1px, 0) scale(1.02);
+	transition: all 0.5s ease;
+}
+.notification {
+  background-color: green;
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification:hover {
+  background: red;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+
+.pdfobject-container {
+	width: 100%;
+
+	height: 600px;
+
+}
+
+.pdfobject { border: solid 1px #666; }
+#results { padding: 1rem; }
+.hidden { display: none; }
+.success { color: #4F8A10; background-color: #DFF2BF; }
+.fail { color: #D8000C; background-color: #FFBABA; }
+
+.modgal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  top:0;
+  width: 100%; /* Full width */
+   /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modgal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 60%; /* Could be more or less, depending on screen size */
+}
+.moda {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  top:0;
+  left:0;
+
+ /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+}
+
+/* Modal Content/Box */
+.moda-content {
+  background-color: #fefefe;
+  
+  margin:auto;
+  
+  width: 70%;
+  height:100% /* Could be more or less, depending on screen size */
+}
+
+
+.modaldoc {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 10px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modaldoc-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 80%;
+  height:100%;
+}
+
+.dyn{
+  width:30%;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.container img {
+  width: 70%;
+  height: 70%;
+}
+
+.container .btn {
+  position: absolute;
+  top: 50%;
+  right:1%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.container .btn:hover {
+  background-color: black;
+}
+
+*body {
+  margin: 0;
+}
+
+#navbar {
+  overflow: hidden;
+  background-color: #099;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 20px;
+}
+
+#navbar a {
+  float: left;
+  display: block;
+  color: #666;
+  text-align: center;
+  padding-right: 20px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+#navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+#navbar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.main {
+  padding: 16px;
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+  cursor: grab;
+  cursor: -o-grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.main img {
+  height: auto;
+  width: 60%;
+}
+
+.vid{
+  width:100%;
+  height:100%;
+}
+/* The Modal (background) */
+.modal100 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 0px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content100 {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 40%;
+  height:200%;
+  max-width: 1200px;
+}
+
+
+
+.modalc {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 10px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modalc-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  padding-left:15px;
+  padding-top:15px;
+  width: 50%;
+  height:100%;
+  max-width: 1200px;
+}
+
+.modal6 {
+   display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 10px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal6-content {
+ 
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  height:800%;
+}
+
+@media screen and (max-width: 500px) {
+	
+	.modal6-content {
+ 
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 100%;
+  height:3000%;
+  max-width: 1200px;
+}
+	
+	.modalc-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  padding-left:15px;
+  padding-top:15px;
+  width: 100%;
+  height:100%;
+  max-width: 1200px;
+	
+}
+.modal-content100 {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 100%;
+  height:200%;
+  max-width: 1200px;
+}
+}
+
+div.gallery {
+  border: 1px solid #ccc;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: 250px;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.responsive {
+  padding: 0 6px;
+  float: left;
+  width: 24.99999%;
+}
+
+@media only screen and (max-width: 700px) {
+  .responsive {
+    width: 49.99999%;
+    margin: 6px 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .responsive {
+    width: 100%;
+  }
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.topnav a {
+  float: right;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: white;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.column {position: relative;}
+  .topnav.column .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.column a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal1-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 60%;
+  max-width: 1200px;
+}
+
+.modal7 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 0px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal71 Content */
+.modal71-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+
+}
+
+.modalboard {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modalboard-content {
+ 
+  background-color: grey;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 60%;
+}
+
+.modal2 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 20px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal2-content {
+ 
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 80%;
+  max-width: 1200px;
+}
+
+.modal3-content {
+ 
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 60%;
+  height:200%
+  max-width: 1200px;
+}
+
+.modal7-content {
+ 
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 80%;
+  height:200%
+  max-width: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 25%;
+  padding: 5px;
+   position: relative;
+}
+.column .content {
+	position: absolute;
+	bottom: 0;
+  background: rgb(0, 0, 0); /* Fallback color */
+  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+  color: #f1f1f1;
+  width: 100%;
+  text-align:center;
+}
+.content1{
+position:absolute
+right:0;
+width:100%;
+text-align:center;
+
+}
+/*text-align:center; Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 25%;
+  top: 5%;
+  width: 50%; /* Full width */
+  height: 70%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: fixed;
+  z-index:9999;
+  right: 25px;
+  top: 0;
+  color:white;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.closedoc {
+  position: fixed;
+  z-index:9999;
+  right: 25px;
+  top: 0;
+  color:white;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+.mySlides {
+  display: none;
+}
+
+.mySlides1 {
+  display: none;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+img {
+  margin-bottom: -4px;
+}
+
+.caption-container {
+  text-align: center;
+  background-color: black;
+  padding: 2px 16px;
+  color: white;
+}
+
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+
+img.hover-shadow {
+  transition: 0.3s;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+
+
+body {
+  background-image: url('/static/views/14.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment:fixed;
+}
+
+.line{
+
+
+}
+h3{
+
+ font-size: 30px;
+  font-family: "Noto Sans Kannada", sans-serif;
+
+}
+h1 {
+  font-size: 50px;
+  font-family: "Noto Sans Kannada", sans-serif;
+}
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskannada.css);
+
+/* column layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 500px) {
+
+.modalboard {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modalboard-content {
+ 
+  background-color: grey;
+  margin:0;
+ /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 100%;
+}
+
+  .board{
+  width:96%;
+}
+  .column {
+    width: 100%;
+  }
+  
+  .modal3-content {
+ 
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 100%;
+  height:200%
+  max-width: 1200px;
+}
+
+.modal2-content {
+ 
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 100%;
+  max-width: 1200px;
+}
+
+.close {
+  position: fixed;
+  z-index:9999;
+  right: 10px;
+  top: 0;
+  color:red;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  top:2%;
+  left: 0%;
+  width: 100%; /* Full width */
+  height: 90%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 20px;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin-top:2px;
+  border: 1px solid #888;
+  width: 100%;
+  height:100% /* Could be more or less, depending on screen size */
+}
+
+.modgal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  top:0;
+  left: 0%;
+  width: 100%; /* Full width */
+ /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 8px;
+}
+
+.modgal-content {
+  background-color: #fefefe;
+  margin-top:2px;
+  border: 1px solid #888;
+  width: 100%;
+  height:100% /* Could be more or less, depending on screen size */
+}
+
+
+h1 {
+  font-size: 20px;
+  font-family: "Noto Sans Kannada", sans-serif;
+}
+
+h3{
+
+ font-size: 15px;
+  font-family: "Noto Sans Kannada", sans-serif;
+
+}
+
+.moda {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  top:0;
+  left:0;
+  overflow:auto;
+ /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+}
+
+/* Modal Content/Box */
+.moda-content {
+  background-color: #fefefe;
+  padding-top:30;
+  margin:auto;
+  overflow:auto;
+  width: 100%;
+  height:100% /* Could be more or less, depending on screen size */
+}
+
+body {
+  background-image: url('/static/views/14.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment:fixed;
+}
+
+.modal1-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 100%;
+  max-width: 1200px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 7px 10px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 60%;
+}
+
+.modal7-content {
+ 
+  background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+
+  width: 100%;
+  height:200%
+  max-width: 1200px;
+}
+
+.vid{
+  width:100%;
+  height:250px;
+}
+
+.container img {
+  width: 90%;
+  height: 50%;
+}
+
+.dyn{
+  width:90%;
+  top:405;
+}
+
+.main img {
+  height: auto;
+  width: 100%;
+}
+
+.modaldoc {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 0px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modaldoc-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding-right: 0;
+  width: 100%;
+  height:100%;
+}
+
+		 .closedoc {
+  position: fixed;
+  right: 50px;
+  top: 0;
+  color:red;
+  font-size: 30px;
+  font-weight: bold;
+  z-index:1;
+}
+
+}
+
+
+
+  
+
+</style>
+
+
+  <script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js"></script>
+
+</head>
+
+<body >
+
+
+<div class="scrollmenu">
+	<div class="topnav" id="myTopnav">
+	<a onclick="document.getElementById('id01').style.display='block'" style="width:100px;float:left;" >Login</a>
+
+  <a href="/" class="active" style="width:100px;" >Home</a>
+  <a href="/feeds"  >Feedback</a>
+    <a href="/map"  >click-map</a>
+    <a href="/list"  >List</a>
+<a onclick="document.getElementById('id04').style.display='block'"  >Contacts</a>
+<a onclick="document.getElementById('idgal').style.display='block'"  >Gallery</a>
+<a href="/allmap"   >Map</a>
+<a href="/document"   >Documents</a>
+  <a href="/socinfo"   >Society Information</a>
+
+    <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+</div>
+</div>
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " column";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+<div style="background-color: rgba(255, 255, 255, 0.5);padding:0">
+<h4  style="color:red;font-size:20; margin-top:0;padding-bottom:0;">
+<marquee BEHAVIOR=SCROLL SCROLLDELAY=120>{{ hello }}</marquee></h4></div>
+
+
+
+
+
+
+
+<div id="idgal" class="modgal">
+
+  <div class="modgal-content animate" >
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('idgal').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+    <div class="container" style="padding-top:160px;padding-bottom:160px">
+<div style="padding-bottom:10px">
+	<center><a class="semi-transparent-button is-blue" style="font-family:Noto Sans Kannada, sans-serif;font-size:25px;padding:40;" href="/gallery" onclick="document.getElementById('idloader').style.display='block'"><b>IMAGES</b></a>
+  <a class="semi-transparent-button is-blue" style="font-family:Noto Sans Kannada, sans-serif;font-size:25px;margin:30;padding:40;" href="/videos" onclick="document.getElementById('idloader').style.display='block'"><b>VIDEOS  </b></a>
+</center>
+</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById('idgal');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+<!--
+<div id="id07" class="modal2">
+<div class="modal7-content animate">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id07').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+	<div>
+    <div class="container">
+  	<center><img src="/static/map/1.jpeg" onclick="openModal7();currentSlide7(1)" width=60% height=60%></center>
+  <button class="btn" style="  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+
+  top:40px;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="openModal7();currentSlide7(1)">+</button>
+
+  <button class="btn" style="  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  top:120px;
+
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="openModal7();currentSlide7(1)" >-</button>
+</div>
+
+	<center><img src="/static/map/5.jpeg" width=60% height=100%></center>
+	<img src="/static/map/6.jpeg" width=100% height=100%>
+  <div class="container">
+  	<center>			<img src="/static/map/3.jpeg" onclick="openModal7();currentSlide7(2)" width=100% height=100%></center>
+  <button class="btn" style="  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+
+  top:40px;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="openModal7();currentSlide7(2)">+</button>
+
+  <button class="btn" style="  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  top:120px;
+
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="openModal7();currentSlide7(2)" >-</button>
+</div>
+
+  <div class="container">
+  	<center>	<img src="/static/map/4.jpeg" onclick="openModal7();currentSlide7(3)" width=100% height=100%></center>
+  <button class="btn" style="  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+
+  top:40px;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="openModal7();currentSlide7(3)">+</button>
+
+  <button class="btn" style="  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  top:120px;
+
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="openModal7();currentSlide7(3)" >-</button>
+</div>
+
+	<center><img src="/static/map/7.jpeg"  width=60% height=100%>
+    <div class="container">
+  	<center>		<img src="/static/map/2.jpeg" onclick="openModal7();currentSlide7(4)" style="width:30%; height:80%;"></center>
+  <button class="btn" style="  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+
+  top:40px;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="openModal7();currentSlide7(4)">+</button>
+
+  <button class="btn" style="  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  top:120px;
+
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="openModal7();currentSlide7(4)" >-</button>
+</div>
+
+	<img src="/static/map/8.jpeg" width=60% height=100%></center>
+	</div>
+</div>
+</div>
+<script>
+// Get the modal
+var modal = document.getElementById('id07');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+<div id="myModal7" class="modal7">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('myModal7').style.display='none'" style="float:left; color:red;" class="close" title="Close Modal">&times;</span>
+    </div>
+  <div class="modal71-content">
+
+    <div class="mySlides7">
+      <div class="numbertext"></div>
+
+ <button style="  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:fixed;
+  top:40px;
+  right:10;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="zoomin()" >+</button>
+
+<button style="  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:fixed;
+  top:120px;
+  right:10;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="zoomout()" >-</button>
+
+      <div class="main dragscroll">
+      <center><img id="map" src="/static/map/1.jpeg" class="dyn"></center>
+      </div>
+
+    <script>
+      function zoomin() {
+  var myImg = document.getElementById("map");
+  var currWidth = myImg.clientWidth;
+  if (currWidth == 2500) return false;
+  else {
+    myImg.style.width = (currWidth + 100) + "px";
+  }
+}
+
+function zoomout() {
+  var myImg = document.getElementById("map");
+  var currWidth = myImg.clientWidth;
+  if (currWidth == 100) return false;
+  else {
+    myImg.style.width = (currWidth - 100) + "px";
+  }
+}
+</script>
+
+        </div>
+
+    <div class="mySlides7">
+      <div class="numbertext"></div>
+ <button style="  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:fixed;
+  top:40px;
+  right:10;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="zoomin3()" >+</button>
+
+<button style="  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:fixed;
+  top:120px;
+  right:10;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="zoomout3()" >-</button>
+
+      <div class="main dragscroll">
+      <center><img id="map3" src="/static/map/3.jpeg" class="dyn" ></center>
+      </div>
+
+    <script>
+      function zoomin3() {
+  var myImg = document.getElementById("map3");
+  var currWidth = myImg.clientWidth;
+  if (currWidth == 2500) return false;
+  else {
+    myImg.style.width = (currWidth + 100) + "px";
+  }
+}
+
+function zoomout3() {
+  var myImg = document.getElementById("map3");
+  var currWidth = myImg.clientWidth;
+  if (currWidth == 100) return false;
+  else {
+    myImg.style.width = (currWidth - 100) + "px";
+  }
+}
+</script>
+    </div>
+
+    <div class="mySlides7">
+      <div class="numbertext"></div>
+ <button style="  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:fixed;
+  top:40px;
+  right:10;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="zoomin4()" >+</button>
+
+<button style="  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:fixed;
+  top:120px;
+  right:10;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="zoomout4()" >-</button>
+
+      <div class="main dragscroll">
+      <center><img id="map4" src="/static/map/4.jpeg" class="dyn" ></center>
+      </div>
+
+    <script>
+      function zoomin4() {
+  var myImg = document.getElementById("map4");
+  var currWidth = myImg.clientWidth;
+  if (currWidth == 2500) return false;
+  else {
+    myImg.style.width = (currWidth + 100) + "px";
+  }
+}
+
+function zoomout4() {
+  var myImg = document.getElementById("map4");
+  var currWidth = myImg.clientWidth;
+  if (currWidth == 100) return false;
+  else {
+    myImg.style.width = (currWidth - 100) + "px";
+  }
+}
+</script>
+    </div>
+
+    <div class="mySlides7">
+      <div class="numbertext"></div>
+       <button style="  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:fixed;
+  top:40px;
+  right:10;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="zoomin2()" >+</button>
+
+<button style="  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:fixed;
+  top:120px;
+  right:10;
+  width:40px;
+  height:40px;
+  border-radius: 50%;" onclick="zoomout2()" >-</button>
+
+      <div class="main dragscroll">
+      <center><img id="map2" src="/static/map/2.jpeg" style="width:40%" ></center>
+      </div>
+
+    <script>
+      function zoomin2() {
+  var myImg = document.getElementById("map2");
+  var currWidth = myImg.clientWidth;
+  if (currWidth == 2500) return false;
+  else {
+    myImg.style.width = (currWidth + 100) + "px";
+  }
+}
+
+function zoomout2() {
+  var myImg = document.getElementById("map2");
+  var currWidth = myImg.clientWidth;
+  if (currWidth == 100) return false;
+  else {
+    myImg.style.width = (currWidth - 100) + "px";
+  }
+}
+</script>
+    </div>
+
+
+
+  </div>
+</div>
+
+<script>
+function openModal7() {
+  document.getElementById("myModal7").style.display = "block";
+}
+
+function closeModal7() {
+  document.getElementById("myModal7").style.display = "none";
+}
+
+var slideIndex7 = 1;
+showSlides7(slideIndex);
+
+function plusSlides7(n) {
+  showSlides7(slideIndex7 += n);
+}
+
+function currentSlide7(n) {
+  showSlides7(slideIndex7 = n);
+}
+
+function showSlides7(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides7");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex7 = 1}
+  if (n < 1) {slideIndex7 = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none"++++++++++++++++++++++++++++++++++++++++++++++++++++;
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex7-1].style.display = "block";
+  dots[slideIndex7-1].className += " active";
+  captionText.innerHTML = dots[slideIndex7-1].alt;
+}
+</script>
+-->
+<div id="id04" class="modalc">
+<div class="modalc-content animate">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+	<div>
+	<img src="/static/views/ravi.jpg"  style="width:200px;height:150px" style="position:fixed; padding-left:10px; padding-top:10px;">
+	<h3 style="font-size:17px;display:inline-block; padding-top:0px; text-align:left;">ರವಿಕುಮಾರ್ ಎ </br>
+		ಕಾರ್ಯದರ್ಶಿ</br>
+		ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ </br>
+	ಕಾಗೆಕೋಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</br></br>
+	Phone number:9972722032</br>
+	Email Address:<a href="kagekodamagge.wucs@gmail.com">kagekodamagge.wucs@gmail.com</a>
+	</div>
+</div>
+</div>
+<script>
+// Get the modal
+var modal = document.getElementById('id04');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+<div style="padding-bottom:5px;padding-top:5px;">
+	<center><h1 style="margin:0">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ </h1>
+	<h3 style="margin-top:0">ಕಾಗೆಕೋಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ </h3></center>
+</div>
+<div style="padding-bottom:10px">
+	<center>    <a class="semi-transparent-button is-blue" style="font-family:Noto Sans Kannada, sans-serif;font-size:15px;" href="/crops"><b>{{text1}}</b></a>
+
+    <a class="semi-transparent-button is-blue" style="font-family:Noto Sans Kannada, sans-serif;font-size:15px;"  href="/board"><b>{{text2}}</b></a>
+
+<!--  <a class="semi-transparent-button is-blue" style="font-family:Noto Sans Kannada, sans-serif;font-size:15px;" onclick="document.getElementById('id05').style.display='block'"><b> {{text3}} </b></a>-->
+    <a class="semi-transparent-button is-blue" style="font-family:Noto Sans Kannada, sans-serif;font-size:15px;" href="/map"><b>ರೈತರ ಕೃಷಿ ಭೂಮಿಯ ನಕ್ಷೆ </b></a>
+    <!--<a class="semi-transparent-button is-blue" style="font-family:Noto Sans Kannada, sans-serif;font-size:15px;" href="/wucscalc"><b> WUCS CALCULATOR </b></a>-->
+</center>
+
+<!--  <div id="id02" class="modal">-->
+<!--    <form class="modal-content animate"  method="post">-->
+<!--      <div class="imgcontainer">-->
+<!--        <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>-->
+<!--      </div>-->
+<!--      <div class="container" id="text1">-->
+<!--        <img id="oblahimage1" src="{{ image1 }}" style="width:100%;">-->
+<!--      </div>-->
+<!--      <div class="container" style="background-color:#f1f1f1">-->
+<!--      <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+
+<!--  <div id="id03" class="modal">-->
+<!--    <form class="modal-content animate"  method="post">-->
+<!--      <div class="imgcontainer">-->
+<!--        <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>-->
+<!--      </div>-->
+<!--      <div class="container" id="text2">-->
+<!--        <img id="oblahimage2" src="{{ image2 }}" style="width:100%;">-->
+<!--      </div>-->
+<!--      <div class="container" style="background-color:#f1f1f1">-->
+<!--      <button type="button" onclick="document.getElementById('id03').style.display='none'" class="cancelbtn">Cancel</button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--  <div id="id05" class="modal">-->
+<!--    <form class="modal-content animate"  method="post">-->
+<!--      <div class="imgcontainer">-->
+<!--        <span onclick="document.getElementById('id05').style.display='none'" class="close" title="Close Modal">&times;</span>-->
+<!--      </div>-->
+<!--      <div class="container" id="text3">-->
+<!--        <img id="oblahimage3" src="{{ image3 }}" style="width:100%;">-->
+<!--      </div>-->
+<!--      <div class="container" style="background-color:#f1f1f1">-->
+<!--      <button type="button" onclick="document.getElementById('id05').style.display='none'" class="cancelbtn">Cancel</button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+
+</div>
+<!--<div style="padding-bottom:10;padding-top:20;position:fixed;bottom:0;left:5;">-->
+<!--<a href="/board" class="notification" onclick="document.getElementById('idloader').style.display='block'">-->
+<!--  <span>ಸೂಚನಾ ಫಲಕ </span>-->
+<!--  <span class="badge">1</span>-->
+<!--</a>-->
+<!--</div>-->
+<!--<div style="padding-bottom:10;padding-top:20;position:fixed;bottom:0;right:5;"> -->
+<!--<div class="notification2" style="float:right;">-->
+<!--			<button disabled class="js-push-btn mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect notification1"  >-->
+<!--				Enable-->
+<!--			</button>-->
+<!--      <span class="fa fa-bell badge" style="font-size:26px" ></span>-->
+<!--</div>-->
+<!--</div>-->
+
+
+
+
+
+
+<div id="id01" class="modal">
+
+  <form class="modal-content animate" action="/login" method="post">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+    <div class="container">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="username" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="password" required>
+
+      <input onclick="document.getElementById('idloader').style.display='block'" style="font-size:20px;   background-color: #4CAF50;color: white; padding: 14px 20px; margin: 8px 0; border: none; cursor: pointer; width: 100%;" type="submit" value="Log in"/>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+  </form>
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+		<section  class="subscription-details js-subscription-details is-invisible" hidden>
+
+			<pre><code  class="js-subscription-json"></code></pre>
+
+		</section>
+
+
+	<script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+
+  <script>
+  var scripts = [
+    "{{ url_for('static',filename='main.js') }}",
+  ];
+
+  for (var i = 0; i < scripts.length; i++) {
+    var script = document.createElement('script');
+    script.onerror = function() {
+      alert('Could not load ' + this.src);
+    };
+
+    script.src = scripts[i] + '?v=' + Date.now();
+    document.body.appendChild(script);
+  }
+</script>
+
+<div id="idloader" class="mloader">
+
+</div>
+<script>
+// Get the modal
+var modal = document.getElementById('idloader');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+
+    }
+}
+</script>
+
+</body>
+
+
+
+</html>

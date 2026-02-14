@@ -1,0 +1,21 @@
+<table style="width:100%">
+  <caption>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</caption>
+  <tr>
+
+    <th>ಖಾತೆದಾರರ ಹೆಸರು</th>
+    <th>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+    <th>ಸರ್ವೆ ನಂ.</th>
+    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+
+    
+  </tr>
+  {% for i in data %}
+  <tr>
+    <td>{{ i['name'] }}</td>
+<td>{{ i['pass'] }}</td>
+<td>{{ i['sno'] }}</td>
+<td>{{ i['acers'] }}</td>
+  </tr>
+  {% endfor %}
+</table>

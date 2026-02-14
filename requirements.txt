@@ -1,0 +1,12 @@
+# Requirements for MySQL versions
+# (main_shared_hosting.py or main_optimized.py)
+# Python 3.7+
+#
+# Install with: pip install -r requirements_mysql.txt
+
+Flask==3.0.0
+Werkzeug==3.0.1
+mysql-connector-python==8.2.0
+
+# Alternative MySQL connector (if above doesn't work):
+# PyMySQL==1.1.0

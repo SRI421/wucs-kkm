@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>payment</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<style>   
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('/static/ajax-loader.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .modal {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+  table {
+  border: 0px;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: center;
+}
+tbody{
+  width:100%;
+}
+
+
+  @media print {
+  
+   h2 {page-break-before:auto;}
+   
+}
+@media print {
+table {page-break-inside:avoid;}
+}
+
+</style>
+</head>
+<body style="background-color:#87CEEB">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+<div class="container">
+				<center><h3 style="margin:0;color:blue;"><b>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</b></h3>
+	</center><hr>
+   <center>
+  <div class="form-inline" >
+    <div class="form-group">
+      <label for="email"><b style="font-size:20px;color:blue;">ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ::</label>
+      <input type="number" class="form-control" id="p" placeholder="Enter passbook number" name="p"></b>
+    </div>
+
+    <button type="submit" id="send" class="btn btn-default">Submit</button>
+  </div>
+
+  </center>
+ <hr>
+<div id="newone">
+     <center>
+
+    <div class="form-inline" >
+      <div class="form-group">
+        <label for="email">Select Year:</label>
+        <select name="year" id="year" style="width:100px;height:20px;">
+              {% for y in dby %}
+                    {% if year==y%}
+                        <option value="{{y}}" selected>{{y}}</option>
+                    {%endif%}
+                    {% if year!=y%}
+                        <option value="{{y}}" >{{y}}</option>
+                    {%endif%}
+              {% endfor %}
+            </select>
+        <label for="email">Payment:</label>
+        <input type="text" class="form-control" id="amount" placeholder="amount" name="amount">
+      </div>
+
+      <button type="submit" id="pay" class="btn btn-default">Submit</button>
+    </div>
+
+    </center>
+   <hr>
+
+  {% for i in data %}
+    {%if i['first']==1 %}
+    <h4>ಖಾತೆದಾರರ ಹೆಸರು=&emsp;{{ i['name'] }} </h4>
+    <h4>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ=&emsp;{{ i['pass'] }}</h4>
+  <input hidden type="number" value="{{ i['pass'] }}" id="pass"/>
+    <h4>ಷೇರು ಖಾತೆ ಸಂಖ್ಯೆ=&emsp;{{ i['share'] }} </h4>
+  <input hidden value="{{ i['pass'] }}" name="no" id="no"/>
+  {%endif%}
+    {%endfor%}
+  <hr>
+  <h3 style="margin:0;padding:5;text-align:center;">{{year}}</h3>
+  <hr>
+  <table style="width:100%;background-color:white;">
+       {% for k in data %}
+    {%if k['first']==1 %} 
+
+  <tr>
+    <th >ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+    <th style="background-color:#FF6347;"><b>ಹಿಂದಿನ ಬಾಕಿ</b></th>
+    <th >ಒಟ್ಟು ಮೊತ್ತ</th>
+    <th style="background-color:lime;"><b>ಪಾವತಿ</b></th>
+    <th style="background-color:#FF6347;"><b> ಬಾಕಿ ಮೊತ್</b>ತ</th>
+  </tr>
+
+  <tr>
+    <th>{{ k['rt']}} </th>
+    <th style="background-color:#FF6347;"><b>{{ k['old']}} </b></th>
+    <th>{{ k['total']}} </th>
+    <th style="background-color:lime;"><b>{{ k['paid']}} </b></th>
+    <th style="background-color:#FF6347;"><b>{{ k['balance']}} </b></th>
+  </tr>
+      {%endif%}
+    {%endfor%}
+  </table>
+  <hr>
+  <div style="overflow-x:auto">
+  <table style="width:100%;background-color:white;">
+    <tr>
+      <th>ಸರ್ವೆ ನಂ.</th>
+      <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+      <th>ಭತ್ತ</th>
+      <th>ಕರ</th>
+      <th>ಕಬ್ಬು</th>
+      <th>ಕರ</th>
+      <th>ತೋಟ</th>
+      <th>ಕರ</th>
+      <th>ನೀರಿನ ಕರ</th>
+      <th>ನಿರ್ವಹಣೆ ಕರ</th>
+      <th style="text-align:right;"> ಒಟ್ಟು ಬೇಡಿಕೆ</th>
+    </tr>
+          {% for j in data %}
+
+    <tr>
+          <td>{{ j['sno']}}</td>
+          <td>{{ j['area']}}</td>
+          <td >{{ j['batha']}}</td>
+          <td >{{ j['bkara']}}</td>
+          <td >{{ j['kabu']}}</td>
+        <td >{{ j['kkara']}}</td>
+        <td >{{ j['thota']}}</td>
+        <td >{{ j['tkara']}}</td>
+        <td >{{ j['wtax']}}</td>
+        <td >{{ j['mtax']}}</td>
+      <td style="text-align:right;">{{ j['t1']}}</td>
+    </tr>
+
+        {% endfor %}
+
+
+
+  </table>
+  </div>
+  <hr>
+  <center><button type="submit" style="background-color:brown;padding:10;margin:10;color:white;" id="omg" class="btn btn-default">PRINT PREVIEW</button></center>
+  <hr>
+     <script> 
+  $("#omg").click(function(){
+      a=document.getElementById('pass').value
+      text=a;
+      $.ajax({
+        url: "/userprint1",
+        type: "get",
+        data: {jsdata: text},
+        success: function(response) {
+          window.location = "/userprint";
+        },
+        error: function(xhr) {
+          //Do Something to handle error
+        }
+      });
+  });
+  </script>
+     <script> 
+  $("#year").change(function(){
+      a=document.getElementById('pass').value
+      text=a+","+document.getElementById('year').value;
+      $.ajax({
+        url: "/datasee1pay",
+        type: "get",
+        data: {jsdata: text},
+        success: function(response) {
+          $("#newone").html(response);
+        },
+        error: function(xhr) {
+          //Do Something to handle error
+        }
+      });
+  });
+  </script>
+     <script> 
+  $("#pay").click(function(){
+      a=document.getElementById('amount').value
+      no=document.getElementById('no').value
+      text=a+","+no+","+document.getElementById('year').value;;
+      $.ajax({
+        url: "/datapayment",
+        type: "get",
+        data: {jsdata: text},
+        success: function(response) {
+          $("#newone").html(response);
+        },
+        error: function(xhr) {
+          //Do Something to handle error
+        }
+      });
+  });
+  </script>
+
+    <script>
+  $body = $("body");
+  $("#pay").on("click",()=>{
+  $body.addClass("loading")
+  });
+  </script>  
+    <!--
+  <br>
+      {% for a in data %}
+        {% if a['first']==1 %}
+        <table style="">
+    <tr>
+        <th style="width:6%;text-align:center;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+        <th style="width:6%;text-align:center;">ಹಿಂದಿನ ಬಾಕಿ</th>
+        <th style="width:6%;text-align:center;">ಒಟ್ಟು ಮೊತ್ತ</th>
+        <th style="width:6%;text-align:center;">ಪಾವತಿ</th>
+        <th style="width:6%;text-align:center;">ಬಾಕಿ ಮೊತ್ತ</th>
+    </tr>
+    <tr>
+        <td style="width:6%;text-align:center;">{{ a['rt']}}</td>       
+        <td style="width:6%;text-align:center;">{{ a['old']}}</td>
+        <td style="width:6%;text-align:center;">{{ a['total']}}</td> 
+        <td style="width:6%;text-align:center;">{{ a['paid']}}</td>
+        <td style="width:6%;text-align:center;">{{ a['balance']}}</td> 
+    </tr>
+  {% endif %}
+        {% endfor %}
+  </table>-->
+
+
+
+
+
+  </div>
+</div>
+
+   <script> 
+$("#send").click(function(){
+    a=document.getElementById('p').value
+    text=a+','+"";
+    $.ajax({
+      url: "/datasee1pay",
+      type: "get",
+      data: {jsdata: text},
+      success: function(response) {
+        $("#newone").html(response);
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+});
+</script> 
+
+ 
+  <script>
+$body = $("body");
+$("#send").on("click",()=>{
+$body.addClass("loading")
+});
+</script>  
+
+  <div class="modal"><!-- Place at bottom of page --></div>
+  <script>
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+     ajaxStop: function() { $body.removeClass("loading"); }    
+});
+</script>
+</body>
+</html>

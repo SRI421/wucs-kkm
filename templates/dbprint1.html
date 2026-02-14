@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0px;
+  text-align: center;
+}
+@media print {
+td,th,tr {page-break-inside:avoid;}
+}
+
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('/static/ajax-loader.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .modal {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+button{
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding:0;
+  text-align: center;
+  text-decoration: none;
+  display: inline;
+  font-size: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+
+</style>
+<script src="static/carkan.js"></script>
+</head>
+<body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+<center><select name="vill" class="form-control subbtn " id='selUser' style="height:30px; margin-top:4%;"  autocomplete="off" >
+{% if year %}
+    <option value="{{ year }}" selected>{{ year }}</option>
+{% endif %}
+{% if not year %}
+      <option value="" disabled selected>Choose year</option>
+{% endif %}
+    {% for i in y %}
+    <option value="{{ i['year'] }}">{{ i['year'] }}</option>
+    {% endfor %}
+    </select></center>
+<!--<div style="position:fixed; top:0; width:100%;height:8%;background-color:green;">
+    <button style="display:inline; width:12%;"></br>ಖಾತೆದಾರರ ಹೆಸರು</button>
+    <button style="display:inline; width:5%;">ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</button>
+    <button style="display:inline; width:6%;">ಷೇರು ಖಾತೆ ಸಂಖ್ಯೆೆ</button>
+    <button style="display:inline; width:11%;"></br>ವಿಳಾಸ(ಗ್ರಾಮ, ಹಳ್ಳಿ )</button>
+    <button style="display:inline; width:4%;">ಸರ್ವೆ ನಂ.</button>
+    <button style="display:inline; width:4.5%;">ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</button>
+    <button style="display:inline; width:4%;"></br>ಬೆಳೆೆ1</button>
+    <button style="display:inline; width:4.5%;">ಬೆಳೆ1 ವಿಸ್ತೀರ್ಣ</button>
+    <button style="display:inline; width:3.5%;"></br>ಕರ1</button>
+    <button style="display:inline; width:4%;"></br>ಬೆಳೆೆ2</button>
+    <button style="display:inline; width:4%;">ಬೆಳೆ2 ವಿಸ್ತೀರ್ಣ</button>
+    <button style="display:inline; width:4%;"></br>ಕರ2</button>
+    <button style="display:inline; width:4%;">ನೀರಿನ ಕರ</button>
+    <button style="display:inline; width:4%;">ನಿರ್ವಹಣೆ ಕರ</button>
+    <button style="display:inline; width:4%;">ಒಟ್ಟು ಬೇಡಿಕೆ</button>
+    <button style="display:inline; width:2.5%;"></br>ವರ್ಷ</button>
+    <button style="display:inline; width:7%;">ನೀರಿನ ವೆಚ್ಚ ಪು.ಪುಟ ಸಂಖ್ಯೆೆ</button>
+    <button style="display:inline; width:7%;"></br>ಮೊಬೈಲ್</button>
+</div>
+  -->
+<div id="place_for_suggestions">
+<form action="/dbupdate" method="POST">
+  {% if year %}
+  <div style="display:fixed; top:0; left:0; padding:0; margin:0;">
+  <input type="submit" value="update" name="update"/>
+</div>
+{% endif %}
+  <div style="position:fixed;top:0;width:100%;">
+  <table style="width:100%">
+  <caption>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</caption>
+
+    <tr>
+
+    <th style="width:200px;">ಖಾತೆದಾರರ ಹೆಸರು</th>
+    <th>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+    <th>ಷೇರು ಖಾತೆ ಸಂಖ್ಯೆೆ</th>
+    <th>ವಿಳಾಸ(ಗ್ರಾಮ, ಹಳ್ಳಿ )</th>
+    <th>ಸರ್ವೆ ನಂ.</th>
+    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಬೆಳೆೆ1</th>
+    <th>ಬೆಳೆ1 ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಕರ1</th>
+    <th>ಬೆಳೆೆ2</th>
+    <th>ಬೆಳೆ2 ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಕರ2</th>
+    <th>ನೀರಿನ ಕರ</th>
+    <th>ನಿರ್ವಹಣೆ ಕರ</th>
+    <th>ಒಟ್ಟು ಬೇಡಿಕೆ</th>
+    <th>ವರ್ಷ</th>
+    <th>ನೀರಿನ ವೆಚ್ಚ ಪು.ಪುಟ ಸಂಖ್ಯೆೆ</th>
+    <th>ಮೊಬೈಲ್</th>
+    
+  </tr></table>
+    </div>
+  <table style="width:100%">
+  {% for i in data %}
+  <tr>
+    <td style="width:200px;"><input type="text" size=25% value="{{ i['name'] }}" name="{{ i['sid'] }}name" onKeyUp="transcrire(this)"></td>
+<td>{{ i['pass'] }}</td>
+<td><input type="text" size=3% value="{{ i['share'] }}" name="{{ i['sid'] }}share"></td>
+<td><input type="text" size=25% value="{{ i['village'] }}" name="{{ i['sid'] }}village" onKeyUp="transcrire(this)"></td>
+<td><input type="text" size=3%  value="{{ i['sno'] }}" name="{{ i['sid'] }}sno"></td>
+<td><input type="text" size=3%  value="{{ i['acers'] }}" name="{{ i['sid'] }}acers"></td>
+<td><input type="text" size=5%  value="{{ i['crop1'] }}" name="{{ i['sid'] }}crop1" onKeyUp="transcrire(this)"></td>
+<td><input type="text" size=3%  value="{{ i['area1'] }}" name="{{ i['sid'] }}area1"></td>
+<td><input type="text" size=3%  value="{{ i['kara1'] }}" name="{{ i['sid'] }}kara1"></td>
+<td><input type="text" size=5%  value="{{ i['crop2'] }}" name="{{ i['sid'] }}crop2" onKeyUp="transcrire(this)"></td>
+<td><input type="text" size=3%  value="{{ i['area2'] }}" name="{{ i['sid'] }}area2"></td>
+<td><input type="text" size=3%  value="{{ i['kara2'] }}" name="{{ i['sid'] }}kara2"></td>
+<td><input type="text" size=3%  value="{{ i['wtax'] }}" name="{{ i['sid'] }}wtax"></td>
+<td><input type="text" size=3%  value="{{ i['mtax'] }}" name="{{ i['sid'] }}mtax"></td>
+<td><input type="text" size=3%  value="{{ i['total'] }}" name="{{ i['sid'] }}total"></td>
+<td>{{ i['year'] }}</td>
+<td><input type="text" size=3%  value="{{ i['pp'] }}" name="{{ i['sid'] }}pp"></td>
+<td><input type="text" size=10%  value="{{ i['phone'] }}" name="{{ i['sid'] }}phone"></td>
+  </tr>
+  {% endfor %}
+</table>
+</form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script>
+$("#selUser").change(function(){
+    var text = $(this).val();
+
+    $.ajax({
+      url: "/dbyearwise",
+      type: "get",
+      data: {jsdata: text},
+      success: function(response) {
+        $("#place_for_suggestions").html(response);
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+});
+</script>
+
+<div class="modal"><!-- Place at bottom of page --></div>
+<script>
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+     ajaxStop: function() { $body.removeClass("loading"); }    
+});
+</script>
+</body>
+</html>

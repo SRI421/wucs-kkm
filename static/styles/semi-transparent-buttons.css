@@ -1,0 +1,81 @@
+.semi-transparent-button {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 30px;
+  max-width: 200px;
+
+  background: #fff; /* fallback color for old browsers */
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: all 0.3s ease-out;
+  margin: 1px 30px;
+}
+.semi-transparent-button:hover,
+.semi-transparent-button:focus,
+.semi-transparent-button:active {
+  background: #fff;
+  color: #000;
+  transition: all 0.5s ease-in;
+}
+.semi-transparent:focus {
+  outline: none;
+}
+
+.is-blue {
+  background: #1e348e; /* fallback color for old browsers */
+  background: rgba(30, 52, 142, 0.5);
+}
+.is-blue:hover,
+.is-blue:focus,
+.is-blue:active {
+  background: #1e348e; /* fallback color for old browsers */
+  background: rgb(30, 52, 142);
+  color: #fff;
+}
+
+.with-border {
+  border: 1px solid #fff;
+}
+
+@media screen and (max-width: 500px) {
+.semi-transparent-button {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 20px;
+
+  background: #fff; 
+  /* fallback color for old browsers */
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  color: rgb(255, 247, 247);
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: all 0.3s ease-out;
+  margin: 1px 30px;
+  width: 300px;
+}
+
+.is-blue {
+  background: #1e348e; /* fallback color for old browsers */
+  background: rgb(29, 50, 134);
+}
+.is-blue:hover,
+.is-blue:focus,
+.is-blue:active {
+  background: #1e348e; /* fallback color for old browsers */
+  background: rgb(30, 52, 142);
+  color: #fff;
+}
+
+.with-border {
+  border: 1px solid #fff;
+}
+
+}

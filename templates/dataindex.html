@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+
+
+    <title>Database print</title>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0px;
+  text-align: center;
+  page-break-inside: avoid;
+}
+tr {page-break-inside:avoid;}
+}
+@media print {
+tr {page-break-inside:avoid;}
+}
+@media print {
+td,th,tr {page-break-inside:avoid;}
+}
+.ok{
+    border: 1px solid ;
+  padding: 5px;
+  
+}
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('/static/ajax-loader.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .modal {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+button{
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding:0;
+  text-align: center;
+  text-decoration: none;
+  display: inline;
+  font-size: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+@media print
+{
+.noprint {display:none;}
+}
+
+
+</style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+<script src="static/carkan.js"></script>
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+</head>
+
+<body class="container">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+  <form action="/dataindex" method="post">
+    <select class="noprint" name="year" id="year" onchange="this.form.submit()" style="position:fixed;left:5px;top:5px;width:100px;height:20px;z-index:999;">
+            {% for y in dby %}
+                  {% if year==y%}
+                      <option value="{{y}}" selected>{{y}}</option>
+                  {%endif%}
+                  {% if year!=y%}
+                      <option value="{{y}}" >{{y}}</option>
+                  {%endif%}
+            {% endfor %}
+    </select>
+  </form>
+<div style="position:sticky;top:0;width:100%;background:gray;" class="noprint">
+    <center><h3 style="padding:0;margin:0;">
+<button onclick="ExportToExcel('xlsx')">Export to EXCEL</button><button style="background-color:red;marging-left:10;"id="btnExport" onclick="printFunction()">Export to PDF</button>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</h3></center>
+  <table style="width:100%">
+
+    
+    <tr>
+        <th style="width:3%;">ಪಾಸ್</th>
+        <th style="width:20%;">ರೈತರ ಹೆಸರು</th>
+        <th style="width:3%;">ಸರ್ವೇ ನಂಬರ್</th>
+        <th style="width:5%;">ವಿಸ್ತೀರ್ಣ</th>
+        <th style="width:4%;">ಭತ್ತ</th>
+        <th style="width:5%;">ಕರ</th>
+        <th style="width:4%;">ಕಬ್ಬು</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:4%;">ತೋಟ</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:6%;">ನೀರಿನ ಕರ</th>
+      <th style="width:6%;">ನಿರ್ವಹಣಾ ಕರ</th>
+      <th style="width:6%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+      <th style="width:6%;">ಹಿಂದಿನ ಬಾಕಿ</th>
+      <th style="width:6%;">ಒಟ್ಟು ಮೊತ್ತ</th>
+      <th style="width:6%;">ಪಾವತಿ</th>
+      <th style="width:6%;">ಬಾಕಿ ಮೊತ್ತ</th>
+    </tr>
+  </table>
+</div>
+<div style="width:100%;"> 
+    <center>{{year}}</center>
+    <table style="width:100%" id="tbl_exporttable_to_xls">
+      
+          <tr>
+        <th style="width:3%;">ಪಾಸ್</th>
+        <th style="width:20%;">ರೈತರ ಹೆಸರು</th>
+        <th style="width:3%;">ಸರ್ವೇ ನಂಬರ್</th>
+        <th style="width:5%;">ವಿಸ್ತೀರ್ಣ</th>
+        <th style="width:4%;">ಭತ್ತ</th>
+        <th style="width:5%;">ಕರ</th>
+        <th style="width:4%;">ಕಬ್ಬು</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:4%;">ತೋಟ</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:6%;">ನೀರಿನ ಕರ</th>
+      <th style="width:6%;">ನಿರ್ವಹಣಾ ಕರ</th>
+      <th style="width:6%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+      <th style="width:6%;">ಹಿಂದಿನ ಬಾಕಿ</th>
+      <th style="width:6%;">ಒಟ್ಟು ಮೊತ್ತ</th>
+      <th style="width:6%;">ಪಾವತಿ</th>
+      <th style="width:6%;">ಬಾಕಿ ಮೊತ್ತ</th>
+    </tr>
+      
+      {% for i in data %}
+      
+      {% if i['first']==1 %}
+      
+	    <tr class="ok">
+
+        
+        
+        <th style="width:3%;" rowspan="{{ i['count'] }}">{{ i['pass']}} </th>
+        <th style="width:20%;text-align: left;" rowspan="{{ i['count'] }}">{{ i['name']}} </th>
+        
+
+        
+        <th style="width:3%;">{{ i['sno']}}</th>
+        <th style="width:5%;">{{ i['area']}}</th>
+        <th style="width:4%;">{{ i['batha']}}</th>
+        <th style="width:5%;">{{ i['bkara']}}</th>
+        <th style="width:4%;">{{ i['kabu']}}</th>
+      <th style="width:5%;">{{ i['kkara']}}</th>
+      <th style="width:4%;">{{ i['thota']}}</th>
+      <th style="width:5%;">{{ i['tkara']}}</th>
+      <th style="width:6%;">{{ i['wtax']}}</th>
+      <th style="width:6%;">{{ i['mtax']}}</th>
+      
+       
+
+      <th style="width:6%;"rowspan="{{ i['count'] }}">{{ i['rt']}}</th>       
+      <th style="width:6%;"rowspan="{{ i['count'] }}">{{ i['old']}}</th>
+      <th style="width:6%;" rowspan="{{ i['count'] }}">{{ i['total']}}</th> 
+      <th style="width:6%;" rowspan="{{ i['count'] }}">{{ i['paid']}}</th>
+      <th style="width:6%;" rowspan="{{ i['count'] }}">{{ i['balance']}}</th> 
+
+    </tr>
+      {%endif%}
+      {% if i['first']==0 %}
+	    <tr>
+
+        
+        <th style="width:3%;">{{ i['sno']}}</th>
+        <th style="width:5%;">{{ i['area']}}</th>
+        <th style="width:4%;">{{ i['batha']}}</th>
+        <th style="width:5%;">{{ i['bkara']}}</th>
+        <th style="width:4%;">{{ i['kabu']}}</th>
+      <th style="width:5%;">{{ i['kkara']}}</th>
+      <th style="width:4%;">{{ i['thota']}}</th>
+      <th style="width:5%;">{{ i['tkara']}}</th>
+      <th style="width:6%;">{{ i['wtax']}}</th>
+      <th style="width:6%;">{{ i['mtax']}}</th>
+      
+       
+        
+    </tr>
+      {%endif%}      
+      {% endfor %}
+    </table>
+</div>
+    <script>
+
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('tbl_exporttable_to_xls');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+                XLSX.writeFile(wb, fn || ('wucskkm2021.' + (type || 'xlsx')));
+        }
+
+    </script>
+
+
+    <script>
+      function printFunction() { 
+        window.print(); 
+      }
+    </script>
+  
+<script type="text/javascript" src="static/js/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="static/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="static/js/jszip.min.js"></script>
+<script type="text/javascript" src="static/js/pdfmake.min.js"></script>
+<script type="text/javascript" src="static/js/vfs_fonts.js"></script>
+<script type="text/javascript" src="static/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="static/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="static/js/app.js"></script>
+<script type="text/javascript" src="static/js/jquery.mark.min.js"></script>
+<script type="text/javascript" src="static/js/datatables.mark.js"></script>
+<script type="text/javascript" src="static/js/buttons.colVis.min.js"></script>
+
+</body>
+
+</html>

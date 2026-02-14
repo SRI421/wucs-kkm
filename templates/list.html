@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html class="supernova">
+<head>
+<style>
+        .supernova {
+        height: 100%;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center ;
+      }
+      .supernova {
+        background-image: url("/static/views/14.jpg");
+      }
+      #stage {
+        background-image: url("/static/views/14.jpg");
+      }
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  background-color:white;
+}
+th, td {
+  padding: 5px;
+  text-align: left;
+}
+    body {
+        height: 842px;
+        width: 795px;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+  @media print {
+  
+   h2 {page-break-before:auto;}
+   
+}
+@media print {
+tr {page-break-inside:avoid;}
+}
+</style>
+</head>
+<body >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+				<center style="color:red;"><b>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ <br>ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ </b></center>
+
+
+<table style="width:100%">
+  
+  <tr>
+    <th style="color:red;">ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+    <th style="color:red;">ಖಾತೆದಾರರ ಹೆಸರು</th>
+    
+    
+  </tr>
+  {% for i in data %}
+  <form action="/bylist" method="post">
+  <tr>
+    <b>
+    <th style="border: 1;width:10%;font-weight: bold;">{{ i["pass"] }}</th>
+    <th style="border: 1;width:90%;"><input style="background-color:#F5F5F5;width:100%;color:blue;text-align:left;font-weight: bold;" {%if sup==3 %} type="submit" {%else%} type="button" {%endif%} value="{{ i['name'] }}" name="submit"/></th>
+      <input type="text" hidden value="{{ i['pass'] }}" name="{{ i['pass'] }}"/>
+    </b>
+  </tr>
+    </form>
+{% endfor %}
+</table><hr>
+
+</body>
+</html>

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="static/google_jsapi.js">
+    </script>
+<script type="text/javascript">
+
+      // Load the Google Transliterate API
+      google.load("elements", "1", {
+            packages: "transliteration"
+          });
+
+
+    </script>
+
+
+    <title>wucskkm database edit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal1-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 95%;
+}
+
+/* The Close Button */
+.close {
+  color: red;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0px;
+  text-align: center;
+}
+@media print {
+td,th,tr {page-break-inside:avoid;}
+}
+
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('/static/ajax-loader.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .modal {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+button{
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding:0;
+  text-align: center;
+  text-decoration: none;
+  display: inline;
+  font-size: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+
+  input {
+    font-weight:bold;
+     width: 100%;
+    height: 100%;
+     box-sizing: border-box;
+     -webkit-box-sizing:border-box;
+     -moz-box-sizing: border-box;
+}
+</style>
+<script src="static/carkan.js"></script>
+</head>
+
+<body class="container">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <form action="/dataedit" method="post">
+                <select name="year" id="year" onchange="this.form.submit()" style="position:fixed;left:10px;top:5px;width:100px;height:20px;z-index:999;">
+            {% for y in dby %}
+                  {% if year==y%}
+                      <option value="{{y}}" selected>{{y}}</option>
+                  {%endif%}
+                  {% if year!=y%}
+                      <option value="{{y}}" >{{y}}</option>
+                  {%endif%}
+            {% endfor %}
+          </select>
+  </form>
+<form action="/dataeditup" onkeydown="return event.key != 'Enter';" method="post">
+  <input type="hidden" name="year" id="year" value="{{year}}"/>
+<div style="position:fixed;top:0;width:99%;background:#3498DB;">
+
+    <center><h4 style="padding:0;margin:0;">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</h4></center>
+  <table style="width:100%">
+
+    <tr>
+        <th style="width:2%;">No</th>
+        <th style="width:4%;"><input type="button" style="padding-top:10;padding-bottom:10;background:#F4D03F;" id="myBtn" name="myBtn" value="NEW"/></th></th>
+        <th style="width:4%;">ಪಾಸ್</th>
+        <th style="width:25%;">ರೈತರ ಹೆಸರು</th>
+        <th style="width:4%;">ಸರ್ವೇ ನಂಬರ್</th>
+        <th style="width:5%;">ವಿಸ್ತೀರ್ಣ</th>
+        <th style="width:4%;">ಭತ್ತ</th>
+        <th style="width:5%;">ಕರ</th>
+        <th style="width:4%;">ಕಬ್ಬು</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:4%;">ತೋಟ</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:5%;">ನೀರಿನ ಕರ</th>
+      <th style="width:5%;">ನಿರ್ವಹಣಾ ಕರ</th>
+      <th style="width:5%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+      <th style="width:5%;">ಹಿಂದಿನ ಬಾಕಿ</th>
+      <th style="width:5%;">ಒಟ್ಟು ಮೊತ್ತ</th>
+      <th style="width:4%;"><input type="submit" style="padding-top:10;padding-bottom:10;background:#F4D03F;" id="up" name="up" value="UPDATE"/></th>
+    </tr>
+  </table>
+</div>
+
+
+<div id="myModal" class="modal1">
+
+  <!-- Modal content -->
+  <div class="modal1-content">
+    <span class="close">&times;</span>
+    <div>
+    <table style="width:100%">
+
+    
+    <tr>
+        
+        <th style="width:4%;">ಪಾಸ್</th>
+        <th style="width:25%;">ರೈತರ ಹೆಸರು</th>
+        <th style="width:4%;">ಸರ್ವೇ ನಂಬರ್</th>
+        <th style="width:5%;">ವಿಸ್ತೀರ್ಣ</th>
+        <th style="width:4%;">ಭತ್ತ</th>
+        <th style="width:5%;">ಕರ</th>
+        <th style="width:4%;">ಕಬ್ಬು</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:4%;">ತೋಟ</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:5%;">ನೀರಿನ ಕರ</th>
+      <th style="width:5%;">ನಿರ್ವಹಣಾ ಕರ</th>
+      <th style="width:5%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+      <th style="width:5%;">ಹಿಂದಿನ ಬಾಕಿ</th>
+      <th style="width:5%;">ಒಟ್ಟು ಮೊತ್ತ</th>
+      <th style="width:4%;">-</th>
+    </tr>
+
+	    <tr>
+        
+        <th style="width:4%;"><input type="number" value="" name="pass" id="pass"/></th>
+
+        <th style="width:25%;text-align: left;"><input type="text" name="name" value="" id="name"/></th>
+<script>
+      function onLoad() {
+        var options = {
+            sourceLanguage:
+                google.elements.transliteration.LanguageCode.ENGLISH,
+            destinationLanguage:
+                [google.elements.transliteration.LanguageCode.KANNADA],
+            shortcutKey: 'ctrl+g',
+            transliterationEnabled: true
+        };
+        
+        // Create an instance on TransliterationControl with the required
+        // options.
+        var control =
+            new google.elements.transliteration.TransliterationControl(options);
+
+        // Enable transliteration in the textbox with id
+        // 'transliterateTextarea'.
+          a="name"
+          control.makeTransliteratable([a]);        
+
+      }
+      google.setOnLoadCallback(onLoad);
+
+        </script>
+
+        <input type="text" hidden name="year" value="{{year}}"/>
+        <th style="width:4%;"><input type="text" name="sno" value=""/></th>
+        <th style="width:5%;"><input type="text" name="area" value="0" id="area" onchange="my3Function(this.value)"/></th>
+        <th style="width:4%;"><input type="text" onchange="myFunction(this.value)" name="batha" value="0" id="batha" /></th>
+        <th style="width:5%;"><input type="text" name="bkara" value="0" id="bkara" onchange="getval1(this.value)"/></th>
+        <th style="width:4%;"><input type="text" name="kabu" value="0" id="kabu" onchange="my1Function(this.value)"/></th>
+      <th style="width:5%;"><input type="text" name="kkara" value="0" id="kkara" onchange="getval2(this.value)"/></th>
+      <th style="width:4%;"><input type="text" name="thota" value="0" id="thota" onchange="my2Function(this.value)"/></th>
+      <th style="width:5%;"><input type="text" name="tkara" value="0" id="tkara" onchange="getval3(this.value)"/></th>
+      <th style="width:5%;"><input type="text" name="wtax" value="0" id="wtax"/></th>
+      <th style="width:5%;"><input type="text" name="mtax" value="0" id="mtax" /></th>
+      <th style="width:5%;"><input type="text" name="t1" value="0" id="t1" /></th>
+      <th style="width:5%;"><input type="text" name="bal" value="0" id="bal" onchange="my4Function(this.value)"/></th>
+      <th style="width:5%;"><input type="text" name="t2" value="0" id="t2"/></th>
+        <th style="width:4%;"><input style="background:#E74C3C;" type="Submit" name="submit" value="Submit" id="submit"/></th>
+  <script>
+$body = $("body");
+$("#Submit").on("click",()=>{
+$body.addClass("loading")
+});
+</script>      
+    </tr>
+  </table>
+    </div>
+    <br>
+    <span class="close"><input id="clz" type="button" value="Cancel"/></span>
+  </div>
+
+</div>
+<script>
+
+function myFunction(val) {
+	value=parseFloat(val);
+  v=((((value)-((value)%1))*40)*{{price['batha']}})+((((value)%1)*100)*{{price['batha']}});
+  document.getElementById("bkara").value=parseFloat(v).toFixed(2);
+  
+  
+b=document.getElementById("kkara").value;
+c=document.getElementById("tkara").value;
+s=v+parseFloat(b)+parseFloat(c);
+document.getElementById("wtax").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2").value=parseFloat(t2).toFixed(2);
+}
+function my1Function(val) {
+	value=parseFloat(val);
+  v=((((value)-((value)%1))*40)*{{price['kabbu']}})+((((value)%1)*100)*{{price['kabbu']}});
+  document.getElementById("kkara").value=parseFloat(v).toFixed(2);
+  a=document.getElementById("bkara").value;
+
+c=document.getElementById("tkara").value;
+s=parseFloat(a)+v+parseFloat(c);
+document.getElementById("wtax").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2").value=parseFloat(t2).toFixed(2);
+}
+
+function my2Function(val) {
+	value=parseFloat(val);
+  v=((((value)-((value)%1))*40)*{{price['tota']}})+((((value)%1)*100)*{{price['tota']}});
+  document.getElementById("tkara").value=parseFloat(v).toFixed(2);
+  a=document.getElementById("bkara").value;
+b=document.getElementById("kkara").value;
+
+s=parseFloat(a)+parseFloat(b)+v;
+document.getElementById("wtax").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2").value=parseFloat(t2).toFixed(2);
+}
+
+function my3Function(val) {
+	value=parseFloat(val);
+  v=((((value)-((value)%1))*40)*{{price['mtax']}})+((((value)%1)*100)*{{price['mtax']}});
+  document.getElementById("mtax").value=parseFloat(v).toFixed(2);
+  s=parseFloat(document.getElementById("wtax").value);
+tax=v+s;
+document.getElementById("t1").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2").value=parseFloat(t2).toFixed(2);
+}
+
+function my4Function(val) {
+
+tax=document.getElementById("t1").value;
+bal=val
+t2=parseFloat(tax)+parseFloat(bal);
+document.getElementById("t2").value=parseFloat(t2).toFixed(2);
+}
+  
+function getval3(val) {
+	value=parseFloat(val);
+
+  a=document.getElementById("bkara").value;
+b=document.getElementById("kkara").value;
+
+s=parseFloat(a)+parseFloat(b)+value;
+document.getElementById("wtax").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2").value=parseFloat(t2).toFixed(2);
+}
+
+function getval2(val) {
+	value=parseFloat(val);
+
+  a=document.getElementById("bkara").value;
+
+c=document.getElementById("tkara").value;
+s=parseFloat(a)+value+parseFloat(c);
+document.getElementById("wtax").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2").value=parseFloat(t2).toFixed(2);
+}
+
+function getval1(val) {
+	value=parseFloat(val);
+
+  
+  
+b=document.getElementById("kkara").value;
+c=document.getElementById("tkara").value;
+s=value+parseFloat(b)+parseFloat(c);
+document.getElementById("wtax").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2").value=parseFloat(t2).toFixed(2);
+}
+</script>
+<script>
+// Get the modal
+var modal1 = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+var close=document.getElementById("clz");
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal1.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal1.style.display = "none";
+}
+close.onclick = function() {
+  modal1.style.display = "none";
+}
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal1) {
+    modal1.style.display = "none";
+  }
+}
+</script>
+  
+  <script>
+$body = $("body");
+$("#up").on("click",()=>{
+$body.addClass("loading")
+});
+</script>
+<div style="width:100%;" id="newone"> 
+
+    <table style="width:100%;margin-top:10%; ">
+      {% for i in data %}
+	    <tr>
+        <th style="width:2%;">{{ i['no'] }}</th>
+        <th style="width:4%;"><input style="width:85%;background:#2ECC71;" type="button" name="add{{ i['id']}}" value="ADD" id="add{{ i['id']}}"/></th>  <script>
+$body = $("body");
+$("#add{{ i['id']}}").on("click",()=>{
+$body.addClass("loading")
+});
+</script>
+        <th style="width:4%;"><input type="number" value="{{ i['pass']}}" name="pass{{ i['id']}}" id="pass{{ i['id']}}"/></th>
+
+        <th style="width:25%;text-align: left;"><input type="text" name="name{{ i['id']}}" value="{{ i['name']}}" id="name{{ i['id']}}"/></th>
+<script>
+      function onLoad{{ i['id']}}() {
+        var options{{ i['id']}} = {
+            sourceLanguage:
+                google.elements.transliteration.LanguageCode.ENGLISH,
+            destinationLanguage:
+                [google.elements.transliteration.LanguageCode.KANNADA],
+            shortcutKey: 'ctrl+g',
+            transliterationEnabled: true
+        };
+
+        // Create an instance on TransliterationControl with the required
+        // options.
+        var control{{ i['id']}} =
+            new google.elements.transliteration.TransliterationControl(options{{ i['id']}});
+
+        // Enable transliteration in the textbox with id
+        // 'transliterateTextarea'.
+          a="name"+"{{ i['id']}}"
+          control{{ i['id']}}.makeTransliteratable([a]);
+
+      }
+      google.setOnLoadCallback(onLoad{{ i['id']}});
+
+        </script>
+
+        <input type="text" hidden name="year{{ i['id']}}" value="{{ i['year']}}"/>
+        <th style="width:4%;"><input type="text" name="sno{{ i['id']}}" value="{{ i['sno']}}"/></th>
+        <th style="width:5%;"><input type="text" name="area{{ i['id']}}" value="{{ i['area']}}" id="area{{ i['id']}}" onchange="my3Function{{ i['id']}}(this.value)"/></th>
+        <th style="width:4%;"><input type="text" onchange="myFunction{{ i['id']}}(this.value)" name="batha{{ i['id']}}" value="{{ i['batha']}}" id="batha{{ i['id']}}" /></th>
+        <th style="width:5%;"><input type="text" name="bkara{{ i['id']}}" value="{{ i['bkara']}}" id="bkara{{ i['id']}}" onchange="getval1{{ i['id']}}(this.value)"/></th>
+        <th style="width:4%;"><input type="text" name="kabu{{ i['id']}}" value="{{ i['kabu']}}" id="kabu{{ i['id']}}" onchange="my1Function{{ i['id']}}(this.value)"/></th>
+      <th style="width:5%;"><input type="text" name="kkara{{ i['id']}}" value="{{ i['kkara']}}" id="kkara{{ i['id']}}" onchange="getval2{{ i['id']}}(this.value)"/></th>
+      <th style="width:4%;"><input type="text" name="thota{{ i['id']}}" value="{{ i['thota']}}" id="thota{{ i['id']}}" onchange="my2Function{{ i['id']}}(this.value)"/></th>
+      <th style="width:5%;"><input type="text" name="tkara{{ i['id']}}" value="{{ i['tkara']}}" id="tkara{{ i['id']}}" onchange="getval3{{ i['id']}}(this.value)"/></th>
+      <th style="width:5%;"><input type="text" name="wtax{{ i['id']}}" value="{{ i['wtax']}}" id="wtax{{ i['id']}}"/></th>
+      <th style="width:5%;"><input type="text" name="mtax{{ i['id']}}" value="{{ i['mtax']}}" id="mtax{{ i['id']}}" /></th>
+      <th style="width:5%;"><input type="text" name="t1{{ i['id']}}" value="{{ i['t1']}}" id="t1{{ i['id']}}" /></th>
+      <th style="width:5%;"><input type="text" name="bal{{ i['id']}}" value="{{ i['bal']}}" id="bal{{ i['id']}}" onchange="my4Function{{ i['id']}}(this.value)"/></th>
+      <th style="width:5%;"><input type="text" name="t2{{ i['id']}}" value="{{ i['t2']}}" id="t2{{ i['id']}}"/></th>
+        <th style="width:4%;"><input style="background:#E74C3C;" type="button" name="del" value="DELETE" id="del{{ i['id']}}"/></th>
+  <script>
+$body = $("body");
+$("#del{{ i['id']}}").on("click",()=>{
+$body.addClass("loading")
+});
+</script>
+    </tr>
+
+
+<script>
+
+function myFunction{{ i['id']}}(val) {
+	value=parseFloat(val);
+  v=((((value)-((value)%1))*40)*{{price['batha']}})+((((value)%1)*100)*{{price['batha']}});
+  document.getElementById("bkara{{ i['id']}}").value=parseFloat(v).toFixed(2);
+
+
+b=document.getElementById("kkara{{ i['id']}}").value;
+c=document.getElementById("tkara{{ i['id']}}").value;
+s=v+parseFloat(b)+parseFloat(c);
+document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax{{ i['id']}}").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal{{ i['id']}}").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
+}
+function my1Function{{ i['id']}}(val) {
+	value=parseFloat(val);
+  v=((((value)-((value)%1))*40)*{{price['kabbu']}})+((((value)%1)*100)*{{price['kabbu']}});
+  document.getElementById("kkara{{ i['id']}}").value=parseFloat(v).toFixed(2);
+  a=document.getElementById("bkara{{ i['id']}}").value;
+
+c=document.getElementById("tkara{{ i['id']}}").value;
+s=parseFloat(a)+v+parseFloat(c);
+document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax{{ i['id']}}").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal{{ i['id']}}").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
+}
+
+function my2Function{{ i['id']}}(val) {
+	value=parseFloat(val);
+  v=((((value)-((value)%1))*40)*{{price['tota']}})+((((value)%1)*100)*{{price['tota']}});
+  document.getElementById("tkara{{ i['id']}}").value=parseFloat(v).toFixed(2);
+  a=document.getElementById("bkara{{ i['id']}}").value;
+b=document.getElementById("kkara{{ i['id']}}").value;
+
+s=parseFloat(a)+parseFloat(b)+v;
+document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax{{ i['id']}}").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal{{ i['id']}}").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
+}
+
+function my3Function{{ i['id']}}(val) {
+	value=parseFloat(val);
+  v=((((value)-((value)%1))*40)*{{price['mtax']}})+((((value)%1)*100)*{{price['mtax']}});
+  document.getElementById("mtax{{ i['id']}}").value=parseFloat(v).toFixed(2);
+  s=parseFloat(document.getElementById("wtax{{ i['id']}}").value);
+tax=v+s;
+document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal{{ i['id']}}").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
+}
+
+function my4Function{{ i['id']}}(val) {
+
+tax=document.getElementById("t1{{ i['id']}}").value;
+bal=val
+t2=parseFloat(tax)+parseFloat(bal);
+document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
+}
+
+function getval3{{ i['id']}}(val) {
+	value=parseFloat(val);
+
+  a=document.getElementById("bkara{{ i['id']}}").value;
+b=document.getElementById("kkara{{ i['id']}}").value;
+
+s=parseFloat(a)+parseFloat(b)+value;
+document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax{{ i['id']}}").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal{{ i['id']}}").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
+}
+
+function getval2{{ i['id']}}(val) {
+	value=parseFloat(val);
+
+  a=document.getElementById("bkara{{ i['id']}}").value;
+
+c=document.getElementById("tkara{{ i['id']}}").value;
+s=parseFloat(a)+value+parseFloat(c);
+document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax{{ i['id']}}").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal{{ i['id']}}").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
+}
+
+function getval1{{ i['id']}}(val) {
+	value=parseFloat(val);
+
+
+
+b=document.getElementById("kkara{{ i['id']}}").value;
+c=document.getElementById("tkara{{ i['id']}}").value;
+s=value+parseFloat(b)+parseFloat(c);
+document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+t=document.getElementById("mtax{{ i['id']}}").value;
+tax=parseFloat(t)+s;
+document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+bal=document.getElementById("bal{{ i['id']}}").value;
+t2=tax+parseFloat(bal);
+document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
+}
+</script>
+
+   <script>
+$("#add{{ i['id']}}").click(function(){
+    a=document.getElementById('pass{{ i['id']}}').value
+    text=a+","+"{{year}}";
+    $.ajax({
+      url: "/dataeditadd",
+      type: "get",
+      data: {jsdata: text},
+      success: function(response) {
+        window.location = "/dataedit";
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+});
+</script>
+
+  <script>
+
+$("#del{{ i['id']}}").click(function(){
+
+    text="{{ i['id']}}"+","+"{{ i['pass']}}"+","+"{{year}}";
+    $.ajax({
+      url: "/dataeditdel",
+      type: "get",
+      data: {jsdata: text},
+      complete: function(response) {
+        window.location = "/dataedit";
+      }
+    });
+});
+</script>  
+      {% endfor %}
+    </table>
+</div>
+  <div class="modal"><!-- Place at bottom of page --></div>
+  <script>
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+     ajaxStop: function() { $body.removeClass("loading"); }    
+});
+</script>
+</form>
+
+<script type="text/javascript" src="static/js/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="static/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="static/js/jszip.min.js"></script>
+<script type="text/javascript" src="static/js/pdfmake.min.js"></script>
+<script type="text/javascript" src="static/js/vfs_fonts.js"></script>
+<script type="text/javascript" src="static/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="static/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="static/js/app.js"></script>
+<script type="text/javascript" src="static/js/jquery.mark.min.js"></script>
+<script type="text/javascript" src="static/js/datatables.mark.js"></script>
+<script type="text/javascript" src="static/js/buttons.colVis.min.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  border: 0px;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: center;
+}
+tbody{
+  width:100%;
+}
+    body {
+        height: 842px;
+        width: 795px;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+  @media print {
+  
+   h2 {page-break-before:auto;}
+   
+}
+@media print {
+table {page-break-inside:avoid;}
+}
+
+@media print
+{
+.noprint {display:none;}
+}
+</style>
+</head>
+<body >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<div class="noprint" style="    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: grey;
+    z-index: 99;
+    right: 0px;margin-bottom:50px;">
+
+
+         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+<a class="noprint" href="/"><i class='noprint fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+</div>
+  <h1></h1>
+  <form action="/datapayup" method="post" style="padding-top:50px;margin-top:50px;">
+                <select name="year1" id="year1" onchange="this.form.submit()" style="position:fixed;left:10px;top:5px;width:100px;height:20px;z-index:999;">
+            {% for y in dby %}
+                  {% if year1==y%}
+                      <option value="{{y}}" selected>{{y}}</option>
+                  {%endif%}
+                  {% if year1!=y%}
+                      <option value="{{y}}" >{{y}}</option>
+                  {%endif%}
+            {% endfor %}
+          </select>
+
+				<center><img src="static/images/icon1.png" style="width:100px;height:70px;padding-top:50px;margin-top:50px;"/><h1 style="margin:0;">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ </h1>
+	<h3 style="margin:0;">ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ </h3></center><hr>
+
+{% for i in data %}
+  {%if i['first']==1 %}
+  <h3>ಖಾತೆದಾರರ ಹೆಸರು=&emsp;{{ i["name"] }} </h3>
+    <input hidden type="number" name="pass" id="pass" value="{{i['pass']}}">
+  <h3>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ=&emsp;{{ i["pass"] }} </h3>
+  <h3>ಷೇರು ಖಾತೆ ಸಂಖ್ಯೆ=&emsp;{{ i["share"] }} </h3>
+
+{%endif%}
+  {%endfor%}
+<hr>
+
+<h3 style="margin:0;padding:5;text-align:center;">{{year1}}</h3>
+<table style="width:100%">
+  <tr>
+    <th>ಸರ್ವೆ ನಂ.</th>
+    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+    <th>ಭತ್ತ</th>
+    <th>ಕರ</th>
+    <th>ಕಬ್ಬು</th>
+    <th>ಕರ</th>
+    <th>ತೋಟ</th>
+    <th>ಕರ</th>
+    <th>ನೀರಿನ ಕರ</th>
+    <th>ನಿರ್ವಹಣೆ ಕರ</th>
+    <th style="text-align:right;"> ಒಟ್ಟು ಬೇಡಿಕೆ</th>
+  </tr>
+  			{% for j in data %}
+				
+  <tr>
+        <td>{{ j['sno']}}</td>
+        <td>{{ j['area']}}</td>
+        <td >{{ j['batha']}}</td>
+        <td >{{ j['bkara']}}</td>
+        <td >{{ j['kabu']}}</td>
+      <td >{{ j['kkara']}}</td>
+      <td >{{ j['thota']}}</td>
+      <td >{{ j['tkara']}}</td>
+      <td >{{ j['wtax']}}</td>
+      <td >{{ j['mtax']}}</td>
+    <td style="text-align:right;">{{ j['t1']}}</td>
+  </tr>
+			
+			{% endfor %}
+    {% for k in data %}
+  {%if k['first']==1 %}
+  <tr>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th  style="border: 0px;text-align:right;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+
+    <th style="border: 0px;text-align:right;">{{ k['rt']}}</th>
+
+  </tr>
+  <tr>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;text-align:right;">ಹಿಂದಿನ ಬಾಕಿ</th>
+
+    <th style="border: 0px;text-align:right;">{{ k['old']}}</th>
+
+  </tr>
+  <tr>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th  style="border: 0px;text-align:right;">ಒಟ್ಟು ಮೊತ್ತ</th>
+
+    <th style="border: 0px;text-align:right;">{{ k['total']}}</th>
+
+  </tr>
+  <tr>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th  style="border: 0px;text-align:right;">ಪಾವತಿ</th>
+
+    <th style="border: 0px;text-align:right;">{{ k['paid']}}</th>
+
+  </tr>
+  <tr>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th style="border: 0px;"></th>
+    <th  style="border: 0px;text-align:right;">ಬಾಕಿ ಮೊತ್ತ</th>
+
+    <th  style="border: 0px;text-align:right;">{{ k['balance']}}</th>
+
+  </tr>
+  {%endif%}
+  {%endfor%}
+</table>
+  <!--
+<br>
+	  {% for a in data %}
+			{% if a['first']==1 %}
+      <table style="">
+  <tr>
+      <th style="width:6%;text-align:center;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+      <th style="width:6%;text-align:center;">ಹಿಂದಿನ ಬಾಕಿ</th>
+      <th style="width:6%;text-align:center;">ಒಟ್ಟು ಮೊತ್ತ</th>
+      <th style="width:6%;text-align:center;">ಪಾವತಿ</th>
+      <th style="width:6%;text-align:center;">ಬಾಕಿ ಮೊತ್ತ</th>
+  </tr>
+  <tr>
+      <td style="width:6%;text-align:center;">{{ a['rt']}}</td>       
+      <td style="width:6%;text-align:center;">{{ a['old']}}</td>
+      <td style="width:6%;text-align:center;">{{ a['total']}}</td> 
+      <td style="width:6%;text-align:center;">{{ a['paid']}}</td>
+      <td style="width:6%;text-align:center;">{{ a['balance']}}</td> 
+  </tr>
+{% endif %}
+			{% endfor %}
+</table>-->
+  <hr>
+</form>
+<center><button class="noprint" style="background-color:#D3D3D3;padding:10px;"id="btnExport" onclick="printFunction()">PRINT</button></center>
+      <script>
+      function printFunction() { 
+        window.print(); 
+      }
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+
+
+
+    <div id="newone">
+
+
+
+<div style="overflow-x:auto">
+<table style="width:100%">
+  <caption>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</caption>
+  <tr>
+    <th>..</th>
+    <th>ಖಾತೆದಾರರ ಹೆಸರು</th>
+    <th>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+    <th>ಸರ್ವೆ ನಂ.</th>
+    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+
+
+  </tr>
+
+
+  {% for i in data %}
+
+
+
+  <tr>
+    <td><input type="submit" id="del{{ i['id'] }}" name="delete" value="del"/>
+    <td><input  type="text"  id="name{{ i['id'] }}" value="{{ i['name'] }}" />
+
+
+    </td>
+
+<td><input type="text" id="pass{{ i['id'] }}" value="{{ i['pass'] }}"/></td>
+<td><input type="text" id="sno{{ i['id'] }}" value="{{ i['sno'] }}"/></td>
+<td><input type="text" id="area{{ i['id'] }}" value="{{ i['area'] }}"/></td>
+
+<td><input type="submit" id="update{{ i['id'] }}" name="update" value="update"/></td>
+
+
+
+
+<script>
+
+$("#del{{ i['id'] }}").click(function(){
+    text="{{ i['id'] }}"+","+"{{ i['mapid'] }}";
+    $.ajax({
+      url: "/ownersdel",
+      type: "get",
+      data: {jsdata: text},
+      success: function(response) {
+        $("#newone").html(response);
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+});
+</script>
+<script>
+
+$("#update{{ i['id'] }}").click(function(){
+    v=document.getElementById('pass{{ i["id"] }}').value
+    x=document.getElementById('name{{ i["id"] }}').value
+    y=document.getElementById('sno{{ i["id"] }}').value
+    z=document.getElementById('area{{ i["id"] }}').value
+    text="{{ i['id'] }}"+","+"{{ i['mapid'] }}"+","+v+","+x+","+y+","+z;
+    $.ajax({
+      url: "/ownersupdate",
+      type: "get",
+      data: {jsdata: text},
+      success: function(response) {
+        $("#newone").html(response);
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+});
+</script>
+  </tr>
+
+  {% endfor %}
+  </table>
+</div>
+  <div>
+  <input type="number" placeholder="no of rows" value="" name="noof" id="num"/>
+  <input type="submit" value="addRow" id="addRow" name="addcolumn"/>
+  </div>
+  <script>
+
+$("#addRow").click(function(){
+    a=document.getElementById('num').value
+    text=a+","+"{{ data[0]['mapid'] }}";
+    $.ajax({
+      url: "/ownersadd",
+      type: "get",
+      data: {jsdata: text},
+      success: function(response) {
+        $("#newone").html(response);
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+});
+</script>
+</div>
+<div class="modal"><!-- Place at bottom of page --></div>
+<script>
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+     ajaxStop: function() { $body.removeClass("loading"); }
+});
+</script>
+
