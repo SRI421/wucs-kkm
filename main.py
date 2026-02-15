@@ -1,16 +1,179 @@
 import os
 import sqlite3
+from datetime import datetime
+
 from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 import base64
 from werkzeug.utils import secure_filename
 from contextlib import contextmanager
-from admin import init_admin
-
+from flask import send_file
 app = Flask(__name__, static_folder='./static', template_folder='./templates')
 
-admin = init_admin(app)
 # SQLite database configuration
 DB_PATH = os.path.join(os.path.dirname(__file__), 'wucskkm.db')
+
+
+def initialize_database_if_needed():
+    """
+    Check if database exists and initialize if it doesn't.
+    This ensures the application works on first deployment without .db file.
+    """
+    if not os.path.exists(DB_PATH):
+        print(f"⚠️  Database not found at: {DB_PATH}")
+        print("🔧 Initializing database...")
+        try:
+            # Import and run the initialization script
+            from init_db import init_database
+            init_database(DB_PATH)
+            print("✅ Database initialized successfully!")
+        except ImportError:
+            # If init_db.py is not available, create minimal database structure
+            print("⚠️  init_db.py not found. Creating minimal database structure...")
+            import sqlite3
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+
+            # Create essential tables
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_news (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    headline TEXT,
+                    text1 TEXT,
+                    text2 TEXT,
+                    text3 TEXT
+                )
+            """)
+            cursor.execute("""
+                INSERT INTO farmers_news (id, headline, text1, text2, text3) 
+                VALUES (1, 'Welcome', 'Welcome to WUCSKKM', '', '')
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_years (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    years TEXT NOT NULL UNIQUE
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_year_data (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    y TEXT NOT NULL,
+                    batha REAL,
+                    kabbu REAL,
+                    tota REAL,
+                    mtax REAL,
+                    UNIQUE(y)
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_data (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    pass INTEGER,
+                    sno TEXT,
+                    area REAL,
+                    batha REAL,
+                    bkara REAL,
+                    kabu REAL,
+                    kkara REAL,
+                    thota REAL,
+                    tkara REAL,
+                    wtax REAL,
+                    mtax REAL,
+                    t1 REAL,
+                    name TEXT,
+                    share TEXT,
+                    year TEXT,
+                    first INTEGER DEFAULT 0,
+                    paid REAL DEFAULT 0,
+                    bal REAL DEFAULT 0,
+                    t2 REAL,
+                    old REAL DEFAULT 0,
+                    rt REAL,
+                    total REAL,
+                    balance REAL,
+                    count INTEGER,
+                    village TEXT,
+                    crop1 TEXT,
+                    area1 REAL,
+                    kara1 REAL,
+                    crop2 TEXT,
+                    area2 REAL,
+                    kara2 REAL,
+                    pp TEXT,
+                    phone TEXT
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_document (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    data BLOB,
+                    link TEXT,
+                    title TEXT,
+                    filename TEXT
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_board (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    data BLOB,
+                    content TEXT
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_crops (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    data BLOB,
+                    content TEXT
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_gallery (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    data BLOB,
+                    content TEXT
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_society (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    data BLOB
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS farmers_map_data (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    mapid TEXT,
+                    name TEXT,
+                    pass INTEGER,
+                    sno TEXT,
+                    area REAL
+                )
+            """)
+
+            conn.commit()
+            conn.close()
+            print("✅ Minimal database structure created!")
+        except Exception as e:
+            print(f"❌ Error initializing database: {e}")
+            raise
+    else:
+        print(f"✓ Database found at: {DB_PATH}")
+
+
+# Initialize database on application startup
+initialize_database_if_needed()
+
+# NOW initialize Flask-Admin (after database is ready)
+from admin import init_admin
+admin = init_admin(app)
 
 
 def fix_base64_image(data_str):
@@ -1761,9 +1924,38 @@ def datacorrection():
         return render_template('dataindex.html', data=rows, dby=ye, year=year)
 
 
+@app.route('/export_my_db', methods=['GET'])
+def export_my_db():
+    """
+    Download current database as backup
+    Requires login for security
+    """
+    # Security check - must be logged in
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))
+
+    # Check if database exists
+    if not os.path.exists(DB_PATH):
+        return "Database file not found!", 404
+
+    try:
+        # Generate filename with current date/time
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        download_name = f'wucskkm_backup_{timestamp}.db'
+
+        # Send file as download
+        return send_file(
+            DB_PATH,
+            as_attachment=True,
+            download_name=download_name,
+            mimetype='application/x-sqlite3'
+        )
+    except Exception as e:
+        return f"Error downloading database: {e}", 500
+
 # Initialize SQLAdmin
 if __name__ == '__main__':
     # Import and initialize admin
-
+    initialize_database_if_needed()
     app.secret_key = os.urandom(12)
     app.run(debug=False, use_reloader=False, host='0.0.0.0', port=5000)

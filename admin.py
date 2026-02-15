@@ -387,11 +387,11 @@ class MyAdminIndexView(AdminIndexView):
 def init_admin(app):
     """Initialize Flask-Admin with the Flask app"""
 
-    # Create tables if they don't exist
-    try:
-        Base.metadata.create_all(bind=engine)
-    except Exception as e:
-        print(f"Warning: Could not create tables: {e}")
+    # DON'T create tables here - init_db.py handles that with CSV import
+    # Only ensure SQLAlchemy can connect to existing database
+    if not os.path.exists(DB_PATH):
+        print(f"⚠️  Warning: Database not found at {DB_PATH}")
+        print(f"ℹ️  Admin panel will be unavailable until database is created")
 
     # Create admin - uses default index view
     admin = Admin(
