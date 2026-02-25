@@ -502,7 +502,7 @@
 <main id="wrap">
 
   <div class="marquee-strip">
-    <marquee behavior="scroll" scrolldelay="120">{{ hello }}</marquee>
+    <marquee behavior="scroll" scrolldelay="120"><span data-en="{{ hello }}" data-kn="{{ hello }}">{{ hello }}</span></marquee>
   </div>
 
   <!-- ─── HERO ROW ─── -->
@@ -517,13 +517,12 @@
       <div class="hero-divider"></div>
 
       <div class="hero-btns">
-        <!-- Public buttons (sky-blue) -->
-        <a class="hbtn" href="/crops" onclick="showLoader()">🌾 <span>{{text1}}</span></a>
-        <a class="hbtn" href="/board" onclick="showLoader()">📋 <span>{{text2}}</span></a>
+        <a class="hbtn" href="/crops" onclick="showLoader()">🌾 <span data-kn="{{text1}}" data-en="{{text1}}">{{text1}}</span></a>
+        <a class="hbtn" href="/board" onclick="showLoader()">📋 <span data-kn="{{text2}}" data-en="{{text2}}">{{text2}}</span></a>
         <a class="hbtn" href="/map"   onclick="showLoader()">
           🗺️ <span data-en="Farmer Land Map" data-kn="ರೈತರ ಕೃಷಿ ಭೂಮಿಯ ನಕ್ಷೆ">Farmer Land Map</span>
         </a>
-        <a class="hbtn" href="/news"  onclick="showLoader()">📰 <span>{{text3}}</span></a>
+        <a class="hbtn" href="/news"  onclick="showLoader()">📰 <span data-kn="{{text3}}" data-en="{{text3}}">{{text3}}</span></a>
 
         <!-- Admin buttons (emerald tint) -->
         <a class="hbtn adm" href="/dataseepay" onclick="showLoader()">

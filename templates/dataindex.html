@@ -153,6 +153,8 @@
     color: rgba(255,255,255,.6); letter-spacing: .5px;
   }
   .lang-btn.on { background: var(--accent); color: #fff; }
+  .sb-uname { font-size: 13px; color: #fff; font-weight: 500; }
+  .sb-urole { font-size: 11px; color: rgba(255,255,255,.45); }
 
   #home-btn {
     padding: 7px 16px;
@@ -484,8 +486,8 @@
   <div class="tb-right">
     <span class="admin-pill" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:rgba(22,163,74,.18);border-radius:14px;font-size:11px;font-weight:700;color:#4ade80;">⚡ <span data-en="Admin" data-kn="ನಿರ್ವಾಹಕ">Admin</span></span>
     <div class="lang-wrap">
-      <button class="lang-btn on" id="len" onclick="setLang('en')">EN</button>
-      <button class="lang-btn"    id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
+      <button class="lang-btn"    id="len" onclick="setLang('en')">EN</button>
+      <button class="lang-btn on" id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
     </div>
     <a href="/logout" onclick="showLoader()"
        style="padding:8px 14px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">

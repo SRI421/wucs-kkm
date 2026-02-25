@@ -482,7 +482,7 @@
 
   <!-- Marquee -->
   <div class="marquee-strip">
-    <marquee behavior="scroll" scrolldelay="120">{{ hello }}</marquee>
+    <marquee behavior="scroll" scrolldelay="120"><span data-en="{{ hello }}" data-kn="{{ hello }}">{{ hello }}</span></marquee>
   </div>
 
   <!-- ─── HERO ROW (≈50vh) ─── -->
@@ -498,10 +498,10 @@
 
       <div class="hero-btns">
         <a class="hbtn" href="/crops" onclick="showLoader()">
-          🌾 <span>{{text1}}</span>
+          🌾 <span data-kn="{{text1}}" data-en="{{text1}}">{{text1}}</span>
         </a>
         <a class="hbtn" href="/board" onclick="showLoader()">
-          📋 <span>{{text2}}</span>
+          📋 <span data-kn="{{text2}}" data-en="{{text2}}">{{text2}}</span>
         </a>
         <a class="hbtn" href="/map" onclick="showLoader()">
           🗺️ <span data-en="Farmer Land Map" data-kn="ರೈತರ ಕೃಷಿ ಭೂಮಿಯ ನಕ್ಷೆ">Farmer Land Map</span>

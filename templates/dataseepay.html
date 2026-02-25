@@ -127,6 +127,8 @@
     background: transparent; color: rgba(255,255,255,.6); letter-spacing: .5px;
   }
   .lang-btn.on { background: var(--accent); color: #fff; }
+  .sb-uname { font-size: 13px; color: #fff; font-weight: 500; }
+  .sb-urole { font-size: 11px; color: rgba(255,255,255,.45); }
   #home-btn {
     padding: 8px 16px; background: linear-gradient(135deg,var(--green),var(--teal));
     color: #fff; border: none; border-radius: 20px;
@@ -226,7 +228,7 @@
 <div id="idloader"></div>
 
 <!-- ═══════ SIDEBAR ═══════ -->
-<aside id="sidebar" aria-label="Main navigation">
+<aside id="sidebar" aria-label="Admin navigation">
   <div class="sb-header">
     <div class="sb-logo">
       <div class="sb-icon">💧</div>
@@ -235,7 +237,8 @@
         <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
       </div>
     </div>
-    <button class="sb-close" id="sb-close-btn" aria-label="Close">✕</button>
+    <button class="sb-close" id="sb-close-btn">✕</button>
+  </div>
 
   <div class="sb-user">
     <div class="sb-avatar"><i class="fa fa-user-shield"></i></div>
@@ -248,7 +251,7 @@
   <nav class="sb-nav">
     <span class="sb-label">Navigation</span>
 
-    <a href="/" class="sb-link" onclick="showLoader()">
+    <a href="/" class="sb-link active">
       <i class="fa fa-home ic"></i>
       <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
     </a>
@@ -275,7 +278,7 @@
 
     <span class="sb-label" style="margin-top:6px" data-en="Admin Panel" data-kn="ನಿರ್ವಹಣೆ">Admin Panel</span>
 
-    <a href="/dataseepay" class="sb-link active" onclick="showLoader()">
+    <a href="/dataseepay" class="sb-link" onclick="showLoader()">
       <i class="fa fa-tint ic"></i>
       <span data-en="Water Tax Payment" data-kn="ನೀರು ಕರ ಪಾವತಿ">Water Tax Payment</span>
     </a>
@@ -291,37 +294,33 @@
       <i class="fa fa-database ic"></i>
       <span data-en="Print Full Database" data-kn="ಡೇಟಾಬೇಸ್ ಮುದ್ರಣ">Print Full Database</span>
     </a>
-    <a href="/year" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-calendar-alt ic"></i>
-      <span data-en="Year / Tax Rates" data-kn="ವರ್ಷ / ಕರ ದರ">Year / Tax Rates</span>
-    </a>
     <a href="/news" class="sb-link" onclick="showLoader()">
       <i class="fa fa-newspaper ic"></i>
       <span data-en="Manage News" data-kn="ಸುದ್ದಿ ನಿರ್ವಹಣೆ">Manage News</span>
     </a>
 
     <span class="sb-label" style="margin-top:6px">Explore</span>
-    <button class="sb-link" onclick="showMo && showMo('gal-mo')">
+    <button class="sb-link" onclick="showMo('gal-mo')">
       <i class="fa fa-image ic"></i>
       <span data-en="Gallery" data-kn="ಗ್ಯಾಲರಿ">Gallery</span>
     </button>
-    <button class="sb-link" onclick="showMo && showMo('cont-mo')">
+    <button class="sb-link" onclick="showMo('cont-mo')">
       <i class="fa fa-phone ic"></i>
       <span data-en="Contacts" data-kn="ಸಂಪರ್ಕ">Contacts</span>
     </button>
   </nav>
 
   <div class="sb-footer">
-    <a href="/logout" class="sb-link" onclick="showLoader()"
-       style="background:rgba(220,38,38,.18);border-radius:8px;color:#fca5a5;">
-      <i class="fa fa-sign-out ic"></i>
+    <a href="/logout" class="sb-logout" onclick="showLoader()">
+      <i class="fa fa-sign-out"></i>
       <span data-en="Logout" data-kn="ಲಾಗ್‌ಔಟ್">Logout</span>
     </a>
   </div>
-</div>
 </aside>
 
 <div id="overlay" onclick="closeSB()"></div>
+
+
 
 <!-- ═══════ TOPBAR ═══════ -->
 <header id="topbar">
@@ -332,8 +331,8 @@
   <div class="tb-right">
     <span class="admin-pill" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:rgba(22,163,74,.18);border-radius:14px;font-size:11px;font-weight:700;color:#4ade80;">⚡ <span data-en="Admin" data-kn="ನಿರ್ವಾಹಕ">Admin</span></span>
     <div class="lang-wrap">
-      <button class="lang-btn on" id="len" onclick="setLang('en')">EN</button>
-      <button class="lang-btn"    id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
+      <button class="lang-btn" id="len" onclick="setLang('en')">EN</button>
+      <button class="lang-btn on"    id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
     </div>
     <a href="/logout" onclick="showLoader()"
        style="padding:8px 14px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
@@ -445,6 +444,11 @@ $(document).on({
   ajaxStart: function() { $body.addClass("loading"); },
   ajaxStop:  function() { $body.removeClass("loading"); }
 });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    setLang('kn');
+  });
 </script>
 </body>
 </html>
