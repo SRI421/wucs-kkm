@@ -1,109 +1,619 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ಪ್ರತಿಕ್ರಿಯೆ – WUCSKKM</title>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html><head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <style>
+    /* ── Variables ── */
+    :root {
+      --sw: 270px; --th: 56px;
+      --green:      #0d6e5a;
+      --green-dark: #094a3c;
+      --accent:     #16a34a;
+      --teal:       #0d9488;
+      --sidebar-bg: #0a1f1a;
+      --sid-text:   #c8e6c9;
+      --sid-hover:  rgba(22,163,74,.15);
+      --sid-active: rgba(22,163,74,.25);
+      --topbar-bg:  rgba(10,31,26,.97);
+      --text:       #1a2e28;
+      --muted:      #5a7a72;
+      --radius:     14px;
+      --ease:       .3s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins','Noto Sans Kannada',sans-serif;
+      background: url('/static/views/14.jpg') center/cover fixed;
+      color: var(--text);
+      min-height: 100vh;
+      padding-top: var(--th);
+    }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1" />
-<meta name="HandheldFriendly" content="true" />
-<title>Feedback Form</title>
+    /* ── Sidebar ── */
+    #sidebar {
+      position: fixed; top: 0; left: calc(-1 * var(--sw));
+      width: var(--sw); height: 100vh;
+      background: var(--sidebar-bg); z-index: 1000;
+      transition: transform var(--ease);
+      display: flex; flex-direction: column;
+      overflow-y: auto; box-shadow: 4px 0 24px rgba(0,0,0,.2);
+    }
+    #sidebar.open { transform: translateX(var(--sw)); }
+    .sb-header {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(135deg,var(--green),var(--green-dark));
+      position: relative;
+    }
+    .sb-logo { display: flex; align-items: center; gap: 11px; }
+    .sb-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg,#16a34a,#0d9488);
+      border-radius: 9px; display: flex; align-items: center;
+      justify-content: center; font-size: 19px; color: #fff; flex-shrink: 0;
+    }
+    .sb-org { font-size: 11px; font-weight: 600; color: #a7f3d0; font-family: 'Noto Sans Kannada',sans-serif; line-height: 1.3; }
+    .sb-sub { font-size: 10px; color: rgba(255,255,255,.55); font-family: 'Noto Sans Kannada',sans-serif; }
+    .sb-close {
+      position: absolute; top: 12px; right: 12px;
+      width: 26px; height: 26px; background: rgba(255,255,255,.1);
+      border: none; border-radius: 6px; color: #fff; cursor: pointer;
+      font-size: 13px; display: flex; align-items: center; justify-content: center;
+      transition: background var(--ease);
+    }
+    .sb-close:hover { background: rgba(255,255,255,.22); }
+    .sb-user {
+      margin: 10px 12px; background: rgba(255,255,255,.07);
+      border-radius: 10px; padding: 11px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sb-avatar {
+      width: 35px; height: 35px;
+      background: linear-gradient(135deg,#16a34a,#0d9488);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; color: #fff; font-size: 15px; flex-shrink: 0;
+    }
+    .sb-uname { font-size: 13px; color: #fff; font-weight: 500; }
+    .sb-urole { font-size: 11px; color: rgba(255,255,255,.45); }
+    .sb-nav { flex: 1; padding: 8px 0; }
+    .sb-label {
+      font-size: 10px; font-weight: 600; color: rgba(255,255,255,.35);
+      text-transform: uppercase; letter-spacing: 1.2px; padding: 10px 20px 4px; display: block;
+    }
+    .sb-link {
+      display: flex; align-items: center; gap: 12px; padding: 10px 20px;
+      color: var(--sid-text); text-decoration: none; font-size: 13.5px;
+      transition: background var(--ease), color var(--ease);
+      border: none; background: transparent; width: 100%; cursor: pointer; text-align: left;
+    }
+    .sb-link:hover  { background: var(--sid-hover); color: #fff; }
+    .sb-link.active { background: var(--sid-active); color: #4ade80; font-weight: 500; }
+    .sb-link .ic    { width: 20px; text-align: center; font-size: 14px; opacity: .8; flex-shrink: 0; }
+    .sb-footer { padding: 12px; border-top: 1px solid rgba(255,255,255,.08); }
+    .sb-logout {
+      display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+      background: rgba(239,68,68,.15); color: #fca5a5;
+      border-radius: 8px; text-decoration: none;
+      font-size: 13px; font-weight: 500; transition: background var(--ease);
+      width: 100%; border: none; cursor: pointer; text-align: left;
+    }
+    .sb-logout:hover { background: rgba(239,68,68,.28); color: #f87171; }
 
-<link type="text/css" rel="stylesheet" href="https://cdn.jotfor.ms/themes/CSS/5e6b428acc8c4e222d1beb91.css?themeRevisionID=5f30e2a790832f3e96009402"/>
+    /* ── Overlay ── */
+    #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999; backdrop-filter: blur(2px); }
+    #overlay.on { display: block; }
 
+    /* ── Topbar ── */
+    #topbar {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--th);
+      background: var(--topbar-bg); z-index: 998;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px; backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .tb-left  { display: flex; align-items: center; gap: 11px; }
+    .tb-right { display: flex; align-items: center; gap: 9px; }
+    #ham-btn {
+      width: 40px; height: 40px; background: transparent;
+      border: 1.5px solid rgba(255,255,255,.2); border-radius: 8px;
+      color: #fff; font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--ease);
+    }
+    #ham-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.4); }
+    #tb-title { color: rgba(255,255,255,.85); font-size: 14px; font-weight: 500; display: none; }
+    @media(min-width:480px) { #tb-title { display: block; } }
+    .admin-pill {
+      padding: 4px 12px; background: rgba(22,163,74,.18);
+      border: 1px solid rgba(22,163,74,.3); border-radius: 20px;
+      color: #4ade80; font-size: 11.5px; font-weight: 600; display: none;
+    }
+    @media(min-width:480px) { .admin-pill { display: block; } }
+    .lang-wrap { display: flex; align-items: center; background: rgba(255,255,255,.1); border-radius: 20px; padding: 2px; }
+    .lang-btn {
+      padding: 4px 10px; border-radius: 18px; font-size: 11px; font-weight: 600;
+      border: none; cursor: pointer; transition: all .2s;
+      background: transparent; color: rgba(255,255,255,.6);
+    }
+    .lang-btn.on { background: var(--accent); color: #fff; }
+    .tb-logout {
+      padding: 7px 15px; background: rgba(239,68,68,.15); color: #fca5a5;
+      border: 1px solid rgba(239,68,68,.25); border-radius: 20px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: all var(--ease); text-decoration: none; white-space: nowrap;
+    }
+    .tb-logout:hover { background: rgba(239,68,68,.28); color: #f87171; }
+    #login-tb-btn {
+      padding: 7px 15px; background: rgba(22,163,74,.2); color: #4ade80;
+      border: 1px solid rgba(22,163,74,.3); border-radius: 20px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: all var(--ease); text-decoration: none; white-space: nowrap;
+    }
+    #login-tb-btn:hover { background: rgba(22,163,74,.35); }
 
+    /* ── Loader ── */
+    #idloader { display: none; position: fixed; z-index: 9999; inset: 0; background: rgba(255,255,255,.82); backdrop-filter: blur(3px); }
+    #idloader::after {
+      content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 46px; height: 46px; border: 4px solid #e0e0e0; border-top-color: var(--green);
+      border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Page layout ── */
+    #wrap {
+      max-width: 720px; margin: 0 auto;
+      padding: 32px 16px 56px;
+    }
+
+    /* ── Feedback submit card ── */
+    .form-card {
+      background: rgba(255,255,255,.93);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.95);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 40px rgba(0,0,0,.13);
+      padding: 32px 36px;
+      margin-bottom: 32px;
+      animation: fadeUp .35s ease;
+    }
+    @keyframes fadeUp { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    .form-card-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px; padding-bottom: 16px;
+      border-bottom: 2px solid rgba(22,163,74,.12);
+    }
+    .fch-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg,#16a34a,#0d9488);
+      border-radius: 11px; display: flex; align-items: center;
+      justify-content: center; font-size: 20px; color: #fff; flex-shrink: 0;
+    }
+    .fch-title { font-size: 18px; font-weight: 700; color: var(--text); font-family: 'Noto Sans Kannada',sans-serif; }
+    .fch-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+    @media(max-width:520px) { .field-row { grid-template-columns: 1fr; } }
+    .field-group { margin-bottom: 16px; }
+    .field-label {
+      display: block; font-size: 11.5px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .7px; margin-bottom: 6px;
+    }
+    .field-req { color: #ef4444; margin-left: 2px; }
+    .field-input {
+      width: 100%; padding: 10px 13px;
+      border: 1.5px solid rgba(13,110,90,.18); border-radius: 9px;
+      font-size: 14px; font-family: 'Poppins','Noto Sans Kannada',sans-serif;
+      color: var(--text); background: rgba(255,255,255,.85);
+      transition: border-color var(--ease), box-shadow var(--ease); outline: none;
+    }
+    .field-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(22,163,74,.12);
+      background: #fff;
+    }
+    textarea.field-input { resize: vertical; min-height: 120px; }
+
+    .submit-btn {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg,#16a34a,#0d9488);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 600;
+      font-family: 'Noto Sans Kannada','Poppins',sans-serif;
+      cursor: pointer; transition: all var(--ease);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 6px;
+    }
+    .submit-btn:hover { background: linear-gradient(135deg,#15803d,#0c7a70); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(22,163,74,.3); }
+    .submit-btn:active { transform: none; }
+
+    /* ── Success flash ── */
+    .flash-success {
+      background: rgba(22,163,74,.12); border: 1.5px solid rgba(22,163,74,.3);
+      color: #0d6e5a; border-radius: 10px; padding: 12px 16px;
+      font-size: 13.5px; font-weight: 500; display: flex; align-items: center; gap: 9px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Admin section header ── */
+    .admin-section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .admin-section-title {
+      font-size: 16px; font-weight: 700; color: #fff;
+      display: flex; align-items: center; gap: 8px;
+      text-shadow: 0 1px 6px rgba(0,0,0,.3);
+    }
+    .feed-count {
+      background: rgba(22,163,74,.25); color: #4ade80;
+      border: 1px solid rgba(22,163,74,.35);
+      border-radius: 20px; padding: 3px 11px;
+      font-size: 12px; font-weight: 600;
+    }
+
+    /* ── Feedback cards ── */
+    .feed-card {
+      background: rgba(255,255,255,.93);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.95);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 20px rgba(0,0,0,.10);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      animation: fadeUp .3s ease;
+      position: relative;
+    }
+    .feed-card-top {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+      margin-bottom: 12px;
+    }
+    .feed-avatar {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: linear-gradient(135deg,#16a34a,#0d9488);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; color: #fff; font-size: 16px; font-weight: 700;
+    }
+    .feed-meta { flex: 1; }
+    .feed-name {
+      font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3;
+    }
+    .feed-email {
+      font-size: 12px; color: var(--muted); margin-top: 2px;
+    }
+    .feed-date {
+      font-size: 11px; color: var(--muted);
+      background: rgba(13,110,90,.07); border-radius: 6px;
+      padding: 3px 9px; white-space: nowrap; align-self: flex-start;
+      margin-top: 2px; flex-shrink: 0;
+    }
+    .feed-message {
+      font-size: 14px; color: #2d4a40; line-height: 1.65;
+      padding: 12px 14px;
+      background: rgba(13,110,90,.05);
+      border-left: 3px solid rgba(22,163,74,.35);
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 12px;
+      word-break: break-word;
+    }
+    .feed-actions { display: flex; justify-content: flex-end; }
+    .del-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px;
+      background: rgba(239,68,68,.1); color: #dc2626;
+      border: 1px solid rgba(239,68,68,.25); border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: all var(--ease);
+    }
+    .del-btn:hover { background: rgba(239,68,68,.22); border-color: rgba(239,68,68,.45); }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center; padding: 48px 24px;
+      background: rgba(255,255,255,.85);
+      border-radius: var(--radius);
+      backdrop-filter: blur(10px);
+    }
+    .empty-icon { font-size: 42px; margin-bottom: 12px; opacity: .5; }
+    .empty-text { font-size: 15px; color: var(--muted); }
+
+    @media(max-width:600px) {
+      .form-card { padding: 20px 16px; }
+      #wrap { padding: 20px 10px 48px; }
+      .feed-card { padding: 16px; }
+    }
+  </style>
 </head>
 <body>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  	<div style="    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: grey;
-    z-index: 99;
-    right: 0px;margin-bottom:50px;">
 
-
-         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
-<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
-</div>
-<form class="jotform-form" action="https://submit.jotform.com/submit/203421187019449/" method="post" name="form_203421187019449" id="203421187019449" accept-charset="utf-8" autocomplete="on">
-  <input type="hidden" name="formID" value="203421187019449" />
-  <input type="hidden" id="JWTContainer" value="" />
-  <input type="hidden" id="cardinalOrderNumber" value="" />
-  <div role="main" class="form-all">
-    <ul class="form-section page-section">
-      <li id="cid_1" class="form-input-wide" data-type="control_head">
-        <div class="form-header-group  header-large">
-          <div class="header-text httal htvam">
-            <h1 id="header_1" class="form-header" data-component="header">
-              Feedback Form
-            </h1>
-            <div id="subHeader_1" class="form-subHeader">
-              We would love to hear your thoughts, suggestions, concerns or problems with anything so we can improve!
-            </div>
-          </div>
-        </div>
-      </li>
-      <li class="form-line jf-required" data-type="control_fullname" id="id_8">
-        <label class="form-label form-label-top form-label-auto" id="label_8" for="first_8">
-          Name
-          <span class="form-required">
-            *
-          </span>
-        </label>
-        <div id="cid_8" class="form-input-wide jf-required" data-layout="full">
-          <div data-wrapper-react="true">
-            <span class="form-sub-label-container" style="vertical-align:top" data-input-type="first">
-              <input type="text" id="first_8" name="q8_name[first]" class="form-textbox validate[required]" size="10" value="" data-component="first" aria-labelledby="label_8 sublabel_8_first" required="" />
-              <label class="form-sub-label" for="first_8" id="sublabel_8_first" style="min-height:13px" aria-hidden="false"> First Name </label>
-            </span>
-            <span class="form-sub-label-container" style="vertical-align:top" data-input-type="last">
-              <input type="text" id="last_8" name="q8_name[last]" class="form-textbox validate[required]" size="15" value="" data-component="last" aria-labelledby="label_8 sublabel_8_last" required="" />
-              <label class="form-sub-label" for="last_8" id="sublabel_8_last" style="min-height:13px" aria-hidden="false"> Last Name </label>
-            </span>
-          </div>
-        </div>
-      </li>
-      <li class="form-line jf-required" data-type="control_email" id="id_6">
-        <label class="form-label form-label-top form-label-auto" id="label_6" for="input_6">
-          E-mail
-          <span class="form-required">
-            *
-          </span>
-        </label>
-        <div id="cid_6" class="form-input-wide jf-required" data-layout="half">
-          <span class="form-sub-label-container" style="vertical-align:top">
-            <input type="email" id="input_6" name="q6_email6" class="form-textbox validate[required, Email]" style="width:310px" size="310" value="" placeholder="ex: myname@example.com" data-component="email" aria-labelledby="label_6 sublabel_input_6" required="" />
-            <label class="form-sub-label" for="input_6" id="sublabel_input_6" style="min-height:13px" aria-hidden="false"> example@example.com </label>
-          </span>
-        </div>
-      </li>
-      <li class="form-line jf-required" data-type="control_textarea" id="id_4">
-        <label class="form-label form-label-top form-label-auto" id="label_4" for="input_4">
-          Describe Your Feedback:
-          <span class="form-required">
-            *
-          </span>
-        </label>
-        <div id="cid_4" class="form-input-wide jf-required" data-layout="full">
-          <textarea id="input_4" class="form-textarea validate[required]" name="q4_describeYour" style="width:648px;height:163px" data-component="textarea" required="" aria-labelledby="label_4"></textarea>
-        </div>
-      </li>
-      <li class="form-line" data-type="control_button" id="id_2">
-        <div id="cid_2" class="form-input-wide" data-layout="full">
-          <div data-align="auto" class="form-buttons-wrapper form-buttons-auto   jsTest-button-wrapperField">
-            <button id="input_2" type="submit" class="form-submit-button submit-button jf-form-buttons jsTest-submitField" data-component="button" data-content="">
-              Submit Feedback
-            </button>
-          </div>
-        </div>
-      </li>
-
-    </ul>
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside id="sidebar" aria-label="Navigation">
+  <div class="sb-header">
+    <div class="sb-logo">
+      <div class="sb-icon">💧</div>
+      <div>
+        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
+        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
+      </div>
+    </div>
+    <button class="sb-close" id="sb-close-btn">✕</button>
   </div>
- 
 
+  {% if logged_in %}
+  <div class="sb-user">
+    <div class="sb-avatar"><i class="fa fa-user-shield"></i></div>
+    <div>
+      <div class="sb-uname">Ravikumar A</div>
+      <div class="sb-urole" data-en="Administrator" data-kn="ನಿರ್ವಾಹಕರು">ನಿರ್ವಾಹಕರು</div>
+    </div>
+  </div>
+  {% endif %}
 
-</form></body>
+  <nav class="sb-nav">
+    <span class="sb-label">Navigation</span>
+    <a href="/" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-home ic"></i>
+      <span data-en="Home" data-kn="ಮುಖಪುಟ">ಮುಖಪುಟ</span>
+    </a>
+    <a href="/feeds" class="sb-link active">
+      <i class="fa fa-comment ic"></i>
+      <span data-en="Feedback" data-kn="ಪ್ರತಿಕ್ರಿಯೆ">ಪ್ರತಿಕ್ರಿಯೆ</span>
+    </a>
+    <a href="/list" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-list ic"></i>
+      <span data-en="List" data-kn="ಪಟ್ಟಿ">ಪಟ್ಟಿ</span>
+    </a>
+    <a href="/allmap" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-map ic"></i>
+      <span data-en="Map" data-kn="ನಕ್ಷೆ">ನಕ್ಷೆ</span>
+    </a>
+    <a href="/map" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-map-marker ic"></i>
+      <span data-en="Click-Map" data-kn="ಕ್ಲಿಕ್-ನಕ್ಷೆ">ಕ್ಲಿಕ್-ನಕ್ಷೆ</span>
+    </a>
+    <a href="/document" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-file ic"></i>
+      <span data-en="Documents" data-kn="ದಾಖಲೆಗಳು">ದಾಖಲೆಗಳು</span>
+    </a>
+    <a href="/socinfo" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-info-circle ic"></i>
+      <span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">ಸಂಘದ ಮಾಹಿತಿ</span>
+    </a>
+
+    {% if logged_in %}
+    <span class="sb-label" style="margin-top:6px" data-en="Admin Panel" data-kn="ನಿರ್ವಹಣೆ">ನಿರ್ವಹಣೆ</span>
+    <a href="/dataseepay" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-droplet ic"></i>
+      <span data-en="Water Tax Payment" data-kn="ನೀರು ಕರ ಪಾವತಿ">ನೀರು ಕರ ಪಾವತಿ</span>
+    </a>
+    <a href="/datapay" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-print ic"></i>
+      <span data-en="Print Tax Records" data-kn="ಕರ ಪಾವತಿ ಮುದ್ರಿಸಿ">ಕರ ಪಾವತಿ ಮುದ್ರಿಸಿ</span>
+    </a>
+    <a href="/dataedit" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-pen ic"></i>
+      <span data-en="Add / Update Account" data-kn="ಖಾತೆ ಸೇರಿಸಿ/ನವೀಕರಿಸಿ">ಖಾತೆ ಸೇರಿಸಿ/ನವೀಕರಿಸಿ</span>
+    </a>
+    <a href="/dataindex" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-database ic"></i>
+      <span data-en="Print Full Database" data-kn="ಡೇಟಾಬೇಸ್ ಮುದ್ರಣ">ಡೇಟಾಬೇಸ್ ಮುದ್ರಣ</span>
+    </a>
+    <a href="/news" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-newspaper ic"></i>
+      <span data-en="Manage News" data-kn="ಸುದ್ದಿ ನಿರ್ವಹಣೆ">ಸುದ್ದಿ ನಿರ್ವಹಣೆ</span>
+    </a>
+    {% endif %}
+  </nav>
+
+  <div class="sb-footer">
+    {% if logged_in %}
+    <a href="/logout" class="sb-logout" onclick="showLoader()">
+      <i class="fa fa-right-from-bracket"></i>
+      <span data-en="Logout" data-kn="ಲಾಗ್‌ಔಟ್">ಲಾಗ್‌ಔಟ್</span>
+    </a>
+    {% else %}
+    <a href="/" class="sb-logout" style="background:rgba(22,163,74,.15);color:#4ade80;">
+      <i class="fa fa-lock"></i>
+      <span data-en="Login" data-kn="ಲಾಗಿನ್">ಲಾಗಿನ್</span>
+    </a>
+    {% endif %}
+  </div>
+</aside>
+
+<div id="overlay" onclick="closeSB()"></div>
+
+<!-- ═══════ TOPBAR ═══════ -->
+<header id="topbar">
+  <div class="tb-left">
+    <button id="ham-btn" onclick="toggleSB()"><i class="fa fa-bars"></i></button>
+    <span id="tb-title" data-en="Feedback" data-kn="ಪ್ರತಿಕ್ರಿಯೆ">ಪ್ರತಿಕ್ರಿಯೆ</span>
+  </div>
+  <div class="tb-right">
+    {% if logged_in %}
+    <span class="admin-pill">⚡ <span data-en="Admin" data-kn="ನಿರ್ವಾಹಕ">ನಿರ್ವಾಹಕ</span></span>
+    {% endif %}
+
+    <div class="lang-wrap">
+      <button class="lang-btn" id="len" onclick="setLang('en')">EN</button>
+      <button class="lang-btn on" id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
+    </div>
+
+    {% if logged_in %}
+    <a href="/logout" class="tb-logout" onclick="showLoader()">
+      <i class="fa fa-right-from-bracket" style="margin-right:4px"></i>
+      <span data-en="Logout" data-kn="ಲಾಗ್‌ಔಟ್">ಲಾಗ್‌ಔಟ್</span>
+    </a>
+    {% else %}
+    <a href="/" id="login-tb-btn">
+      <i class="fa fa-lock" style="margin-right:4px"></i>
+      <span data-en="Login" data-kn="ಲಾಗಿನ್">ಲಾಗಿನ್</span>
+    </a>
+    {% endif %}
+  </div>
+</header>
+
+<div id="idloader"></div>
+
+<!-- ═══════ MAIN ═══════ -->
+<main id="wrap">
+{% if submitted %}
+<div class="flash-success">
+  <i class="fa fa-circle-check"></i>
+  <span data-en="Feedback submitted successfully!"
+        data-kn="ಪ್ರತಿಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!">
+        ಪ್ರತಿಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!
+  </span>
+</div>
+{% endif %}
+  <!-- ── Feedback Submit Form ── -->
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="fch-icon">💬</div>
+      <div>
+        <div class="fch-title" data-en="Feedback Form" data-kn="ಪ್ರತಿಕ್ರಿಯೆ ನಮೂನೆ">ಪ್ರತಿಕ್ರಿಯೆ ನಮೂನೆ</div>
+        <div class="fch-sub" data-en="We'd love to hear your thoughts, suggestions or concerns." data-kn="ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ, ಸಲಹೆ ಅಥವಾ ಸಮಸ್ಯೆಗಳನ್ನು ತಿಳಿಸಿ.">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ, ಸಲಹೆ ಅಥವಾ ಸಮಸ್ಯೆಗಳನ್ನು ತಿಳಿಸಿ.</div>
+      </div>
+    </div>
+
+    <form action="/feeds" method="post" id="feed-form" autocomplete="on" onsubmit="return confirmSubmit()">
+      <input type="hidden" name="action" value="submit">
+
+      <div class="field-row">
+        <div class="field-group" style="margin-bottom:0">
+          <label class="field-label" for="firstname">
+            <span data-en="First Name" data-kn="ಮೊದಲ ಹೆಸರು">ಮೊದಲ ಹೆಸರು</span>
+            <span class="field-req">*</span>
+          </label>
+          <input class="field-input" type="text" id="firstname" name="firstname" required autocomplete="given-name" />
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <label class="field-label" for="lastname">
+            <span data-en="Last Name" data-kn="ಕೊನೆ ಹೆಸರು">ಕೊನೆ ಹೆಸರು</span>
+          </label>
+          <input class="field-input" type="text" id="lastname" name="lastname" autocomplete="family-name" />
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:16px">
+        <label class="field-label" for="email">
+          <span data-en="Email" data-kn="ಇ-ಮೇಲ್">ಇ-ಮೇಲ್</span>
+        </label>
+        <input class="field-input" type="email" id="email" name="email" autocomplete="email" placeholder="example@mail.com" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="message">
+          <span data-en="Your Feedback" data-kn="ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ</span>
+          <span class="field-req">*</span>
+        </label>
+        <textarea class="field-input" id="message" name="message" rows="5" required></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        <i class="fa fa-paper-plane"></i>
+        <span data-en="Submit Feedback" data-kn="ಪ್ರತಿಕ್ರಿಯೆ ಸಲ್ಲಿಸಿ">ಪ್ರತಿಕ್ರಿಯೆ ಸಲ್ಲಿಸಿ</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- ── Admin: Submitted Feedback Cards ── -->
+  {% if logged_in %}
+  <div class="admin-section-head">
+    <div class="admin-section-title">
+      <i class="fa fa-inbox"></i>
+      <span data-en="Submitted Feedback" data-kn="ಸಲ್ಲಿಸಿದ ಪ್ರತಿಕ್ರಿಯೆಗಳು">ಸಲ್ಲಿಸಿದ ಪ್ರತಿಕ್ರಿಯೆಗಳು</span>
+    </div>
+    <span class="feed-count">{{ feeds|length }}</span>
+  </div>
+
+  {% if feeds %}
+    {% for f in feeds %}
+    <div class="feed-card">
+      <div class="feed-card-top">
+        <div class="feed-avatar">{{ (f.firstname or 'A')[0]|upper }}</div>
+        <div class="feed-meta">
+          <div class="feed-name">{{ f.firstname }} {{ f.lastname or '' }}</div>
+          {% if f.email %}
+          <div class="feed-email"><i class="fa fa-envelope" style="opacity:.5;margin-right:4px;font-size:11px"></i>{{ f.email }}</div>
+          {% endif %}
+        </div>
+        <div class="feed-date"><i class="fa fa-clock" style="opacity:.5;margin-right:4px"></i>{{ f.submitted }}</div>
+      </div>
+
+      <div class="feed-message">{{ f.message }}</div>
+
+      <div class="feed-actions">
+        <form action="/feeds" method="post" onsubmit="return confirm('Delete this feedback?')">
+          <input type="hidden" name="action" value="delete">
+          <input type="hidden" name="feed_id" value="{{ f.id }}">
+          <button type="submit" class="del-btn">
+            <i class="fa fa-trash"></i>
+            <span data-en="Delete" data-kn="ಅಳಿಸಿ">ಅಳಿಸಿ</span>
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">📭</div>
+    <div class="empty-text" data-en="No feedback submitted yet." data-kn="ಇನ್ನೂ ಯಾವುದೇ ಪ್ರತಿಕ್ರಿಯೆ ಸಲ್ಲಿಸಲಾಗಿಲ್ಲ.">ಇನ್ನೂ ಯಾವುದೇ ಪ್ರತಿಕ್ರಿಯೆ ಸಲ್ಲಿಸಲಾಗಿಲ್ಲ.</div>
+  </div>
+  {% endif %}
+  {% endif %}
+
+</main>
+
+<script>
+/* ── Sidebar ── */
+function toggleSB() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('on');
+}
+function closeSB() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('on');
+}
+document.getElementById('sb-close-btn').addEventListener('click', closeSB);
+
+/* ── Loader ── */
+function showLoader() { document.getElementById('idloader').style.display = 'block'; }
+function hideLoader() { var el = document.getElementById('idloader'); if (el) el.style.display = 'none'; }
+if (document.readyState === 'complete') { hideLoader(); }
+else { window.addEventListener('load', hideLoader); }
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) { hideLoader(); closeSB(); }
+});
+
+/* ── Language toggle ── */
+var LANG = 'kn';
+function setLang(lang) {
+  LANG = lang;
+  document.getElementById('len').classList.toggle('on', lang === 'en');
+  document.getElementById('lkn').classList.toggle('on', lang === 'kn');
+  document.querySelectorAll('[data-en][data-kn]').forEach(function(el) {
+    el.textContent = lang === 'kn' ? el.getAttribute('data-kn') : el.getAttribute('data-en');
+  });
+  document.documentElement.lang = lang === 'kn' ? 'kn' : 'en';
+}
+window.addEventListener('DOMContentLoaded', function() { setLang('kn'); });
+  function confirmSubmit() {
+  if (LANG === 'kn') {
+    return confirm("ನೀವು ಪ್ರತಿಕ್ರಿಯೆ ಸಲ್ಲಿಸಲು ಖಚಿತವಾಗಿದ್ದೀರಾ?");
+  } else {
+    return confirm("Are you sure you want to submit the feedback?");
+  }
+}
+</script>
+</body>
 </html>
-

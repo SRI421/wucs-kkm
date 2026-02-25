@@ -574,7 +574,70 @@ def cropupdate():
 
 @app.route('/feeds', methods=['GET', 'POST'])
 def feed():
-    return render_template('feed.html')
+    """
+    Feedback page:
+    - Public: submit name, email, message → saved to farmers_feedback table
+    - Admin: see all submissions as cards with delete option
+    """
+    submitted = False  # ✅ NEW
+
+    with get_db() as conn:
+        cursor = conn.cursor()
+
+        # Create table if it doesn't exist
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS farmers_feedback (
+                id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                firstname TEXT,
+                lastname  TEXT,
+                email     TEXT,
+                message   TEXT,
+                submitted TEXT DEFAULT (datetime('now','localtime'))
+            )
+        """)
+        conn.commit()
+
+        # Handle form submission (any visitor can submit)
+        if request.method == 'POST' and request.values.get('action') == 'submit':
+            firstname = (request.values.get('firstname') or '').strip()
+            lastname  = (request.values.get('lastname')  or '').strip()
+            email     = (request.values.get('email')     or '').strip()
+            message   = (request.values.get('message')   or '').strip()
+
+            if firstname and message:
+                cursor.execute(
+                    "INSERT INTO farmers_feedback (firstname, lastname, email, message) VALUES (?,?,?,?)",
+                    (firstname, lastname, email, message)
+                )
+                conn.commit()
+                submitted = True  # ✅ MARK SUCCESS
+
+        # Handle delete (admin only)
+        if request.method == 'POST' and request.values.get('action') == 'delete':
+            if session.get('logged_in'):
+                del_id = request.values.get('feed_id')
+                if del_id:
+                    cursor.execute("DELETE FROM farmers_feedback WHERE id=?", (del_id,))
+                    conn.commit()
+            return redirect(url_for('feed'))
+
+        # Load all feedback for admin view
+        feeds = []
+        if session.get('logged_in'):
+            cursor.execute(
+                "SELECT id, firstname, lastname, email, message, submitted FROM farmers_feedback ORDER BY id DESC"
+            )
+            feeds = [dict_from_row(r) for r in cursor.fetchall()]
+
+    logged_in = session.get('logged_in', False)
+
+    # ✅ Pass submitted flag to template
+    return render_template(
+        'feed.html',
+        feeds=feeds,
+        logged_in=logged_in,
+        submitted=submitted
+    )
 
 
 @app.route("/every", methods=['GET', 'POST'])
