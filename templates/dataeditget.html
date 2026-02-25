@@ -1,226 +1,242 @@
+<!-- dataeditget.html — AJAX partial returned by /dataeditadd and /dataeditdel -->
+<!-- Injected into #newone div in dataedit.html -->
+<style>
+  .dg-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; }
+  table.dg-table {
+    border-collapse:collapse; table-layout:fixed;
+    min-width:960px; width:100%;
+    font-family:'DM Sans','Noto Sans Kannada',sans-serif; font-size:12px;
+  }
+  table.dg-table th, table.dg-table td {
+    border:1px solid #d1d9e0; padding:0; text-align:center; vertical-align:middle;
+  }
+  table.dg-table thead th {
+    background:#1e293b; color:#f8fafc;
+    font-size:10px; font-weight:700; padding:6px 3px;
+    text-transform:uppercase; letter-spacing:.4px; white-space:nowrap;
+  }
+  table.dg-table tbody tr { background:#fff; }
+  table.dg-table tbody tr:nth-child(even) { background:#f7f9fc; }
+  table.dg-table tbody tr:hover { background:#eef3fb; }
+  table.dg-table input[type="text"],
+  table.dg-table input[type="number"] {
+    width:100%; height:30px; border:none; background:transparent;
+    text-align:center; font-weight:600; font-size:11px; color:#1a202c;
+    padding:0 2px; font-family:inherit; box-sizing:border-box;
+  }
+  table.dg-table input:focus {
+    background:#e8f0fe; outline:none; border-bottom:2px solid #1a56db;
+  }
+  .btn-dg-add {
+    border:none; border-radius:3px; padding:3px 6px;
+    background:#0d9f6e; color:#fff; font-size:11px; font-weight:600;
+    cursor:pointer; width:90%; display:inline-flex; align-items:center; gap:3px;
+  }
+  .btn-dg-add:hover { filter:brightness(1.1); }
+  .btn-dg-del {
+    border:none; border-radius:3px; padding:3px 6px;
+    background:#e02424; color:#fff; font-size:11px; font-weight:600;
+    cursor:pointer; width:90%; display:inline-flex; align-items:center; gap:3px;
+  }
+  .btn-dg-del:hover { filter:brightness(1.1); }
+</style>
 
-<table style="width:100%;margin-top:10%; ">
-      {% for i in data %}
-	    <tr>
-        <th style="width:2%;">{{ i['no'] }}</th>
-        <th style="width:4%;"><input style="width:85%;background:#2ECC71;" type="button" name="add{{ i['_id']}}" value="ADD" id="add{{ i['_id']}}"/></th>  <script>
-$body = $("body");
-$("#add{{ i['_id']}}").on("click",()=>{
-$body.addClass("loading")
-});
-</script>
-        <th style="width:4%;"><input type="number" value="{{ i['pass']}}" name="pass{{ i['_id']}}" id="pass{{ i['_id']}}"/></th>
-
-<th style="width:25%;text-align: left;"><input type="text" name="name{{ i['_id']}}" value="{{ i['name']}}" id="name{{ i['_id']}}"/></th>
-        <script>
-      function onLoad{{ i['_id']}}() {
-
-        var options{{ i['_id']}} = {
-            sourceLanguage:
-                google.elements.transliteration.LanguageCode.ENGLISH,
-            destinationLanguage:
-                [google.elements.transliteration.LanguageCode.KANNADA],
-            shortcutKey: 'ctrl+g',
-            transliterationEnabled: true
-        };
-        
-        // Create an instance on TransliterationControl with the required
-        // options.
-        var control{{ i['_id']}} =
-            new google.elements.transliteration.TransliterationControl(options{{ i['_id']}});
-
-        // Enable transliteration in the textbox with id
-        // 'transliterateTextarea'.
-          a="name"+"{{ i['_id']}}"
-          control{{ i['_id']}}.makeTransliteratable([a]);        
-
-      }
-      google.setOnLoadCallback(onLoad{{ i['_id']}});
-
-        </script>
-
-        
-        <th style="width:4%;"><input type="number" name="sno{{ i['_id']}}" value="{{ i['sno']}}"/></th>
-        <th style="width:5%;"><input type="text" name="area{{ i['_id']}}" value="{{ i['area']}}" id="area{{ i['_id']}}" onchange="my3Function{{ i['_id']}}(this.value)"/></th>
-        <th style="width:4%;"><input type="text" onchange="myFunction{{ i['_id']}}(this.value)" name="batha{{ i['_id']}}" value="{{ i['batha']}}" id="batha{{ i['_id']}}" /></th>
-        <th style="width:5%;"><input type="text" name="bkara{{ i['_id']}}" value="{{ i['bkara']}}" id="bkara{{ i['_id']}}" onchange="getval1{{ i['_id']}}(this.value)"/></th>
-        <th style="width:4%;"><input type="text" name="kabu{{ i['_id']}}" value="{{ i['kabu']}}" id="kabu{{ i['_id']}}" onchange="my1Function{{ i['_id']}}(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="kkara{{ i['_id']}}" value="{{ i['kkara']}}" id="kkara{{ i['_id']}}" onchange="getval2{{ i['_id']}}(this.value)"/></th>
-      <th style="width:4%;"><input type="text" name="thota{{ i['_id']}}" value="{{ i['thota']}}" id="thota{{ i['_id']}}" onchange="my2Function{{ i['_id']}}(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="tkara{{ i['_id']}}" value="{{ i['tkara']}}" id="tkara{{ i['_id']}}" onchange="getval3{{ i['_id']}}(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="wtax{{ i['_id']}}" value="{{ i['wtax']}}" id="wtax{{ i['_id']}}"/></th>
-      <th style="width:5%;"><input type="text" name="mtax{{ i['_id']}}" value="{{ i['mtax']}}" id="mtax{{ i['_id']}}" /></th>
-      <th style="width:5%;"><input type="text" name="t1{{ i['_id']}}" value="{{ i['t1']}}" id="t1{{ i['_id']}}" /></th>
-      <th style="width:5%;"><input type="text" name="bal{{ i['_id']}}" value="{{ i['bal']}}" id="bal{{ i['_id']}}" onchange="my4Function{{ i['_id']}}(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="t2{{ i['_id']}}" value="{{ i['t2']}}" id="t2{{ i['_id']}}"/></th>
-        <th style="width:4%;"><input style="background:#E74C3C;" type="button" name="del" value="DELETE" id="del{{ i['_id']}}"/></th>
-  <script>
-$body = $("body");
-$("#del{{ i['_id']}}").on("click",()=>{
-$body.addClass("loading")
-});
-</script>      
+<div class="dg-scroll">
+<table class="dg-table">
+  <thead>
+    <tr>
+      <th style="width:3%;">No</th>
+      <th style="width:5%;">ADD</th>
+      <th style="width:4%;">ಪಾಸ್</th>
+      <th style="width:20%;">ರೈತರ ಹೆಸರು</th>
+      <th style="width:4%;">ಸರ್ವೇ ನಂ</th>
+      <th style="width:5%;">ವಿಸ್ತೀರ್ಣ</th>
+      <th style="width:4%;">ಭತ್ತ</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:4%;">ಕಬ್ಬು</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:4%;">ತೋಟ</th>
+      <th style="width:5%;">ಕರ</th>
+      <th style="width:5%;">ನೀರಿನ ಕರ</th>
+      <th style="width:5%;">ನಿರ್ವಹಣಾ ಕರ</th>
+      <th style="width:5%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+      <th style="width:5%;">ಹಿಂದಿನ ಬಾಕಿ</th>
+      <th style="width:5%;">ಒಟ್ಟು ಮೊತ್ತ</th>
+      <th style="width:5%;">Delete</th>
     </tr>
-  
+  </thead>
+  <tbody>
+    {% for i in data %}
+    <tr>
+      <td style="width:3%;">{{ i['no'] }}</td>
 
-<script>
+      <!-- ADD: calls /dataeditadd with pass value, reloads #newone -->
+      <td style="width:5%;">
+        <button type="button" class="btn-dg-add" id="add{{ i['_id']}}">
+          <i class="fa fa-plus"></i>
+        </button>
+      </td>
 
-function myFunction{{ i['_id']}}(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*5)+((((value)%1)*100)*5);
-  document.getElementById("bkara{{ i['_id']}}").value=parseFloat(v).toFixed(2);
-  
-  
-b=document.getElementById("kkara{{ i['_id']}}").value;
-c=document.getElementById("tkara{{ i['_id']}}").value;
-s=v+parseFloat(b)+parseFloat(c);
-document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['_id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['_id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['_id']}}").value=parseFloat(t2).toFixed(2);
-}
-function my1Function{{ i['_id']}}(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*10)+((((value)%1)*100)*10);
-  document.getElementById("kkara{{ i['_id']}}").value=parseFloat(v).toFixed(2);
-  a=document.getElementById("bkara{{ i['_id']}}").value;
+      <td style="width:4%;"><input type="number" value="{{ i['pass']}}" name="pass{{ i['_id']}}" id="pass{{ i['_id']}}"/></td>
+      <td style="width:20%;text-align:left;"><input type="text" name="name{{ i['_id']}}" value="{{ i['name']}}" id="name{{ i['_id']}}"/></td>
+      <script>
+        function onLoad{{ i['_id']}}() {
+          var opts{{ i['_id']}} = {
+            sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+            destinationLanguage: [google.elements.transliteration.LanguageCode.KANNADA],
+            shortcutKey: 'ctrl+g', transliterationEnabled: true
+          };
+          var ctrl{{ i['_id']}} = new google.elements.transliteration.TransliterationControl(opts{{ i['_id']}});
+          ctrl{{ i['_id']}}.makeTransliteratable(["name{{ i['_id']}}"]);
+        }
+        google.setOnLoadCallback(onLoad{{ i['_id']}});
+      </script>
+      <td style="width:4%;"><input type="number" name="sno{{ i['_id']}}" value="{{ i['sno']}}"/></td>
+      <td style="width:5%;"><input type="text" name="area{{ i['_id']}}" value="{{ i['area']}}" id="area{{ i['_id']}}" onchange="my3Function{{ i['_id']}}(this.value)"/></td>
+      <td style="width:4%;"><input type="text" name="batha{{ i['_id']}}" value="{{ i['batha']}}" id="batha{{ i['_id']}}" onchange="myFunction{{ i['_id']}}(this.value)"/></td>
+      <td style="width:5%;"><input type="text" name="bkara{{ i['_id']}}" value="{{ i['bkara']}}" id="bkara{{ i['_id']}}" onchange="getval1{{ i['_id']}}(this.value)"/></td>
+      <td style="width:4%;"><input type="text" name="kabu{{ i['_id']}}" value="{{ i['kabu']}}" id="kabu{{ i['_id']}}" onchange="my1Function{{ i['_id']}}(this.value)"/></td>
+      <td style="width:5%;"><input type="text" name="kkara{{ i['_id']}}" value="{{ i['kkara']}}" id="kkara{{ i['_id']}}" onchange="getval2{{ i['_id']}}(this.value)"/></td>
+      <td style="width:4%;"><input type="text" name="thota{{ i['_id']}}" value="{{ i['thota']}}" id="thota{{ i['_id']}}" onchange="my2Function{{ i['_id']}}(this.value)"/></td>
+      <td style="width:5%;"><input type="text" name="tkara{{ i['_id']}}" value="{{ i['tkara']}}" id="tkara{{ i['_id']}}" onchange="getval3{{ i['_id']}}(this.value)"/></td>
+      <td style="width:5%;"><input type="text" name="wtax{{ i['_id']}}" value="{{ i['wtax']}}" id="wtax{{ i['_id']}}"/></td>
+      <td style="width:5%;"><input type="text" name="mtax{{ i['_id']}}" value="{{ i['mtax']}}" id="mtax{{ i['_id']}}"/></td>
+      <td style="width:5%;"><input type="text" name="t1{{ i['_id']}}" value="{{ i['t1']}}" id="t1{{ i['_id']}}"/></td>
+      <td style="width:5%;"><input type="text" name="bal{{ i['_id']}}" value="{{ i['bal']}}" id="bal{{ i['_id']}}" onchange="my4Function{{ i['_id']}}(this.value)"/></td>
+      <td style="width:5%;"><input type="text" name="t2{{ i['_id']}}" value="{{ i['t2']}}" id="t2{{ i['_id']}}"/></td>
 
-c=document.getElementById("tkara{{ i['_id']}}").value;
-s=parseFloat(a)+v+parseFloat(c);
-document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['_id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['_id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['_id']}}").value=parseFloat(t2).toFixed(2);
-}
+      <!-- DELETE: calls /dataeditdel with _id,pass, reloads #newone -->
+      <td style="width:5%;">
+        <button type="button" class="btn-dg-del" id="del{{ i['_id']}}">
+          <i class="fa fa-trash"></i>
+        </button>
+      </td>
+    </tr>
 
-function my2Function{{ i['_id']}}(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*1.5)+((((value)%1)*100)*1.5);
-  document.getElementById("tkara{{ i['_id']}}").value=parseFloat(v).toFixed(2);
-  a=document.getElementById("bkara{{ i['_id']}}").value;
-b=document.getElementById("kkara{{ i['_id']}}").value;
-
-s=parseFloat(a)+parseFloat(b)+v;
-document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['_id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['_id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['_id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function my3Function{{ i['_id']}}(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*1)+((((value)%1)*100)*1);
-  document.getElementById("mtax{{ i['_id']}}").value=parseFloat(v).toFixed(2);
-  s=parseFloat(document.getElementById("wtax{{ i['_id']}}").value);
-tax=v+s;
-document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['_id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['_id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function my4Function{{ i['_id']}}(val) {
-
-document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
-bal=val
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['_id']}}").value=parseFloat(t2).toFixed(2);
-}
-  
-function getval3{{ i['_id']}}(val) {
-	value=parseFloat(val);
-
-  a=document.getElementById("bkara{{ i['_id']}}").value;
-b=document.getElementById("kkara{{ i['_id']}}").value;
-
-s=parseFloat(a)+parseFloat(b)+value;
-document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['_id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['_id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['_id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function getval2{{ i['_id']}}(val) {
-	value=parseFloat(val);
-
-  a=document.getElementById("bkara{{ i['_id']}}").value;
-
-c=document.getElementById("tkara{{ i['_id']}}").value;
-s=parseFloat(a)+value+parseFloat(c);
-document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['_id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['_id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['_id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function getval1{{ i['_id']}}(val) {
-	value=parseFloat(val);
-
-  
-  
-b=document.getElementById("kkara{{ i['_id']}}").value;
-c=document.getElementById("tkara{{ i['_id']}}").value;
-s=value+parseFloat(b)+parseFloat(c);
-document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['_id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['_id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['_id']}}").value=parseFloat(t2).toFixed(2);
-}
-</script>
-      
-   <script> 
-$("#add{{ i['_id']}}").click(function(){
-    a=document.getElementById('pass{{ i['_id']}}').value
-    text=a;
-    $.ajax({
-      url: "/dataeditadd",
-      type: "get",
-      data: {jsdata: text},
-      success: function(response) {
-        $("#newone").html(response);
-      },
-      error: function(xhr) {
-        //Do Something to handle error
+    <script>
+      /* ── Calculation functions (exact original logic) ── */
+      function myFunction{{ i['_id']}}(val) {
+        var value=parseFloat(val);
+        var v=((((value)-((value)%1))*40)*5)+((((value)%1)*100)*5);
+        document.getElementById("bkara{{ i['_id']}}").value=parseFloat(v).toFixed(2);
+        var b=document.getElementById("kkara{{ i['_id']}}").value;
+        var c=document.getElementById("tkara{{ i['_id']}}").value;
+        var s=v+parseFloat(b)+parseFloat(c);
+        document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
+        var t=document.getElementById("mtax{{ i['_id']}}").value;
+        var tax=parseFloat(t)+s;
+        document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
+        var bal=document.getElementById("bal{{ i['_id']}}").value;
+        document.getElementById("t2{{ i['_id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
       }
-    });
-});
-</script> 
-
-  <script>
-
-$("#del{{ i['_id']}}").click(function(){
-
-    text="{{ i['_id']}}"+","+"{{ i['pass']}}";
-    $.ajax({
-      url: "/dataeditdel",
-      type: "get",
-      data: {jsdata: text},
-      success: function(response) {
-        $("#newone").html(response);
-      },
-      error: function(xhr) {
-        //Do Something to handle error
+      function my1Function{{ i['_id']}}(val) {
+        var value=parseFloat(val);
+        var v=((((value)-((value)%1))*40)*10)+((((value)%1)*100)*10);
+        document.getElementById("kkara{{ i['_id']}}").value=parseFloat(v).toFixed(2);
+        var a=document.getElementById("bkara{{ i['_id']}}").value;
+        var c=document.getElementById("tkara{{ i['_id']}}").value;
+        var s=parseFloat(a)+v+parseFloat(c);
+        document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
+        var t=document.getElementById("mtax{{ i['_id']}}").value;
+        var tax=parseFloat(t)+s;
+        document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
+        var bal=document.getElementById("bal{{ i['_id']}}").value;
+        document.getElementById("t2{{ i['_id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
       }
-    });
-});
-</script> 
-      {% endfor %}
-    </table>
+      function my2Function{{ i['_id']}}(val) {
+        var value=parseFloat(val);
+        var v=((((value)-((value)%1))*40)*1.5)+((((value)%1)*100)*1.5);
+        document.getElementById("tkara{{ i['_id']}}").value=parseFloat(v).toFixed(2);
+        var a=document.getElementById("bkara{{ i['_id']}}").value;
+        var b=document.getElementById("kkara{{ i['_id']}}").value;
+        var s=parseFloat(a)+parseFloat(b)+v;
+        document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
+        var t=document.getElementById("mtax{{ i['_id']}}").value;
+        var tax=parseFloat(t)+s;
+        document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
+        var bal=document.getElementById("bal{{ i['_id']}}").value;
+        document.getElementById("t2{{ i['_id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+      }
+      function my3Function{{ i['_id']}}(val) {
+        var value=parseFloat(val);
+        var v=((((value)-((value)%1))*40)*1)+((((value)%1)*100)*1);
+        document.getElementById("mtax{{ i['_id']}}").value=parseFloat(v).toFixed(2);
+        var s=parseFloat(document.getElementById("wtax{{ i['_id']}}").value);
+        var tax=v+s;
+        document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
+        var bal=document.getElementById("bal{{ i['_id']}}").value;
+        document.getElementById("t2{{ i['_id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+      }
+      function my4Function{{ i['_id']}}(val) {
+        var tax=document.getElementById("t1{{ i['_id']}}").value;
+        document.getElementById("t2{{ i['_id']}}").value=parseFloat(parseFloat(tax)+parseFloat(val)).toFixed(2);
+      }
+      function getval1{{ i['_id']}}(val) {
+        var value=parseFloat(val);
+        var b=document.getElementById("kkara{{ i['_id']}}").value;
+        var c=document.getElementById("tkara{{ i['_id']}}").value;
+        var s=value+parseFloat(b)+parseFloat(c);
+        document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
+        var t=document.getElementById("mtax{{ i['_id']}}").value;
+        var tax=parseFloat(t)+s;
+        document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
+        var bal=document.getElementById("bal{{ i['_id']}}").value;
+        document.getElementById("t2{{ i['_id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+      }
+      function getval2{{ i['_id']}}(val) {
+        var value=parseFloat(val);
+        var a=document.getElementById("bkara{{ i['_id']}}").value;
+        var c=document.getElementById("tkara{{ i['_id']}}").value;
+        var s=parseFloat(a)+value+parseFloat(c);
+        document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
+        var t=document.getElementById("mtax{{ i['_id']}}").value;
+        var tax=parseFloat(t)+s;
+        document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
+        var bal=document.getElementById("bal{{ i['_id']}}").value;
+        document.getElementById("t2{{ i['_id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+      }
+      function getval3{{ i['_id']}}(val) {
+        var value=parseFloat(val);
+        var a=document.getElementById("bkara{{ i['_id']}}").value;
+        var b=document.getElementById("kkara{{ i['_id']}}").value;
+        var s=parseFloat(a)+parseFloat(b)+value;
+        document.getElementById("wtax{{ i['_id']}}").value=parseFloat(s).toFixed(2);
+        var t=document.getElementById("mtax{{ i['_id']}}").value;
+        var tax=parseFloat(t)+s;
+        document.getElementById("t1{{ i['_id']}}").value=parseFloat(tax).toFixed(2);
+        var bal=document.getElementById("bal{{ i['_id']}}").value;
+        document.getElementById("t2{{ i['_id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+      }
+
+      /* ADD & DELETE with confirmation alerts */
+      (function(){
+        var $body=$('body');
+        $('#add{{ i["_id"]}}').click(function(){
+          var a=document.getElementById('pass{{ i["_id"]}}').value;
+          var n=document.getElementById('name{{ i["_id"]}}').value;
+          if(!confirm('\u0c08 \u0cb0\u0cc8\u0ca4\u0cb0 \u0ca6\u0cbe\u0c96\u0cb2\u0cc6 \u0cb8\u0cc7\u0cb0\u0cbf\u0cb8\u0cc1\u0cb5\u0cc1\u0ca6\u0cc7?\nPass: '+a+'  Name: '+n)) return;
+          $body.addClass('loading');
+          $.ajax({
+            url:'/dataeditadd', type:'get', data:{jsdata:a},
+            success:function(response){ $('#newone').html(response); $body.removeClass('loading'); },
+            error:function(){ $body.removeClass('loading'); alert('Error adding record.'); }
+          });
+        });
+
+        $('#del{{ i["_id"]}}').click(function(){
+          var n2=document.getElementById('name{{ i["_id"]}}').value;
+          if(!confirm('\u0c08 \u0ca6\u0cbe\u0c96\u0cb2\u0cc6 \u0c85\u0cb3\u0cbf\u0cb8\u0cc1\u0cb5\u0cc1\u0ca6\u0cc7?\nName: '+n2)) return;
+          $body.addClass('loading');
+          var text='{{ i["_id"]}}'+','+'{{ i["pass"]}}'
+          $.ajax({
+            url:'/dataeditdel', type:'get', data:{jsdata:text},
+            success:function(response){ $('#newone').html(response); $body.removeClass('loading'); },
+            error:function(){ $body.removeClass('loading'); alert('Error deleting record.'); }
+          });
+        });
+      })();
+    </script>
+    {% endfor %}
+  </tbody>
+</table>
+</div>

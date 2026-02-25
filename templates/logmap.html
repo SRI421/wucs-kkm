@@ -1,197 +1,378 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta charset="utf-8">
-<meta name="contentription" content="wucskkm,kaagekodamagge,water Society bdvt, kaagekodamaggi, wucs, gondi"/>
-<title>infomap</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="http://fonts.googleapis.com/css?family=Lato:300|Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
-<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>  
-<script src="static/carkan.js"></script>  
-    <style>
-
-
-
-  .main {
-  padding: 16px;
-  width: 100%;
-  height: 100vh;
-  overflow: auto;
-  cursor: grab;
-  cursor: -o-grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab;
-}
-
-    path {fill:#d3d3d3; transition: .6s fill;}
-    path:hover {fill: rgb(72, 255, 0);}
-
-
-    .modalc {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 10px;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content/Box */
-.modalc-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 0;
-  padding-left:15px;
-  padding-top:15px;
-  width: 50%;
-  
-  max-width: 1200px;
-}
-
-.close {
-  display:inline;
-  position: fixed;
-  z-index:9999;
-  right: 10px;
-  top: 0;
-  color:red;
-  font-size: 30px;
-  font-weight: bold;
-}
-.close1 {
-  display:inline;
-  z-index:9999;
-  color:red;
-  font-size: 20px;
-  font-weight: bold;
-}
-table, th, td {
-  border: 5px solid pink;
-  border-collapse: collapse;
-  background-color:white;
-  color: solid black;
-}
-th, td {
-  padding: 0px;
-  text-align: center;
-}
-@media print {
-td,th,tr {page-break-inside:avoid;}
-}
-
-h2{
-  
-  margin:0;
-  display:inline-block;
-  font-size:20px;
-}
-@media screen and (max-width: 500px) {
-
-	.modalc-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 0;
-  padding-left:15px;
-  padding-top:15px;
-  width: 80%;
-
-  max-width: 1200px;
-	
-}
-
-.close {
-  display:inline;
-  position: fixed;
-  z-index:9999;
-  right: 10px;
-  top: 0;
-  color:red;
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.close1 {
-  display:inline;
-  z-index:9999;
-  color:red;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-h2{
-  
-  margin:0;
-  display:inline-block;
-  font-size:15px;
-  text-align:center;
-}
-
-}
-   </style> </head>
-  <body>
+<html lang="kn" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <title>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ - ಭೂ ನಕ್ಷೆ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  	<div style="    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: grey;
-    z-index: 99;
-    right: 0px;margin-bottom:50px;">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="static/carkan.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
 
+    /* ══════════════════════════════════════
+       TOOLBAR
+    ══════════════════════════════════════ */
+    #toolbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 54px;
+      z-index: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+      background: linear-gradient(90deg, #0a4a6e 0%, #0d6e8a 50%, #0a4a6e 100%);
+      box-shadow: 0 3px 18px rgba(0,60,120,.45);
+      border-bottom: 2px solid rgba(255,255,255,.15);
+    }
+    .toolbar-title {
+      flex: 1;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 13px; font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 4px rgba(0,0,0,.4);
+      line-height: 1.35;
+    }
+    .toolbar-title small { display: block; font-size: 10px; font-weight: 400; color: rgba(255,255,255,.7); }
 
-         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
-<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+    /* Zoom controls */
+    .zoom-box {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 30px;
+      padding: 4px 10px;
+    }
+    .zbtn {
+      background: rgba(255,255,255,.2);
+      border: 1px solid rgba(255,255,255,.35);
+      color: #fff;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      font-size: 20px; font-weight: bold; font-family: monospace;
+      line-height: 1; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, transform .1s;
+      user-select: none;
+    }
+    .zbtn:hover { background: rgba(255,255,255,.38); }
+    .zbtn:active { transform: scale(.88); }
+    #zoom-pct {
+      font-family: monospace; font-size: 12px; font-weight: 700;
+      color: #fff; min-width: 42px; text-align: center;
+    }
+
+    /* Reset */
+    .rbtn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: #fff; border-radius: 20px;
+      padding: 6px 14px; font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif;
+      cursor: pointer; transition: background .15s;
+    }
+    .rbtn:hover { background: rgba(255,255,255,.3); }
+
+    /* Home icon */
+    .hbtn {
+      color: rgba(255,255,255,.8); font-size: 20px;
+      text-decoration: none; padding: 4px 6px;
+      transition: color .15s;
+    }
+    .hbtn:hover { color: #fff; }
+
+    /* ══════════════════════════════════════
+       MAP CANVAS  — water blue background
+    ══════════════════════════════════════ */
+    #map-canvas {
+      position: fixed;
+      top: 54px; bottom: 0; left: 0; right: 0;
+      overflow: hidden;
+      /* Water-like background */
+      background:
+        radial-gradient(ellipse at 20% 80%, #b3e0f7 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, #a8d8f0 0%, transparent 50%),
+        linear-gradient(165deg, #c8ecff 0%, #9ed4f0 30%, #7dc5e8 60%, #a0d8f2 100%);
+      cursor: grab;
+    }
+    #map-canvas:active { cursor: grabbing; }
+
+    /* Water shimmer overlay */
+    #map-canvas::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(
+          105deg,
+          transparent 0px,
+          transparent 80px,
+          rgba(255,255,255,.08) 80px,
+          rgba(255,255,255,.08) 82px
+        );
+      pointer-events: none; z-index: 0;
+    }
+
+    /* Draggable SVG wrapper */
+    #map-drag {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform-origin: 0 0;
+      will-change: transform;
+      z-index: 1;
+    }
+
+    /* touch-action:none is required so PointerEvents fire correctly on mobile */
+    #map-canvas { touch-action: none; }
+
+    /* ══════════════════════════════════════
+       SVG MAP STYLING  — land green theme
+    ══════════════════════════════════════ */
+    #map {
+      display: block;
+      filter: drop-shadow(0 4px 18px rgba(0,80,40,.35));
+    }
+
+    /* Land plots */
+    #map path {
+      fill: #5a9e5a;
+      stroke: #1a1a1a;
+      stroke-width: 1.2;
+      paint-order: stroke fill;
+      transition: fill .18s, filter .18s;
+      cursor: pointer;
+    }
+    #map path:hover {
+      fill: #f0c040;
+      filter: drop-shadow(0 0 6px rgba(240,180,0,.7));
+      stroke: #111;
+    }
+    #map path[fill="none"] { fill: none !important; stroke: #1a1a1a; stroke-width: 1.5; }
+
+    /* Survey number labels */
+    #map text, #map tspan {
+      fill: #1a3a1a !important;
+      font-family: 'Segoe UI', Arial, sans-serif !important;
+      font-weight: 700 !important;
+      font-size: 10.583px;
+      pointer-events: none;
+      text-shadow: none;
+    }
+
+    /* ══════════════════════════════════════
+       MINI-MAP / COMPASS ROSE
+    ══════════════════════════════════════ */
+    #compass {
+      position: fixed;
+      bottom: 50px; right: 16px;
+      width: 52px; height: 52px;
+      background: rgba(255,255,255,.75);
+      border: 2px solid rgba(255,255,255,.9);
+      border-radius: 50%;
+      box-shadow: 0 3px 12px rgba(0,60,120,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; z-index: 300;
+      pointer-events: none;
+    }
+
+    /* Scale bar */
+    #scalebar {
+      position: fixed;
+      bottom: 14px; left: 16px;
+      z-index: 300;
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 10px; color: #0a4a6e;
+      font-weight: 600;
+    }
+    #scalebar .bar {
+      width: 80px; height: 6px;
+      background: linear-gradient(90deg, #0a4a6e 50%, #fff 50%);
+      border: 1.5px solid #0a4a6e;
+      border-radius: 2px;
+    }
+
+    /* Hint */
+    #hint {
+      position: fixed; bottom: 14px; right: 80px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 10px; color: rgba(10,60,100,.6);
+      pointer-events: none; z-index: 300;
+    }
+
+    /* ══════════════════════════════════════
+       LOADING OVERLAY
+    ══════════════════════════════════════ */
+    #load-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: linear-gradient(135deg, #c8ecff 0%, #9ed4f0 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+      transition: opacity .5s;
+    }
+    .spinner {
+      width: 48px; height: 48px;
+      border: 4px solid rgba(10,74,110,.2);
+      border-top-color: #0a4a6e;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #load-overlay p {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #0a4a6e; font-size: 14px; font-weight: 600;
+    }
+
+    /* Ajax progress */
+    #ajax-bar {
+      position: fixed; top: 54px; left: 0; right: 0; height: 3px; z-index: 700;
+      background: linear-gradient(90deg, #fff600, #00e5ff);
+      display: none;
+      animation: shimmer 1.2s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    /* ══════════════════════════════════════
+       MODAL
+    ══════════════════════════════════════ */
+    .modalc {
+      display: none;
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0, 50, 100, .55);
+      backdrop-filter: blur(4px);
+    }
+    .modalc-content {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(160deg, #f0faff 0%, #e0f2fc 100%);
+      border: 1px solid #a0d4ee;
+      border-radius: 14px;
+      width: 92%; max-width: 700px;
+      max-height: 84vh; overflow-y: auto;
+      box-shadow: 0 24px 64px rgba(0,60,120,.4);
+      animation: modal-pop .22s cubic-bezier(.34,1.3,.64,1);
+    }
+    @keyframes modal-pop {
+      from { opacity: 0; transform: translate(-50%, -44%) scale(.94); }
+      to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+    .modal-hdr {
+      position: sticky; top: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px;
+      background: linear-gradient(90deg, #0a4a6e 0%, #0d6e8a 100%);
+      border-radius: 14px 14px 0 0;
+    }
+    .modal-hdr h3 { color: #fff; font-size: 14px; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 600; }
+    .close-x {
+      background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4);
+      color: #fff; width: 30px; height: 30px; border-radius: 50%;
+      cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .close-x:hover { background: rgba(255,80,80,.5); }
+
+    #place_for_owners { padding: 16px; }
+
+    /* Tables inside modal */
+    #place_for_owners table { width: 100%; border-collapse: collapse; font-family: 'Segoe UI', Arial, sans-serif; }
+    #place_for_owners caption {
+      font-size: 13px; font-weight: 700; color: #0a4a6e;
+      padding: 10px 8px 8px; text-align: center; line-height: 1.6;
+      background: #e0f0fa; border-bottom: 2px solid #a0d4ee;
+    }
+    #place_for_owners th {
+      background: #0a4a6e; color: #fff;
+      padding: 9px 12px; font-size: 12px; text-align: center;
+      border-bottom: 2px solid #0d6e8a;
+    }
+    #place_for_owners td {
+      padding: 9px 12px; color: #1a3a5a; font-size: 13px; text-align: center;
+      border-bottom: 1px solid #c8e4f4;
+    }
+    #place_for_owners tr:nth-child(even) td { background: #f0f8ff; }
+    #place_for_owners tr:hover td { background: #ddf0fd; }
+
+    /* Editable inputs */
+    #place_for_owners input[type="text"],
+    #place_for_owners input[type="number"] {
+      background: #fff; border: 1.5px solid #a0c8e0;
+      color: #1a3a5a; border-radius: 5px; padding: 5px 8px;
+      font-size: 12px; width: 100%; outline: none; transition: border-color .15s;
+    }
+    #place_for_owners input:focus { border-color: #0a4a6e; box-shadow: 0 0 0 2px rgba(10,74,110,.15); }
+    #place_for_owners input[type="submit"] {
+      background: linear-gradient(135deg, #0a4a6e, #0d6e8a);
+      border: none; color: #fff; border-radius: 5px;
+      padding: 5px 12px; cursor: pointer; font-size: 11px; font-weight: 600;
+      transition: opacity .15s;
+    }
+    #place_for_owners input[type="submit"]:hover { opacity: .85; }
+
+    @media (max-width: 500px) {
+      .toolbar-title small { display: none; }
+      .modalc-content { width: 96%; }
+    }
+
+    /* ── Modal content loader ── */
+    #modal-loader {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 48px 24px;
+    }
+    #modal-loader.active { display: flex; }
+    .ml-spinner {
+      width: 44px; height: 44px;
+      border: 4px solid rgba(10,74,110,.15);
+      border-top-color: #0a4a6e;
+      border-radius: 50%;
+      animation: spin .75s linear infinite;
+    }
+    #modal-loader p {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 13px; color: #0a4a6e; font-weight: 600;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- Loading screen -->
+<div id="load-overlay">
+  <div class="spinner"></div>
+  <p>ನಕ್ಷೆ ಲೋಡ್ ಆಗುತ್ತಿದೆ…</p>
 </div>
-          <div class="imgcontainer">
-                <a style="margin:0;display:inline-block;" href="/" class="close1" title="Close Modal"><button class="close1">Back</button></a>
 
-      </div>
-    <div class="mySlides7">
+<!-- Ajax bar -->
+<div id="ajax-bar"></div>
 
- <button style="  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 0px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 25px;
-  margin: 4px 2px;
-  cursor: pointer;
-  position:fixed;
-  top:80px;
-  left:10px;
-  width:40px;
-  height:40px;
-  border-radius: 50%;" onclick="zoomin()" >+</button>
-  
-<button style="  background-color: red; /* Green */
-  border: none;
-  color: white;
-  padding: 0px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 25px;
-  margin: 4px 2px;
-  cursor: pointer;
-  position:fixed;
-  top:140px;
-  left:10px;
-  width:40px;
-  height:40px;
-  border-radius: 50%;" onclick="zoomout()" >-</button>
+<!-- Toolbar -->
+<div id="toolbar">
+  <a href="/" class="hbtn" title="Home"><i class="fa fa-home"></i></a>
+  <div class="toolbar-title">
+    ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
+    <small>ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ — ಭೂ ನಕ್ಷೆ</small>
+  </div>
+  <div class="zoom-box">
+    <button class="zbtn" id="btn-zoomout" title="Zoom Out">−</button>
+    <span id="zoom-pct">100%</span>
+    <button class="zbtn" id="btn-zoomin" title="Zoom In">+</button>
+  </div>
+  <button class="rbtn" id="btn-reset" title="Reset view">↺ Reset</button>
+</div>
 
-<div class="main">
- 
-
-<center>
+<!-- Map canvas -->
+<div id="map-canvas">
+  <div id="map-drag">
     <svg
       class="dyn"
       id="map"
@@ -568,7 +749,7 @@ h2{
                                                                                   <a  id="p323" xlink:href="#"> <text x="1155.2627" y="598.24854" style="line-height:1.25" xml:space="preserve"><tspan x="1155.2627" y="598.24854" stroke-width=".26458">38</tspan></text></a>
                                                                                     <a  id="p324" xlink:href="#"> <text x="1005.584" y="562.71881" style="line-height:1.25" xml:space="preserve"><tspan x="1005.584" y="562.71881" stroke-width=".26458">39</tspan></text></a>
                                                                                       <a  id="p325" xlink:href="#"> <text x="1143.5454" y="524.54315" style="line-height:1.25" xml:space="preserve"><tspan x="1143.5454" y="524.54315" stroke-width=".26458">36</tspan></text></a>
-                                                                                        <a  id="p326" xlink:href="#"> <text x="1149.9709" y="464.06699" style="line-height:1.25" xml:space="preserve"><tspan x="1149.9709" y="464.06699" stroke-width=".26458">23</tspan></text></a>
+                                                                                        <a  id="p326" xlink:href="#"> <text x="1149.9709" y="464.06699" style="line-height:1.25" xml:space="preserve"><tspan x="1149.9709" y="464.06699" stroke-width=".26458">43</tspan></text></a>
                                                                                           <a  id="p327" xlink:href="#"> <text x="1100.8341" y="498.84079" style="line-height:1.25" xml:space="preserve"><tspan x="1100.8341" y="498.84079" stroke-width=".26458">42</tspan></text></a>
                                                                                             <a  id="p328" xlink:href="#"> <text x="1160.9323" y="674.97766" style="line-height:1.25" xml:space="preserve"><tspan x="1160.9323" y="674.97766" stroke-width=".26458">62</tspan></text></a>
                                                                                               <a  id="p329" xlink:href="#"> <text x="1139.8267" y="676.61469" style="line-height:1.25" xml:space="preserve"><tspan x="1139.8267" y="676.61469" stroke-width=".26458">63</tspan></text></a>
@@ -644,67 +825,321 @@ h2{
     </svg>
 
   </div>
-</center>
-<script>
-  function zoomin() {
-var currWidth =document.getElementById('map').clientWidth;
-var currheight =document.getElementById('map').clientHeight;
-if (currWidth == 25000) return false;
-else {
-  document.getElementById('map').setAttribute("width", (currWidth + 100) + "px");
-  document.getElementById('map').setAttribute("height", (currheight + 100) + "px");
-}
-}
+</div>
 
-function zoomout() {
-var currWidth =document.getElementById('map').clientWidth;
-var currheight =document.getElementById('map').clientHeight;
-if (currWidth == 100) return false;
-else {
-  document.getElementById('map').setAttribute("width", (currWidth - 100) + "px");
-  document.getElementById('map').setAttribute("height", (currheight - 100) + "px");
-}
-}
+<!-- Compass -->
+<div id="compass">🧭</div>
+
+<!-- Scale bar -->
+<div id="scalebar">
+  <div class="bar"></div>
+  <span>ಪ್ರಮಾಣ</span>
+</div>
+
+<!-- Hint -->
+<div id="hint">🖱 Scroll/Pinch=Zoom &nbsp;·&nbsp; Drag=Pan &nbsp;·&nbsp; Click plot=Info</div>
+
+<!-- Owner modal -->
+<div id="id04" class="modalc">
+  <div class="modalc-content">
+    <div class="modal-hdr">
+      <h3>📋 ಖಾತೆದಾರ ಮಾಹಿತಿ</h3>
+      <button class="close-x" id="modal-close" title="Close">✕</button>
+    </div>
+    <!-- Loader shown while AJAX is in-flight -->
+    <div id="modal-loader">
+      <div class="ml-spinner"></div>
+      <p>ಮಾಹಿತಿ ತರುತ್ತಿದೆ…</p>
+    </div>
+    <div id="place_for_owners"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  MAP ENGINE — Pointer Events (mouse + touch + pinch unified)
+// ═══════════════════════════════════════════════════════════════
+(function(){
+  var canvas  = document.getElementById('map-canvas');
+  var dragEl  = document.getElementById('map-drag');
+  var svgEl   = document.getElementById('map');
+
+  // SVG intrinsic size (matches width/height we set below)
+  var SVG_W = 3000, SVG_H = 3200;
+
+  // State
+  var scale   = 0.52;
+  var originX = 0, originY = 0;
+  var MIN_SCALE = 0.10, MAX_SCALE = 12;
+
+  // ── Apply CSS transform ──────────────────────────────────────
+  function applyTransform(animated) {
+    if (animated) {
+      dragEl.style.transition = 'transform .28s cubic-bezier(.25,.46,.45,.94)';
+      clearTimeout(applyTransform._t);
+      applyTransform._t = setTimeout(function(){ dragEl.style.transition = ''; }, 300);
+    } else {
+      dragEl.style.transition = '';
+    }
+    dragEl.style.transform =
+      'translate(' + originX + 'px,' + originY + 'px) scale(' + scale + ')';
+    document.getElementById('zoom-pct').textContent = Math.round(scale * 100) + '%';
+  }
+
+  // ── Center map on actual content bounds ──────────────────────
+  // #map-drag is at CSS top:50%;left:50% → its (0,0) IS the canvas centre.
+  // The SVG viewBox is "-500 10 3000 3200": user_unit → pixel offset:
+  //   px = user_x + 500,  py = user_y - 10   (scale 1:1 since vb==size)
+  // getBBox() gives content bounds in user units → convert → centre.
+  function centerMap(animated) {
+    var canvasW = canvas.clientWidth;
+    var canvasH = canvas.clientHeight;
+    var bbox;
+    try { bbox = svgEl.getBBox(); } catch(e) { bbox = null; }
+
+    if (bbox && bbox.width > 0 && bbox.height > 0) {
+      // Content centre in SVG pixel coords (viewBox offset already factored)
+      var ccx = bbox.x + bbox.width  / 2 + 500;   // +500 from viewBox minX=-500
+      var ccy = bbox.y + bbox.height / 2 - 10;    // -10  from viewBox minY=10
+
+      // Auto-fit: show full map with 8% padding
+      var fitS = Math.min(canvasW * 0.92 / bbox.width,
+                          canvasH * 0.92 / bbox.height);
+      fitS = Math.max(MIN_SCALE, Math.min(MAX_SCALE, fitS));
+      scale = fitS;
+
+      // Place content centre at canvas centre
+      // screen_x = 0 + originX + ccx*scale  → want screen_x = 0
+      originX = -ccx * scale;
+      originY = -ccy * scale;
+    } else {
+      // Fallback (getBBox not available yet)
+      scale = 0.52;
+      originX = -(SVG_W * scale) / 2;
+      originY = -(SVG_H * scale) / 2;
+    }
+    applyTransform(animated || false);
+  }
+
+  // ── Zoom toward a canvas-relative point ──────────────────────
+  function zoomAt(cx, cy, factor) {
+    var ns = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * factor));
+    if (ns === scale) return;
+    var r = ns / scale;
+    // cx, cy are relative to canvas element (not window)
+    // map-drag starts at canvas center, so adjust
+    var canvasRect = canvas.getBoundingClientRect();
+    var relX = cx - canvasRect.width  / 2;
+    var relY = cy - canvasRect.height / 2;
+    originX = relX - (relX - originX) * r;
+    originY = relY - (relY - originY) * r;
+    scale = ns;
+    applyTransform(false);
+  }
+
+  // Public zoom actions (toolbar buttons + keyboard)
+  function centerOfCanvas() {
+    var r = canvas.getBoundingClientRect();
+    return { x: r.width / 2, y: r.height / 2 };
+  }
+  window.zoomin    = function(){ var c = centerOfCanvas(); zoomAt(c.x, c.y, 1.25); };
+  window.zoomout   = function(){ var c = centerOfCanvas(); zoomAt(c.x, c.y, 0.80); };
+  window.resetZoom = function(){ centerMap(true); };
+
+  document.getElementById('btn-zoomin') .addEventListener('click', window.zoomin);
+  document.getElementById('btn-zoomout').addEventListener('click', window.zoomout);
+  document.getElementById('btn-reset')  .addEventListener('click', window.resetZoom);
+
+  // ── Init on load ─────────────────────────────────────────────
+  window.addEventListener('load', function(){
+    // Set explicit pixel size so paths render at full resolution
+    svgEl.setAttribute('width',  String(SVG_W));
+    svgEl.setAttribute('height', String(SVG_H));
+    // Small RAF delay ensures layout is complete before getBBox
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        centerMap(false);
+        var lo = document.getElementById('load-overlay');
+        lo.style.opacity = '0';
+        setTimeout(function(){ lo.style.display = 'none'; }, 450);
+      });
+    });
+  });
+
+  // ── Mouse wheel zoom ─────────────────────────────────────────
+  canvas.addEventListener('wheel', function(e){
+    e.preventDefault();
+    var rect = canvas.getBoundingClientRect();
+    zoomAt(e.clientX - rect.left, e.clientY - rect.top,
+           e.deltaY < 0 ? 1.12 : 0.89);
+  }, { passive: false });
+
+  // ═════════════════════════════════════════════════════════════
+  //  POINTER EVENTS — unified mouse + touch + stylus
+  //  Handles: 1-pointer drag, 2-pointer pinch+pan, tap→click
+  // ═════════════════════════════════════════════════════════════
+  var pointers = {};   // active pointers by id
+  var TAP_MAX_MOVE = 10;  // px — threshold to distinguish tap vs drag
+
+  function numPointers() { return Object.keys(pointers).length; }
+
+  function pinchState() {
+    var ids = Object.keys(pointers);
+    var p0 = pointers[ids[0]], p1 = pointers[ids[1]];
+    var dx = p1.x - p0.x, dy = p1.y - p0.y;
+    return {
+      dist: Math.sqrt(dx*dx + dy*dy),
+      midX: (p0.x + p1.x) / 2,
+      midY: (p0.y + p1.y) / 2
+    };
+  }
+
+  var lastPinch = null;
+
+  canvas.addEventListener('pointerdown', function(e){
+    canvas.setPointerCapture(e.pointerId);
+    var rect = canvas.getBoundingClientRect();
+    pointers[e.pointerId] = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      startX: e.clientX - rect.left,
+      startY: e.clientY - rect.top,
+      moved: false,
+      target: e.target   // remember what element was pressed
+    };
+    if (numPointers() === 2) {
+      lastPinch = pinchState();
+    }
+    canvas.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+
+  canvas.addEventListener('pointermove', function(e){
+    if (!pointers[e.pointerId]) return;
+    var rect = canvas.getBoundingClientRect();
+    var nx = e.clientX - rect.left;
+    var ny = e.clientY - rect.top;
+    var p = pointers[e.pointerId];
+    var dx = nx - p.x, dy = ny - p.y;
+
+    if (Math.abs(nx - p.startX) > TAP_MAX_MOVE ||
+        Math.abs(ny - p.startY) > TAP_MAX_MOVE) {
+      p.moved = true;
+    }
+    p.x = nx; p.y = ny;
+
+    var n = numPointers();
+    if (n === 1) {
+      // Single-pointer pan
+      originX += dx; originY += dy;
+      applyTransform(false);
+    } else if (n >= 2) {
+      // Pinch zoom + two-finger pan
+      var cur = pinchState();
+      if (lastPinch) {
+        var factor = cur.dist / lastPinch.dist;
+        // Pan by midpoint delta
+        originX += cur.midX - lastPinch.midX;
+        originY += cur.midY - lastPinch.midY;
+        // Zoom toward midpoint
+        var rect2 = canvas.getBoundingClientRect();
+        var relMX = cur.midX - rect2.width  / 2;
+        var relMY = cur.midY - rect2.height / 2;
+        var ns = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * factor));
+        var r  = ns / scale;
+        originX = relMX - (relMX - originX) * r;
+        originY = relMY - (relMY - originY) * r;
+        scale = ns;
+        applyTransform(false);
+      }
+      lastPinch = cur;
+    }
+    e.preventDefault();
+  });
+
+  canvas.addEventListener('pointerup', function(e){
+    var p = pointers[e.pointerId];
+    if (p && !p.moved) {
+      // It's a TAP — find the SVG <a> element ancestor and fire its handler
+      var el = p.target;
+      while (el && el !== canvas) {
+        var aid = el.id || (el.parentElement && el.parentElement.id);
+        if (aid && /^p\d+$/.test(aid)) {
+          // Fire jQuery click on the <a> ancestor
+          var anchor = document.getElementById(aid);
+          if (anchor) { $(anchor).trigger('click'); }
+          break;
+        }
+        // Also check the element itself has an id like p123
+        if (el.id && /^p\d+$/.test(el.id)) {
+          $(el).trigger('click');
+          break;
+        }
+        el = el.parentElement;
+      }
+    }
+    delete pointers[e.pointerId];
+    if (numPointers() < 2) lastPinch = null;
+    if (numPointers() === 0) canvas.style.cursor = 'grab';
+  });
+
+  canvas.addEventListener('pointercancel', function(e){
+    delete pointers[e.pointerId];
+    if (numPointers() < 2) lastPinch = null;
+    if (numPointers() === 0) canvas.style.cursor = 'grab';
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e){
+    if (e.key === '+' || e.key === '=') window.zoomin();
+    if (e.key === '-')                   window.zoomout();
+    if (e.key === '0')                   window.resetZoom();
+    if (e.key === 'Escape') document.getElementById('id04').style.display = 'none';
+  });
+
+})();
+
+// ══ Modal ══════════════════════════════════════════════════════
+document.getElementById('modal-close').addEventListener('click', function(){
+  document.getElementById('id04').style.display = 'none';
+});
+document.getElementById('id04').addEventListener('click', function(e){
+  if (e.target === this) this.style.display = 'none';
+});
+
+// Ajax progress bar
+$(document).ajaxStart(function(){
+  document.getElementById('ajax-bar').style.display = 'block';
+}).ajaxStop(function(){
+  document.getElementById('ajax-bar').style.display = 'none';
+});
 </script>
 
-<div id="id04" class="modalc">
-  <div class="modalc-content animate">
-      <div class="imgcontainer">
-        <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal"><button class="close">&times;</button></span>
-                <span onclick="document.getElementById('id04').style.display='none'" class="close1" title="Close Modal"><button class="close1">Close</button></span>
-      </div>
-<div id="place_for_owners"></div>
-  </div>
-  </div>
-
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 {% for i in data %}
 <script>
-var id="#"
-console.log("{{i}}")
-$(id+"{{ i }}").click(function(){
-  document.getElementById('id04').style.display='block';
-    var temp=id+"{{ i }}"
-    console.log(temp)
-    var text="{{ i }}"
+(function(){
+  var id = "#{{ i }}";
+  $(id).on('click', function(e){
+    e.stopPropagation();
+    document.getElementById('id04').style.display = 'block';
+    $("#place_for_owners").empty();
+    $("#modal-loader").addClass("active");
     $.ajax({
-      url: "/owners",
-      type: "get",
-      data: {jsdata: text},
-      success: function(response) {
+      url: "/owners", type: "get",
+      data: { jsdata: "{{ i }}" },
+      success: function(response){
+        $("#modal-loader").removeClass("active");
         $("#place_for_owners").html(response);
       },
-      error: function(xhr) {
-        //Do Something to handle error
+      error: function(){
+        $("#modal-loader").removeClass("active");
+        $("#place_for_owners").html('<p style="padding:24px;text-align:center;color:#c00;font-family:sans-serif">⚠ ಮಾಹಿತಿ ತರಲು ವಿಫಲವಾಗಿದೆ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</p>');
       }
     });
-});
+  });
+})();
 </script>
 {% endfor %}
 
-
-    
-  </body>
+</body>
 </html>

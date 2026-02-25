@@ -1,83 +1,393 @@
-
 <!DOCTYPE html>
-<html class="supernova">
+<html lang="kn">
 <head>
-<style>
-        .supernova {
-        height: 100%;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center ;
-      }
-      .supernova {
-        background-image: url("/static/views/14.jpg");
-      }
-      #stage {
-        background-image: url("/static/views/14.jpg");
-      }
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  background-color:white;
-}
-th, td {
-  padding: 5px;
-  text-align: left;
-}
-    body {
-        height: 842px;
-        width: 795px;
-        /* to centre page on screen*/
-        margin-left: auto;
-        margin-right: auto;
-    }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WUCSKKM – Member List</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+  /* ═══════════════════════════════════════════════════════════
+     SHARED DESIGN TOKENS
+  ═══════════════════════════════════════════════════════════ */
+  :root {
+    --sw:         270px;
+    --th:         56px;
+    --green:      #0d6e5a;
+    --green-dark: #094a3c;
+    --accent:     #16a34a;
+    --teal:       #0d9488;
+    --sidebar-bg: #0a1f1a;
+    --sid-text:   #c8e6c9;
+    --sid-hover:  rgba(22,163,74,.15);
+    --sid-active: rgba(22,163,74,.25);
+    --topbar-bg:  rgba(10,31,26,.97);
+    --bg:         #f0f7f4;
+    --card:       #ffffff;
+    --border:     #d1e7dd;
+    --text:       #1a2e28;
+    --muted:      #5a7a72;
+    --danger:     #dc2626;
+    --ease:       .3s cubic-bezier(.4,0,.2,1);
+    --radius:     14px;
+    --shadow:     0 4px 24px rgba(0,0,0,.08);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Poppins','Noto Sans Kannada',sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; overflow-x: hidden;
+  }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    position: fixed; top: 0; left: calc(-1 * var(--sw));
+    width: var(--sw); height: 100vh; background: var(--sidebar-bg);
+    z-index: 1000; transition: transform var(--ease);
+    display: flex; flex-direction: column; overflow-y: auto;
+    box-shadow: 4px 0 24px rgba(0,0,0,.2);
+  }
+  #sidebar.open { transform: translateX(var(--sw)); }
+  .sb-header {
+    padding: 18px 20px 14px; border-bottom: 1px solid rgba(255,255,255,.08);
+    background: linear-gradient(135deg,var(--green),var(--green-dark)); position: relative;
+  }
+  .sb-logo { display: flex; align-items: center; gap: 11px; }
+  .sb-icon {
+    width: 38px; height: 38px; background: linear-gradient(135deg,#16a34a,#0d9488);
+    border-radius: 9px; display: flex; align-items: center; justify-content: center;
+    font-size: 19px; color: #fff; flex-shrink: 0;
+  }
+  .sb-org { font-size: 11px; font-weight: 600; color: #a7f3d0; font-family: 'Noto Sans Kannada',sans-serif; line-height: 1.3; }
+  .sb-sub { font-size: 10px; color: rgba(255,255,255,.55); font-family: 'Noto Sans Kannada',sans-serif; }
+  .sb-close {
+    position: absolute; top: 12px; right: 12px; width: 26px; height: 26px;
+    background: rgba(255,255,255,.1); border: none; border-radius: 6px;
+    color: #fff; cursor: pointer; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background var(--ease);
+  }
+  .sb-close:hover { background: rgba(255,255,255,.22); }
+  .sb-nav { flex: 1; padding: 10px 0; }
+  .sb-label {
+    font-size: 10px; font-weight: 600; color: rgba(255,255,255,.35);
+    text-transform: uppercase; letter-spacing: 1.2px; padding: 12px 20px 5px; display: block;
+  }
+  .sb-link {
+    display: flex; align-items: center; gap: 12px; padding: 11px 20px;
+    color: var(--sid-text); text-decoration: none; font-size: 14px;
+    transition: background var(--ease), color var(--ease);
+    border: none; background: transparent; width: 100%; cursor: pointer; text-align: left;
+  }
+  .sb-link:hover  { background: var(--sid-hover); color: #fff; }
+  .sb-link.active { background: var(--sid-active); color: #4ade80; font-weight: 500; }
+  .sb-link .ic    { width: 20px; text-align: center; font-size: 15px; opacity: .8; flex-shrink: 0; }
+  .sb-footer { padding: 12px 14px; border-top: 1px solid rgba(255,255,255,.08); }
+  #overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.5); z-index: 999; backdrop-filter: blur(2px);
+  }
+  #overlay.on { display: block; }
+
+  /* ── Topbar ── */
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--th);
+    background: var(--topbar-bg); z-index: 998;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .tb-left  { display: flex; align-items: center; gap: 11px; }
+  .tb-right { display: flex; align-items: center; gap: 9px; }
+  #ham-btn {
+    width: 40px; height: 40px; background: transparent;
+    border: 1.5px solid rgba(255,255,255,.2); border-radius: 8px;
+    color: #fff; font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--ease);
+  }
+  #ham-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.4); }
+  #tb-title {
+    color: rgba(255,255,255,.85); font-size: 14px; font-weight: 500;
+    font-family: 'Noto Sans Kannada',sans-serif; display: none;
+  }
+  @media(min-width:480px){ #tb-title { display: block; } }
+  .lang-wrap {
+    display: flex; align-items: center;
+    background: rgba(255,255,255,.1); border-radius: 20px; padding: 2px;
+  }
+  .lang-btn {
+    padding: 4px 10px; border-radius: 18px; font-size: 11px; font-weight: 600;
+    border: none; cursor: pointer; transition: all .2s;
+    background: transparent; color: rgba(255,255,255,.6); letter-spacing: .5px;
+  }
+  .lang-btn.on { background: var(--accent); color: #fff; }
+  #home-btn {
+    padding: 8px 16px; background: linear-gradient(135deg,var(--green),var(--teal));
+    color: #fff; border: none; border-radius: 20px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+    transition: all var(--ease); white-space: nowrap;
+  }
+  #home-btn:hover { opacity: .88; transform: translateY(-1px); }
+
+  /* ── Page layout ── */
+  #wrap { padding-top: var(--th); min-height: 100vh; }
+  .page-inner {
+    /* Original: 795px wide centred — kept for print fidelity */
+    max-width: 860px; margin: 0 auto; padding: 28px 16px 60px;
+  }
+
+  /* ── Breadcrumb ── */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12.5px; color: var(--muted); margin-bottom: 20px;
+  }
+  .breadcrumb a { color: var(--green); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb .sep { color: #bbb; }
+
+  /* ── Page header ── */
+  .page-hdr { margin-bottom: 22px; }
+  .page-hdr h2 {
+    font-size: 19px; font-weight: 700; color: var(--green);
+    font-family: 'Noto Sans Kannada',sans-serif; line-height: 1.4;
+    text-align: center;
+  }
+  .page-hdr p { font-size: 12.5px; color: var(--muted); margin-top: 4px; text-align: center; font-family: 'Noto Sans Kannada',sans-serif; }
+
+  /* ── Card wrapper ── */
+  .list-card {
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow); border: 1px solid var(--border);
+    overflow: visible;   /* allow inner scroll wrapper to work on mobile */
+  }
+  /* Scrollable table wrapper — enables horizontal swipe on mobile */
+  .list-tbl-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+  .list-card-head {
+    background: var(--green); padding: 13px 20px;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .list-card-head h3 {
+    font-size: 14px; font-weight: 600; color: #fff;
+    font-family: 'Noto Sans Kannada',sans-serif;
+  }
+  .list-count {
+    margin-left: auto; background: rgba(255,255,255,.2);
+    color: #fff; font-size: 11.5px; font-weight: 700;
+    border-radius: 12px; padding: 2px 10px;
+  }
+
+  /* ── Member table ── */
+  .list-tbl { width: 100%; border-collapse: collapse; }
+  .list-tbl thead th {
+    padding: 11px 16px; font-weight: 700; color: var(--green);
+    background: #e8f5e9; border-bottom: 2px solid var(--border);
+    font-family: 'Noto Sans Kannada',sans-serif; font-size: 12.5px; text-align: center;
+    white-space: nowrap;
+  }
+  .list-tbl thead th:first-child { text-align: center; width: 90px; }
+  .list-tbl thead th:last-child  { text-align: left; }
+  .list-tbl tbody tr { border-bottom: 1px solid #f0f0f0; transition: background var(--ease); }
+  .list-tbl tbody tr:last-child  { border-bottom: none; }
+  .list-tbl tbody tr:hover { background: #f7fdf9; }
+  .list-tbl tbody td { padding: 0; vertical-align: middle; }
+
+  /* Pass number cell */
+  .pass-cell {
+    width: 90px; text-align: center; padding: 10px 14px;
+    font-size: 13px; font-weight: 700; color: var(--green);
+    font-family: 'Poppins',sans-serif; border-right: 1px solid var(--border);
+  }
+  .pass-badge {
+    display: inline-block; padding: 3px 12px;
+    background: #f0fdf4; border: 1px solid #bbf7d0;
+    border-radius: 14px; font-size: 13px; font-weight: 700; color: var(--green);
+  }
+
+  /* Name button — styled to look like a button or plain text depending on sup */
+  .name-cell { padding: 0; }
+  .name-btn {
+    display: block; width: 100%; padding: 12px 16px;
+    font-size: 14px; font-weight: 600; text-align: left;
+    font-family: 'Noto Sans Kannada','Poppins',sans-serif; color: var(--text);
+    background: transparent; border: none; cursor: default;
+    transition: background var(--ease), color var(--ease);
+  }
+  /* When type="submit" (sup==3), show pointer and hover effect */
+  .name-btn[type="submit"] {
+    cursor: pointer; color: var(--green);
+  }
+  .name-btn[type="submit"]:hover {
+    background: #f0fdf4; color: var(--green-dark);
+  }
+  /* Subtle indicator for clickable rows */
+  tr:has(.name-btn[type="submit"]):hover .pass-badge { background: #dcfce7; }
+
+  /* ── Print styles ── */
   @media print {
-  
-   h2 {page-break-before:auto;}
-   
-}
-@media print {
-tr {page-break-inside:avoid;}
-}
-</style>
+    .noprint { display: none !important; }
+    #wrap { padding-top: 0; }
+    body { background: #fff; }
+    /* Restore print layout to ~795px original */
+    .page-inner { max-width: 795px; padding: 10px; }
+    .list-card { box-shadow: none; border: 1px solid #ccc; border-radius: 4px; }
+    .list-card-head { background: #e8f5e9; }
+    .list-card-head h3 { color: #0d6e5a; }
+    .list-count { background: rgba(13,110,90,.1); color: #0d6e5a; }
+    .name-btn { font-size: 13px; padding: 8px 12px; }
+    .pass-cell { padding: 8px 10px; }
+    tr { page-break-inside: avoid; }
+    h2 { page-break-before: auto; }
+  }
+  </style>
 </head>
-<body >
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  	<div style="    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: grey;
-    z-index: 99;
-    right: 0px;margin-bottom:50px;">
+<body>
 
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside id="sidebar" aria-label="Main navigation">
+  <div class="sb-header">
+    <div class="sb-logo">
+      <div class="sb-icon">💧</div>
+      <div>
+        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
+        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
+      </div>
+    </div>
+    <button class="sb-close" id="sb-close-btn" aria-label="Close">✕</button>
+  </div>
+  <nav class="sb-nav">
+    <span class="sb-label">Navigation / ನ್ಯಾವಿಗೇಷನ್</span>
+    <a href="/"         class="sb-link"><i class="fa fa-home ic"></i><span data-en="Home"        data-kn="ಮುಖಪುಟ">Home</span></a>
+    <a href="/feeds"    class="sb-link"><i class="fa fa-comment ic"></i><span data-en="Feedback"    data-kn="ಪ್ರತಿಕ್ರಿಯೆ">Feedback</span></a>
+    <a href="/list"     class="sb-link active"><i class="fa fa-list ic"></i><span data-en="List"        data-kn="ಪಟ್ಟಿ">List</span></a>
+    <a href="/allmap"   class="sb-link"><i class="fa fa-map ic"></i><span data-en="Map"         data-kn="ನಕ್ಷೆ">Map</span></a>
+    <a href="/map"      class="sb-link"><i class="fa fa-map-marker ic"></i><span data-en="Click-Map"  data-kn="ಕ್ಲಿಕ್-ನಕ್ಷೆ">Click-Map</span></a>
+    <a href="/document" class="sb-link"><i class="fa fa-file ic"></i><span data-en="Documents"   data-kn="ದಾಖಲೆಗಳು">Documents</span></a>
+  </nav>
+  <div class="sb-footer">
+    <a href="/" class="sb-link" style="background:rgba(22,163,74,.15);border-radius:8px;color:#4ade80;">
+      <i class="fa fa-arrow-left ic"></i>
+      <span data-en="Back to Home" data-kn="ಮುಖಪುಟಕ್ಕೆ">Back to Home</span>
+    </a>
+  </div>
+</aside>
 
-         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
-<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+<div id="overlay" onclick="closeSB()"></div>
+
+<!-- ═══════ TOPBAR ═══════ -->
+<header id="topbar" class="noprint">
+  <div class="tb-left">
+    <button id="ham-btn" onclick="toggleSB()" aria-label="Menu"><i class="fa fa-bars"></i></button>
+    <span id="tb-title" data-en="Member List" data-kn="ಸದಸ್ಯರ ಪಟ್ಟಿ">ಸದಸ್ಯರ ಪಟ್ಟಿ</span>
+  </div>
+  <div class="tb-right">
+    <div class="lang-wrap">
+      <button class="lang-btn on" id="len" onclick="setLang('en')">EN</button>
+      <button class="lang-btn"    id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
+    </div>
+    <a href="/" id="home-btn">
+      <i class="fa fa-home"></i>
+      <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
+    </a>
+  </div>
+</header>
+
+<!-- ═══════ MAIN ═══════ -->
+<div id="wrap">
+  <div class="page-inner">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb noprint">
+      <a href="/"><i class="fa fa-home"></i> <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span></a>
+      <span class="sep">/</span>
+      <span data-en="Member List" data-kn="ಸದಸ್ಯರ ಪಟ್ಟಿ">ಸದಸ್ಯರ ಪಟ್ಟಿ</span>
+    </nav>
+
+    <!-- Page heading (shows in print too) -->
+    <div class="page-hdr">
+      <h2 data-en="Water Users Co-operative Society Ltd. — Member List"
+          data-kn="ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ — ಸದಸ್ಯರ ಪಟ್ಟಿ">
+        ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ — ಸದಸ್ಯರ ಪಟ್ಟಿ
+      </h2>
+      <p data-en="Kagekodamagge, Bhadravathi" data-kn="ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ">ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</p>
+    </div>
+
+    <!-- Member list card -->
+    <div class="list-card">
+      <div class="list-card-head noprint">
+        <i class="fa fa-users" style="color:#a7f3d0;font-size:16px"></i>
+        <h3 data-en="Member List" data-kn="ಸದಸ್ಯರ ಪಟ್ಟಿ">ಸದಸ್ಯರ ಪಟ್ಟಿ</h3>
+      </div>
+
+      <div class="list-tbl-wrap">
+      <table class="list-tbl">
+        <thead>
+          <tr>
+            <th data-en="Passbook No." data-kn="ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ">ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+            <th data-en="Account Holder Name" data-kn="ಖಾತೆದಾರರ ಹೆಸರು">ಖಾತೆದಾರರ ಹೆಸರು</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in data %}
+          <form action="/bylist" method="post">
+            <tr>
+              <td class="pass-cell">
+                <span class="pass-badge">{{ i["pass"] }}</span>
+              </td>
+              <td class="name-cell">
+                <!-- Original logic: type="submit" if sup==3, else type="button" -->
+                <input type="text" hidden value="{{ i['pass'] }}" name="{{ i['pass'] }}"/>
+                <input class="name-btn"
+                  {%if sup==3 %} type="submit" {%else%} type="button" {%endif%}
+                  value="{{ i['name'] }}"
+                  name="submit"/>
+              </td>
+            </tr>
+          </form>
+          {% endfor %}
+        </tbody>
+      </table>
+      </div><!-- /list-tbl-wrap -->
+    </div>
+
+  </div>
 </div>
-				<center style="color:red;"><b>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ <br>ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ </b></center>
 
+<script>
+/* ── Sidebar ── */
+function toggleSB() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('on');
+}
+function closeSB() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('on');
+}
+document.getElementById('sb-close-btn').addEventListener('click', closeSB);
 
-<table style="width:100%">
-  
-  <tr>
-    <th style="color:red;">ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
-    <th style="color:red;">ಖಾತೆದಾರರ ಹೆಸರು</th>
-    
-    
-  </tr>
-  {% for i in data %}
-  <form action="/bylist" method="post">
-  <tr>
-    <b>
-    <th style="border: 1;width:10%;font-weight: bold;">{{ i["pass"] }}</th>
-    <th style="border: 1;width:90%;"><input style="background-color:#F5F5F5;width:100%;color:blue;text-align:left;font-weight: bold;" {%if sup==3 %} type="submit" {%else%} type="button" {%endif%} value="{{ i['name'] }}" name="submit"/></th>
-      <input type="text" hidden value="{{ i['pass'] }}" name="{{ i['pass'] }}"/>
-    </b>
-  </tr>
-    </form>
-{% endfor %}
-</table><hr>
-
+/* ── Language toggle ── */
+var LANG = 'kn';
+function setLang(lang) {
+  LANG = lang;
+  document.getElementById('len').classList.toggle('on', lang === 'en');
+  document.getElementById('lkn').classList.toggle('on', lang === 'kn');
+  document.querySelectorAll('[data-en][data-kn]').forEach(function(el) {
+    el.textContent = lang === 'kn' ? el.getAttribute('data-kn') : el.getAttribute('data-en');
+  });
+  document.documentElement.lang = lang === 'kn' ? 'kn' : 'en';
+}
+</script><script>
+  document.addEventListener('DOMContentLoaded', function() {
+    setLang('kn');
+  });
+</script>
 </body>
 </html>

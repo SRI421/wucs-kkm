@@ -1,670 +1,776 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
-    <meta charset="UTF-8">
-    <script type="text/javascript" src="static/google_jsapi.js">
-    </script>
-<script type="text/javascript">
-
-      // Load the Google Transliterate API
-      google.load("elements", "1", {
-            packages: "transliteration"
-          });
-
-
-    </script>
-
-
-    <title>wucskkm database edit</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-
-/* The Modal (background) */
-.modal1 {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal1-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 95%;
-}
-
-/* The Close Button */
-.close {
-  color: red;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: red;
-  text-decoration: none;
-  cursor: pointer;
-}
-</style>
-<style>
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 0px;
-  text-align: center;
-}
-@media print {
-td,th,tr {page-break-inside:avoid;}
-}
-
-.modal {
-    display:    none;
-    position:   fixed;
-    z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-    background: rgba( 255, 255, 255, .8 ) 
-                url('/static/ajax-loader.gif') 
-                50% 50% 
-                no-repeat;
-}
-
-/* When the body has the loading class, we turn
-   the scrollbar off with overflow:hidden */
-body.loading .modal {
-    overflow: hidden;   
-}
-
-/* Anytime the body has the loading class, our
-   modal element will be visible */
-body.loading .modal {
-    display: block;
-}
-
-button{
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding:0;
-  text-align: center;
-  text-decoration: none;
-  display: inline;
-  font-size: 16px;
-  margin: 0;
-  cursor: pointer;
-}
-
-  input {
-    font-weight:bold;
-     width: 100%;
-    height: 100%;
-     box-sizing: border-box;
-     -webkit-box-sizing:border-box;
-     -moz-box-sizing: border-box;
-}
-</style>
-<script src="static/carkan.js"></script>
-</head>
-
-<body class="container">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  	<div style="    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: grey;
-    z-index: 99;
-    right: 0px;margin-bottom:50px;">
-
-
-         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
-<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
-</div>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WUCSKKM – Database Edit</title>
+  <script type="text/javascript" src="static/google_jsapi.js"></script>
+  <script type="text/javascript">
+    google.load("elements", "1", { packages: "transliteration" });
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <style>
+    :root {
+      --primary: #1a56db;
+      --primary-dark: #1241b0;
+      --primary-light: #e8f0fe;
+      --success: #0d9f6e;
+      --danger: #e02424;
+      --surface: #ffffff;
+      --bg: #f0f4f8;
+      --border: #d1d9e0;
+      --text: #1a202c;
+      --text-muted: #5a6a7e;
+      --header-bg: #1e293b;
+      --header-text: #f8fafc;
+      --radius-sm: 4px;
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', 'Noto Sans Kannada', sans-serif;
+      background: var(--bg); color: var(--text); font-size: 13px;
+      padding-top: 48px; /* push below fixed navbar */
+    }
 
+    /* Loading overlay */
+    .modal {
+      display: none; position: fixed; z-index: 2000; inset: 0;
+      background: rgba(255,255,255,.85) url('/static/ajax-loader.gif') 50% 50% no-repeat;
+    }
+    body.loading .modal { display: block; overflow: hidden; }
 
-  <form action="/dataedit" method="post">
-                <select name="year" id="year" onchange="this.form.submit()" style="position:fixed;left:10px;top:5px;width:100px;height:20px;z-index:999;">
-            {% for y in dby %}
-                  {% if year==y%}
-                      <option value="{{y}}" selected>{{y}}</option>
-                  {%endif%}
-                  {% if year!=y%}
-                      <option value="{{y}}" >{{y}}</option>
-                  {%endif%}
-            {% endfor %}
-          </select>
-  </form>
-<form action="/dataeditup" onkeydown="return event.key != 'Enter';" method="post">
-  <input type="hidden" name="year" id="year" value="{{year}}"/>
-<div style="position:fixed;top:0;width:99%;background:#3498DB;">
+    /* Navbar */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 400;
+      background: var(--header-bg); height: 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .navbar-left { display: flex; align-items: center; gap: 10px; }
+    .navbar a {
+      color: var(--header-text); text-decoration: none;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 14px; opacity: .85;
+    }
+    .navbar a:hover { opacity: 1; }
+    .year-select {
+      background: #334155; border: 1.5px solid #475569;
+      border-radius: var(--radius-sm); color: #e2e8f0;
+      font-weight: 600; font-size: 12px; height: 28px; padding: 0 8px;
+      cursor: pointer; outline: none;
+    }
+    .lang-btn {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+      border-radius: 16px; padding: 3px 10px; cursor: pointer;
+      color: var(--header-text); font-size: 11px; font-weight: 600;
+    }
+    .lang-btn:hover { background: rgba(255,255,255,.2); }
 
-    <center><h4 style="padding:0;margin:0;">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
-ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</h4></center>
-  <table style="width:100%">
+    /* Sticky band below navbar */
+    .sticky-band {
+      position: sticky; top: 48px; z-index: 300;
+      background: var(--header-bg);
+    }
+    .org-banner {
+      text-align: center; padding: 7px 16px;
+      background: linear-gradient(90deg,#1e3a5f,#1a56db);
+    }
+    .org-banner h2 { color:#fff; font-size:13px; font-weight:700; line-height:1.4; }
 
-    <tr>
-        <th style="width:2%;">No</th>
-        <th style="width:4%;"><input type="button" style="padding-top:10;padding-bottom:10;background:#F4D03F;" id="myBtn" name="myBtn" value="NEW"/></th></th>
-        <th style="width:4%;">ಪಾಸ್</th>
-        <th style="width:25%;">ರೈತರ ಹೆಸರು</th>
-        <th style="width:4%;">ಸರ್ವೇ ನಂಬರ್</th>
-        <th style="width:5%;">ವಿಸ್ತೀರ್ಣ</th>
-        <th style="width:4%;">ಭತ್ತ</th>
-        <th style="width:5%;">ಕರ</th>
-        <th style="width:4%;">ಕಬ್ಬು</th>
-      <th style="width:5%;">ಕರ</th>
-      <th style="width:4%;">ತೋಟ</th>
-      <th style="width:5%;">ಕರ</th>
-      <th style="width:5%;">ನೀರಿನ ಕರ</th>
-      <th style="width:5%;">ನಿರ್ವಹಣಾ ಕರ</th>
-      <th style="width:5%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
-      <th style="width:5%;">ಹಿಂದಿನ ಬಾಕಿ</th>
-      <th style="width:5%;">ಒಟ್ಟು ಮೊತ್ತ</th>
-      <th style="width:4%;"><input type="submit" style="padding-top:10;padding-bottom:10;background:#F4D03F;" id="up" name="up" value="UPDATE"/></th>
-    </tr>
-  </table>
-</div>
+    .action-strip {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 10px; background: #f8fafc;
+      border-bottom: 2px solid var(--border); flex-wrap: wrap;
+    }
 
+    /* Buttons */
+    .btn {
+      border: none; border-radius: var(--radius-sm);
+      padding: 5px 12px; font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: filter .15s, transform .1s;
+      display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+    }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-new    { background: #7c3aed; color: #fff; }
+    .btn-update { background: #f59e0b; color: #fff; }
+    .btn-add    { background: var(--success); color: #fff; }
+    .btn-submit { background: var(--danger); color: #fff; }
+    .btn-del    { background: var(--danger); color: #fff; }
 
-<div id="myModal" class="modal1">
+    /* Table */
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+    table.dt { border-collapse: collapse; min-width: 960px; width: 100%; }
+    table.dt th, table.dt td {
+      border: 1px solid var(--border); padding: 0;
+      text-align: center; vertical-align: middle;
+    }
+    table.dt thead th {
+      background: var(--header-bg); color: var(--header-text);
+      font-size: 10px; font-weight: 700; padding: 6px 3px;
+      text-transform: uppercase; letter-spacing: .4px; white-space: nowrap;
+    }
+    table.dt tbody tr { background: var(--surface); }
+    table.dt tbody tr:nth-child(even) { background: #f7f9fc; }
+    table.dt tbody tr:hover { background: #eef3fb; }
+    table.dt input[type="text"],
+    table.dt input[type="number"] {
+      width: 100%; height: 30px; border: none; background: transparent;
+      text-align: center; font-weight: 600; font-size: 11px; color: var(--text);
+      padding: 0 2px; font-family: inherit;
+    }
+    table.dt input:focus {
+      background: var(--primary-light); outline: none;
+      border-bottom: 2px solid var(--primary);
+    }
 
-  <!-- Modal content -->
-  <div class="modal1-content">
-    <span class="close">&times;</span>
-    <div>
-    <table style="width:100%">
+    /* content pushed below navbar via body padding-top:48px */
+    .main-content { margin-top: 0; }
 
-    
-    <tr>
-        
-        <th style="width:4%;">ಪಾಸ್</th>
-        <th style="width:25%;">ರೈತರ ಹೆಸರು</th>
-        <th style="width:4%;">ಸರ್ವೇ ನಂಬರ್</th>
-        <th style="width:5%;">ವಿಸ್ತೀರ್ಣ</th>
-        <th style="width:4%;">ಭತ್ತ</th>
-        <th style="width:5%;">ಕರ</th>
-        <th style="width:4%;">ಕಬ್ಬು</th>
-      <th style="width:5%;">ಕರ</th>
-      <th style="width:4%;">ತೋಟ</th>
-      <th style="width:5%;">ಕರ</th>
-      <th style="width:5%;">ನೀರಿನ ಕರ</th>
-      <th style="width:5%;">ನಿರ್ವಹಣಾ ಕರ</th>
-      <th style="width:5%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
-      <th style="width:5%;">ಹಿಂದಿನ ಬಾಕಿ</th>
-      <th style="width:5%;">ಒಟ್ಟು ಮೊತ್ತ</th>
-      <th style="width:4%;">-</th>
-    </tr>
+    /* Modal */
+    .modal1 {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.5); overflow-y: auto; padding-top: 70px;
+    }
+    .modal1-content {
+      background: var(--surface); border-radius: 10px;
+      margin: 0 auto 40px; padding: 20px;
+      width: min(98%, 1100px); box-shadow: var(--shadow-md);
+      animation: slideUp .2s ease;
+    }
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(15px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .modal-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .modal-hdr h3 { font-size: 15px; color: var(--primary-dark); }
+    .close-x {
+      background: none; border: none; cursor: pointer;
+      font-size: 22px; color: var(--text-muted); line-height: 1;
+    }
+    .close-x:hover { color: var(--danger); }
 
-	    <tr>
-        
-        <th style="width:4%;"><input type="number" value="" name="pass" id="pass"/></th>
+    @media print {
+      .noprint { display: none !important; }
+      td, th, tr { page-break-inside: avoid; }
+      .navbar, .sticky-band { display: none; }
+      .main-content { margin-top: 0; }
+      body { padding-top: 0; }
+    }
+    @media (max-width: 600px) {
+      .org-banner h2 { font-size: 11px; }
+    }
 
-        <th style="width:25%;text-align: left;"><input type="text" name="name" value="" id="name"/></th>
-<script>
-      function onLoad() {
-        var options = {
-            sourceLanguage:
-                google.elements.transliteration.LanguageCode.ENGLISH,
-            destinationLanguage:
-                [google.elements.transliteration.LanguageCode.KANNADA],
-            shortcutKey: 'ctrl+g',
-            transliterationEnabled: true
-        };
-        
-        // Create an instance on TransliterationControl with the required
-        // options.
-        var control =
-            new google.elements.transliteration.TransliterationControl(options);
+    /* ── Sidebar ── */
+    :root { --sw: 270px; --sid-bg: #0a1f1a; --sid-txt: #c8e6c9;
+            --sid-hover: rgba(22,163,74,.15); --sid-act: rgba(22,163,74,.25);
+            --green: #0d6e5a; --dk: #094a3c; --accent: #16a34a; --teal: #0d9488; }
+    #sidebar { position:fixed; top:0; left:calc(-1 * var(--sw)); width:var(--sw); height:100vh;
+      background:var(--sid-bg); z-index:1001; transition:transform .22s cubic-bezier(.4,0,.2,1);
+      display:flex; flex-direction:column; overflow-y:auto; box-shadow:4px 0 24px rgba(0,0,0,.2); }
+    #sidebar.open { transform:translateX(var(--sw)); }
+    .sb-header { padding:18px 20px 14px; border-bottom:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(135deg,var(--green),var(--dk)); position:relative; }
+    .sb-logo { display:flex; align-items:center; gap:11px; }
+    .sb-icon { width:38px; height:38px; background:linear-gradient(135deg,#16a34a,#0d9488);
+      border-radius:9px; display:flex; align-items:center; justify-content:center;
+      font-size:19px; color:#fff; flex-shrink:0; }
+    .sb-org { font-size:11px; font-weight:600; color:#a7f3d0; font-family:'Noto Sans Kannada',sans-serif; line-height:1.3; }
+    .sb-sub { font-size:10px; color:rgba(255,255,255,.55); }
+    .sb-close { position:absolute; top:12px; right:12px; width:26px; height:26px;
+      background:rgba(255,255,255,.1); border:none; border-radius:6px; color:#fff;
+      cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center;
+      transition:background .22s; }
+    .sb-close:hover { background:rgba(255,255,255,.22); }
+    .sb-nav { flex:1; padding:10px 0; }
+    .sb-label { font-size:10px; font-weight:600; color:rgba(255,255,255,.35);
+      text-transform:uppercase; letter-spacing:1.2px; padding:12px 20px 5px; display:block; }
+    .sb-link { display:flex; align-items:center; gap:12px; padding:11px 20px;
+      color:var(--sid-txt); text-decoration:none; font-size:14px;
+      transition:background .22s, color .22s; border:none; background:transparent;
+      width:100%; cursor:pointer; text-align:left; }
+    .sb-link:hover { background:var(--sid-hover); color:#fff; }
+    .sb-link.active { background:var(--sid-act); color:#4ade80; font-weight:500; }
+    .sb-link .ic { width:20px; text-align:center; font-size:15px; opacity:.8; flex-shrink:0; }
+    .sb-footer { padding:12px 14px; border-top:1px solid rgba(255,255,255,.08); }
+    #overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5);
+      z-index:1000; backdrop-filter:blur(2px); }
+    #overlay.on { display:block; }
+    #ham-btn { background:transparent; border:1.5px solid rgba(255,255,255,.2);
+      border-radius:4px; color:var(--header-text); font-size:16px; width:34px; height:30px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:all .2s; }
+    #ham-btn:hover { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.4); }
 
-        // Enable transliteration in the textbox with id
-        // 'transliterateTextarea'.
-          a="name"
-          control.makeTransliteratable([a]);        
+    /* ── Sticky column header band (outside overflow-x container) ── */
+    .sticky-col-hdr {
+      position: sticky;
+      top: 48px;           /* set precisely by JS: navbar + sticky-band height */
+      z-index: 299;
+      background: var(--header-bg);
+      overflow: hidden;    /* hides scrollbar */
+    }
+    .sticky-col-hdr-inner {
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .sticky-col-hdr-inner::-webkit-scrollbar { display: none; }
+    .sticky-col-hdr-inner table {
+      border-collapse: collapse; min-width: 960px; width: 100%; table-layout: fixed;
+    }
+    .sticky-col-hdr-inner table th {
+      background: var(--header-bg); color: var(--header-text);
+      font-size: 10px; font-weight: 700; padding: 6px 3px;
+      text-transform: uppercase; letter-spacing: .4px; white-space: nowrap;
+      border: 1px solid rgba(255,255,255,.1); text-align: center;
+    }
+    /* Hide real thead on screen — sticky band above is the visible header */
+    table.dt thead { visibility: hidden; height: 0; }
+    table.dt thead tr { height: 0; }
+    table.dt thead th { padding: 0; height: 0; border: none; font-size: 0; line-height: 0; }
+    /* Show real thead when printing (sticky band is .noprint) */
+    @media print {
+      table.dt thead { visibility: visible !important; height: auto !important; }
+      table.dt thead tr { height: auto !important; }
+      table.dt thead th { padding: 6px 3px !important; height: auto !important;
+        border: 1px solid var(--border) !important; font-size: 9pt !important;
+        line-height: normal !important; }
+      .sticky-col-hdr { display: none !important; }
+    }
+  </style>
+</head>
+<body>
 
-      }
-      google.setOnLoadCallback(onLoad);
-
-        </script>
-
-        <input type="text" hidden name="year" value="{{year}}"/>
-        <th style="width:4%;"><input type="text" name="sno" value=""/></th>
-        <th style="width:5%;"><input type="text" name="area" value="0" id="area" onchange="my3Function(this.value)"/></th>
-        <th style="width:4%;"><input type="text" onchange="myFunction(this.value)" name="batha" value="0" id="batha" /></th>
-        <th style="width:5%;"><input type="text" name="bkara" value="0" id="bkara" onchange="getval1(this.value)"/></th>
-        <th style="width:4%;"><input type="text" name="kabu" value="0" id="kabu" onchange="my1Function(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="kkara" value="0" id="kkara" onchange="getval2(this.value)"/></th>
-      <th style="width:4%;"><input type="text" name="thota" value="0" id="thota" onchange="my2Function(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="tkara" value="0" id="tkara" onchange="getval3(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="wtax" value="0" id="wtax"/></th>
-      <th style="width:5%;"><input type="text" name="mtax" value="0" id="mtax" /></th>
-      <th style="width:5%;"><input type="text" name="t1" value="0" id="t1" /></th>
-      <th style="width:5%;"><input type="text" name="bal" value="0" id="bal" onchange="my4Function(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="t2" value="0" id="t2"/></th>
-        <th style="width:4%;"><input style="background:#E74C3C;" type="Submit" name="submit" value="Submit" id="submit"/></th>
-  <script>
-$body = $("body");
-$("#Submit").on("click",()=>{
-$body.addClass("loading")
-});
-</script>      
-    </tr>
-  </table>
+<!-- Sidebar -->
+<aside id="sidebar">
+  <div class="sb-header">
+    <div class="sb-logo">
+      <div class="sb-icon">💧</div>
+      <div>
+        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
+        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
+      </div>
     </div>
-    <br>
-    <span class="close"><input id="clz" type="button" value="Cancel"/></span>
+    <button class="sb-close" id="sb-close-btn">✕</button>
   </div>
+  <nav class="sb-nav">
+    <span class="sb-label">Navigation</span>
+    <a href="/"         class="sb-link"><i class="fa fa-home ic"></i><span>Home</span></a>
+    <a href="/feeds"    class="sb-link"><i class="fa fa-comment ic"></i><span>Feedback</span></a>
+    <a href="/list"     class="sb-link"><i class="fa fa-list ic"></i><span>List</span></a>
+    <a href="/allmap"   class="sb-link"><i class="fa fa-map ic"></i><span>Map</span></a>
+    <a href="/document" class="sb-link"><i class="fa fa-file ic"></i><span>Documents</span></a>
+    <a href="/socinfo"  class="sb-link"><i class="fa fa-info-circle ic"></i><span>Society Info</span></a>
+    <span class="sb-label" style="margin-top:6px">Admin</span>
+    <a href="/dataedit"  class="sb-link active"><i class="fa fa-table ic"></i><span>Area Edit</span></a>
+    <a href="/datapay"   class="sb-link"><i class="fa fa-money-bill-wave ic"></i><span>Payment Edit</span></a>
+    <a href="/year"      class="sb-link"><i class="fa fa-calendar-alt ic"></i><span>Year / Tax Rates</span></a>
+    <a href="/dataindex" class="sb-link"><i class="fa fa-print ic"></i><span>Database Report</span></a>
+  </nav>
+  <div class="sb-footer">
+    <a href="/" class="sb-link" style="background:rgba(22,163,74,.15);border-radius:8px;color:#4ade80;">
+      <i class="fa fa-arrow-left ic"></i><span>Back to Home</span>
+    </a>
+  </div>
+</aside>
+<div id="overlay" onclick="closeSB()"></div>
 
+<!-- Navbar -->
+<nav class="navbar noprint">
+  <div class="navbar-left">
+    <button id="ham-btn" onclick="toggleSB()"><i class="fa fa-bars"></i></button>
+    <a href="/"><i class="fa fa-home"></i></a>
+    <form action="/dataedit" method="post" style="margin:0;">
+      <select name="year" class="year-select" onchange="this.form.submit()">
+        {% for y in dby %}
+          <option value="{{y}}" {% if year==y %}selected{% endif %}>{{y}}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+  <button class="lang-btn" onclick="toggleLang()">
+    <i class="fa fa-language"></i><span id="langLabel">ಕನ್ನಡ</span>
+  </button>
+</nav>
+
+<!-- Sticky band: org title + action strip -->
+<div class="sticky-band noprint">
+  <div class="org-banner">
+    <h2 id="org-title">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</h2>
+  </div>
+  <div class="action-strip">
+    <button type="button" class="btn btn-new" id="myBtn">
+      <i class="fa fa-plus"></i> <span id="lbl-new">New Record</span>
+    </button>
+    <button type="submit" form="main-form" class="btn btn-update" id="up" name="up" value="UPDATE"
+      onclick="if(!confirm('ಎಲ್ಲ ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸುವುದೇ? / Save all changes?')) return false;">
+      <i class="fa fa-save"></i> <span id="lbl-update">UPDATE</span>
+    </button>
+  </div>
 </div>
-<script>
 
-function myFunction(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*{{price['batha']}})+((((value)%1)*100)*{{price['batha']}});
-  document.getElementById("bkara").value=parseFloat(v).toFixed(2);
-  
-  
-b=document.getElementById("kkara").value;
-c=document.getElementById("tkara").value;
-s=v+parseFloat(b)+parseFloat(c);
-document.getElementById("wtax").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2").value=parseFloat(t2).toFixed(2);
-}
-function my1Function(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*{{price['kabbu']}})+((((value)%1)*100)*{{price['kabbu']}});
-  document.getElementById("kkara").value=parseFloat(v).toFixed(2);
-  a=document.getElementById("bkara").value;
-
-c=document.getElementById("tkara").value;
-s=parseFloat(a)+v+parseFloat(c);
-document.getElementById("wtax").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2").value=parseFloat(t2).toFixed(2);
-}
-
-function my2Function(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*{{price['tota']}})+((((value)%1)*100)*{{price['tota']}});
-  document.getElementById("tkara").value=parseFloat(v).toFixed(2);
-  a=document.getElementById("bkara").value;
-b=document.getElementById("kkara").value;
-
-s=parseFloat(a)+parseFloat(b)+v;
-document.getElementById("wtax").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2").value=parseFloat(t2).toFixed(2);
-}
-
-function my3Function(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*{{price['mtax']}})+((((value)%1)*100)*{{price['mtax']}});
-  document.getElementById("mtax").value=parseFloat(v).toFixed(2);
-  s=parseFloat(document.getElementById("wtax").value);
-tax=v+s;
-document.getElementById("t1").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2").value=parseFloat(t2).toFixed(2);
-}
-
-function my4Function(val) {
-
-tax=document.getElementById("t1").value;
-bal=val
-t2=parseFloat(tax)+parseFloat(bal);
-document.getElementById("t2").value=parseFloat(t2).toFixed(2);
-}
-  
-function getval3(val) {
-	value=parseFloat(val);
-
-  a=document.getElementById("bkara").value;
-b=document.getElementById("kkara").value;
-
-s=parseFloat(a)+parseFloat(b)+value;
-document.getElementById("wtax").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2").value=parseFloat(t2).toFixed(2);
-}
-
-function getval2(val) {
-	value=parseFloat(val);
-
-  a=document.getElementById("bkara").value;
-
-c=document.getElementById("tkara").value;
-s=parseFloat(a)+value+parseFloat(c);
-document.getElementById("wtax").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2").value=parseFloat(t2).toFixed(2);
-}
-
-function getval1(val) {
-	value=parseFloat(val);
-
-  
-  
-b=document.getElementById("kkara").value;
-c=document.getElementById("tkara").value;
-s=value+parseFloat(b)+parseFloat(c);
-document.getElementById("wtax").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2").value=parseFloat(t2).toFixed(2);
-}
-</script>
-<script>
-// Get the modal
-var modal1 = document.getElementById("myModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-var close=document.getElementById("clz");
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-  modal1.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal1.style.display = "none";
-}
-close.onclick = function() {
-  modal1.style.display = "none";
-}
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal1) {
-    modal1.style.display = "none";
-  }
-}
-</script>
-  
-  <script>
-$body = $("body");
-$("#up").on("click",()=>{
-$body.addClass("loading")
-});
-</script>
-<div style="width:100%;" id="newone"> 
-
-    <table style="width:100%;margin-top:10%; ">
-      {% for i in data %}
-	    <tr>
-        <th style="width:2%;">{{ i['no'] }}</th>
-        <th style="width:4%;"><input style="width:85%;background:#2ECC71;" type="button" name="add{{ i['id']}}" value="ADD" id="add{{ i['id']}}"/></th>  <script>
-$body = $("body");
-$("#add{{ i['id']}}").on("click",()=>{
-$body.addClass("loading")
-});
-</script>
-        <th style="width:4%;"><input type="number" value="{{ i['pass']}}" name="pass{{ i['id']}}" id="pass{{ i['id']}}"/></th>
-
-        <th style="width:25%;text-align: left;"><input type="text" name="name{{ i['id']}}" value="{{ i['name']}}" id="name{{ i['id']}}"/></th>
-<script>
-      function onLoad{{ i['id']}}() {
-        var options{{ i['id']}} = {
-            sourceLanguage:
-                google.elements.transliteration.LanguageCode.ENGLISH,
-            destinationLanguage:
-                [google.elements.transliteration.LanguageCode.KANNADA],
-            shortcutKey: 'ctrl+g',
-            transliterationEnabled: true
-        };
-
-        // Create an instance on TransliterationControl with the required
-        // options.
-        var control{{ i['id']}} =
-            new google.elements.transliteration.TransliterationControl(options{{ i['id']}});
-
-        // Enable transliteration in the textbox with id
-        // 'transliterateTextarea'.
-          a="name"+"{{ i['id']}}"
-          control{{ i['id']}}.makeTransliteratable([a]);
-
-      }
-      google.setOnLoadCallback(onLoad{{ i['id']}});
-
-        </script>
-
-        <input type="text" hidden name="year{{ i['id']}}" value="{{ i['year']}}"/>
-        <th style="width:4%;"><input type="text" name="sno{{ i['id']}}" value="{{ i['sno']}}"/></th>
-        <th style="width:5%;"><input type="text" name="area{{ i['id']}}" value="{{ i['area']}}" id="area{{ i['id']}}" onchange="my3Function{{ i['id']}}(this.value)"/></th>
-        <th style="width:4%;"><input type="text" onchange="myFunction{{ i['id']}}(this.value)" name="batha{{ i['id']}}" value="{{ i['batha']}}" id="batha{{ i['id']}}" /></th>
-        <th style="width:5%;"><input type="text" name="bkara{{ i['id']}}" value="{{ i['bkara']}}" id="bkara{{ i['id']}}" onchange="getval1{{ i['id']}}(this.value)"/></th>
-        <th style="width:4%;"><input type="text" name="kabu{{ i['id']}}" value="{{ i['kabu']}}" id="kabu{{ i['id']}}" onchange="my1Function{{ i['id']}}(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="kkara{{ i['id']}}" value="{{ i['kkara']}}" id="kkara{{ i['id']}}" onchange="getval2{{ i['id']}}(this.value)"/></th>
-      <th style="width:4%;"><input type="text" name="thota{{ i['id']}}" value="{{ i['thota']}}" id="thota{{ i['id']}}" onchange="my2Function{{ i['id']}}(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="tkara{{ i['id']}}" value="{{ i['tkara']}}" id="tkara{{ i['id']}}" onchange="getval3{{ i['id']}}(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="wtax{{ i['id']}}" value="{{ i['wtax']}}" id="wtax{{ i['id']}}"/></th>
-      <th style="width:5%;"><input type="text" name="mtax{{ i['id']}}" value="{{ i['mtax']}}" id="mtax{{ i['id']}}" /></th>
-      <th style="width:5%;"><input type="text" name="t1{{ i['id']}}" value="{{ i['t1']}}" id="t1{{ i['id']}}" /></th>
-      <th style="width:5%;"><input type="text" name="bal{{ i['id']}}" value="{{ i['bal']}}" id="bal{{ i['id']}}" onchange="my4Function{{ i['id']}}(this.value)"/></th>
-      <th style="width:5%;"><input type="text" name="t2{{ i['id']}}" value="{{ i['t2']}}" id="t2{{ i['id']}}"/></th>
-        <th style="width:4%;"><input style="background:#E74C3C;" type="button" name="del" value="DELETE" id="del{{ i['id']}}"/></th>
-  <script>
-$body = $("body");
-$("#del{{ i['id']}}").on("click",()=>{
-$body.addClass("loading")
-});
-</script>
-    </tr>
-
-
-<script>
-
-function myFunction{{ i['id']}}(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*{{price['batha']}})+((((value)%1)*100)*{{price['batha']}});
-  document.getElementById("bkara{{ i['id']}}").value=parseFloat(v).toFixed(2);
-
-
-b=document.getElementById("kkara{{ i['id']}}").value;
-c=document.getElementById("tkara{{ i['id']}}").value;
-s=v+parseFloat(b)+parseFloat(c);
-document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
-}
-function my1Function{{ i['id']}}(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*{{price['kabbu']}})+((((value)%1)*100)*{{price['kabbu']}});
-  document.getElementById("kkara{{ i['id']}}").value=parseFloat(v).toFixed(2);
-  a=document.getElementById("bkara{{ i['id']}}").value;
-
-c=document.getElementById("tkara{{ i['id']}}").value;
-s=parseFloat(a)+v+parseFloat(c);
-document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function my2Function{{ i['id']}}(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*{{price['tota']}})+((((value)%1)*100)*{{price['tota']}});
-  document.getElementById("tkara{{ i['id']}}").value=parseFloat(v).toFixed(2);
-  a=document.getElementById("bkara{{ i['id']}}").value;
-b=document.getElementById("kkara{{ i['id']}}").value;
-
-s=parseFloat(a)+parseFloat(b)+v;
-document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function my3Function{{ i['id']}}(val) {
-	value=parseFloat(val);
-  v=((((value)-((value)%1))*40)*{{price['mtax']}})+((((value)%1)*100)*{{price['mtax']}});
-  document.getElementById("mtax{{ i['id']}}").value=parseFloat(v).toFixed(2);
-  s=parseFloat(document.getElementById("wtax{{ i['id']}}").value);
-tax=v+s;
-document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function my4Function{{ i['id']}}(val) {
-
-tax=document.getElementById("t1{{ i['id']}}").value;
-bal=val
-t2=parseFloat(tax)+parseFloat(bal);
-document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function getval3{{ i['id']}}(val) {
-	value=parseFloat(val);
-
-  a=document.getElementById("bkara{{ i['id']}}").value;
-b=document.getElementById("kkara{{ i['id']}}").value;
-
-s=parseFloat(a)+parseFloat(b)+value;
-document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function getval2{{ i['id']}}(val) {
-	value=parseFloat(val);
-
-  a=document.getElementById("bkara{{ i['id']}}").value;
-
-c=document.getElementById("tkara{{ i['id']}}").value;
-s=parseFloat(a)+value+parseFloat(c);
-document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
-}
-
-function getval1{{ i['id']}}(val) {
-	value=parseFloat(val);
-
-
-
-b=document.getElementById("kkara{{ i['id']}}").value;
-c=document.getElementById("tkara{{ i['id']}}").value;
-s=value+parseFloat(b)+parseFloat(c);
-document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
-t=document.getElementById("mtax{{ i['id']}}").value;
-tax=parseFloat(t)+s;
-document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
-bal=document.getElementById("bal{{ i['id']}}").value;
-t2=tax+parseFloat(bal);
-document.getElementById("t2{{ i['id']}}").value=parseFloat(t2).toFixed(2);
-}
-</script>
-
-   <script>
-$("#add{{ i['id']}}").click(function(){
-    a=document.getElementById('pass{{ i['id']}}').value
-    text=a+","+"{{year}}";
-    $.ajax({
-      url: "/dataeditadd",
-      type: "get",
-      data: {jsdata: text},
-      success: function(response) {
-        window.location = "/dataedit";
-      },
-      error: function(xhr) {
-        //Do Something to handle error
-      }
-    });
-});
-</script>
-
-  <script>
-
-$("#del{{ i['id']}}").click(function(){
-
-    text="{{ i['id']}}"+","+"{{ i['pass']}}"+","+"{{year}}";
-    $.ajax({
-      url: "/dataeditdel",
-      type: "get",
-      data: {jsdata: text},
-      complete: function(response) {
-        window.location = "/dataedit";
-      }
-    });
-});
-</script>  
-      {% endfor %}
+<!-- Sticky column header band — OUTSIDE overflow container so position:sticky works -->
+<div class="sticky-col-hdr noprint" id="sticky-col-hdr">
+  <div class="sticky-col-hdr-inner" id="sticky-col-hdr-inner">
+    <table>
+      <colgroup>
+        <col style="width:3%"><col style="width:5%"><col style="width:4%">
+        <col style="width:18%"><col style="width:4%"><col style="width:5%">
+        <col style="width:4%"><col style="width:5%"><col style="width:4%">
+        <col style="width:5%"><col style="width:4%"><col style="width:5%">
+        <col style="width:5%"><col style="width:5%"><col style="width:5%">
+        <col style="width:5%"><col style="width:5%"><col style="width:5%">
+      </colgroup>
+      <tbody><tr>
+        <th class="noprint" id="th-no">No</th>
+        <th class="noprint" id="th-add">ADD</th>
+        <th id="th-pass">ಪಾಸ್</th>
+        <th id="th-name">ರೈತರ ಹೆಸರು</th>
+        <th id="th-sno">ಸರ್ವೇ ನಂ</th>
+        <th id="th-area">ವಿಸ್ತೀರ್ಣ</th>
+        <th id="th-batha">ಭತ್ತ</th>
+        <th id="th-bkara">ಕರ</th>
+        <th id="th-kabu">ಕಬ್ಬು</th>
+        <th id="th-kkara">ಕರ</th>
+        <th id="th-thota">ತೋಟ</th>
+        <th id="th-tkara">ಕರ</th>
+        <th id="th-wtax">ನೀರಿನ ಕರ</th>
+        <th id="th-mtax">ನಿರ್ವಹಣಾ ಕರ</th>
+        <th id="th-t1">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+        <th id="th-bal">ಹಿಂದಿನ ಬಾಕಿ</th>
+        <th id="th-t2">ಒಟ್ಟು ಮೊತ್ತ</th>
+        <th class="noprint" id="th-del">Delete</th>
+      </tr></tbody>
     </table>
+  </div>
 </div>
-  <div class="modal"><!-- Place at bottom of page --></div>
-  <script>
-$body = $("body");
 
-$(document).on({
-    ajaxStart: function() { $body.addClass("loading");    },
-     ajaxStop: function() { $body.removeClass("loading"); }    
-});
-</script>
+<!-- Main form: UPDATE existing records -->
+<form id="main-form" action="/dataeditup" onkeydown="return event.key != 'Enter';" method="post">
+  <input type="hidden" name="year" value="{{year}}"/>
+
+  <div class="main-content">
+    <div class="table-scroll" id="de-body-scroll">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th style="width:3%;" class="noprint" id="th-no">No</th>
+            <th style="width:5%;" class="noprint" id="th-add">ADD</th>
+            <th style="width:4%;" id="th-pass">ಪಾಸ್</th>
+            <th style="width:18%;" id="th-name">ರೈತರ ಹೆಸರು</th>
+            <th style="width:4%;" id="th-sno">ಸರ್ವೇ ನಂ</th>
+            <th style="width:5%;" id="th-area">ವಿಸ್ತೀರ್ಣ</th>
+            <th style="width:4%;" id="th-batha">ಭತ್ತ</th>
+            <th style="width:5%;" id="th-bkara">ಕರ</th>
+            <th style="width:4%;" id="th-kabu">ಕಬ್ಬು</th>
+            <th style="width:5%;" id="th-kkara">ಕರ</th>
+            <th style="width:4%;" id="th-thota">ತೋಟ</th>
+            <th style="width:5%;" id="th-tkara">ಕರ</th>
+            <th style="width:5%;" id="th-wtax">ನೀರಿನ ಕರ</th>
+            <th style="width:5%;" id="th-mtax">ನಿರ್ವಹಣಾ ಕರ</th>
+            <th style="width:5%;" id="th-t1">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+            <th style="width:5%;" id="th-bal">ಹಿಂದಿನ ಬಾಕಿ</th>
+            <th style="width:5%;" id="th-t2">ಒಟ್ಟು ಮೊತ್ತ</th>
+            <th style="width:5%;" class="noprint" id="th-del">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for i in data %}
+          <tr>
+            <td class="noprint">{{ i['no'] }}</td>
+
+            <!-- ADD button: calls /dataeditadd with pass,year → reloads page -->
+            <td class="noprint">
+              <button type="button" class="btn btn-add"
+                style="width:90%;padding:3px 4px;font-size:11px;" id="add{{ i['id']}}">
+                <i class="fa fa-plus"></i>
+              </button>
+            </td>
+
+            <td><input type="number" value="{{ i['pass']}}" name="pass{{ i['id']}}" id="pass{{ i['id']}}"/></td>
+            <td style="text-align:left;"><input type="text" name="name{{ i['id']}}" value="{{ i['name']}}" id="name{{ i['id']}}"/></td>
+            <script>
+              function onLoad{{ i['id']}}() {
+                var opts{{ i['id']}} = {
+                  sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+                  destinationLanguage: [google.elements.transliteration.LanguageCode.KANNADA],
+                  shortcutKey: 'ctrl+g', transliterationEnabled: true
+                };
+                var ctrl{{ i['id']}} = new google.elements.transliteration.TransliterationControl(opts{{ i['id']}});
+                ctrl{{ i['id']}}.makeTransliteratable(["name{{ i['id']}}"]);
+              }
+              google.setOnLoadCallback(onLoad{{ i['id']}});
+            </script>
+            <input type="hidden" name="year{{ i['id']}}" value="{{ i['year']}}"/>
+            <td><input type="text" name="sno{{ i['id']}}" value="{{ i['sno']}}"/></td>
+            <td><input type="text" name="area{{ i['id']}}" value="{{ i['area']}}" id="area{{ i['id']}}" onchange="my3Function{{ i['id']}}(this.value)"/></td>
+            <td><input type="text" name="batha{{ i['id']}}" value="{{ i['batha']}}" id="batha{{ i['id']}}" onchange="myFunction{{ i['id']}}(this.value)"/></td>
+            <td><input type="text" name="bkara{{ i['id']}}" value="{{ i['bkara']}}" id="bkara{{ i['id']}}" onchange="getval1{{ i['id']}}(this.value)"/></td>
+            <td><input type="text" name="kabu{{ i['id']}}" value="{{ i['kabu']}}" id="kabu{{ i['id']}}" onchange="my1Function{{ i['id']}}(this.value)"/></td>
+            <td><input type="text" name="kkara{{ i['id']}}" value="{{ i['kkara']}}" id="kkara{{ i['id']}}" onchange="getval2{{ i['id']}}(this.value)"/></td>
+            <td><input type="text" name="thota{{ i['id']}}" value="{{ i['thota']}}" id="thota{{ i['id']}}" onchange="my2Function{{ i['id']}}(this.value)"/></td>
+            <td><input type="text" name="tkara{{ i['id']}}" value="{{ i['tkara']}}" id="tkara{{ i['id']}}" onchange="getval3{{ i['id']}}(this.value)"/></td>
+            <td><input type="text" name="wtax{{ i['id']}}" value="{{ i['wtax']}}" id="wtax{{ i['id']}}"/></td>
+            <td><input type="text" name="mtax{{ i['id']}}" value="{{ i['mtax']}}" id="mtax{{ i['id']}}"/></td>
+            <td><input type="text" name="t1{{ i['id']}}" value="{{ i['t1']}}" id="t1{{ i['id']}}"/></td>
+            <td><input type="text" name="bal{{ i['id']}}" value="{{ i['bal']}}" id="bal{{ i['id']}}" onchange="my4Function{{ i['id']}}(this.value)"/></td>
+            <td><input type="text" name="t2{{ i['id']}}" value="{{ i['t2']}}" id="t2{{ i['id']}}"/></td>
+
+            <!-- DELETE: calls /dataeditdel with id,pass,year → reloads page -->
+            <td class="noprint">
+              <button type="button" class="btn btn-del"
+                style="width:90%;padding:3px 4px;font-size:11px;" id="del{{ i['id']}}">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+
+          <script>
+            $body = $("body");
+
+            /* ADD this pass to next year via /dataeditadd?jsdata=pass,year */
+            $("#add{{ i['id']}}").on("click", function(){
+              var passVal = document.getElementById('pass{{ i['id'] }}').value;
+              var nameVal = document.getElementById('name{{ i['id'] }}').value;
+              if (!confirm("ಈ ರೈತರ ದಾಖಲೆ ಸೇರಿಸುವುದೇ?nPass: " + passVal + "  Name: " + nameVal)) return;
+              $body.addClass("loading");
+              var text = document.getElementById('pass{{ i['id']}}').value + "," + "{{year}}";
+              $.ajax({
+                url: "/dataeditadd", type: "get", data: {jsdata: text},
+                success: function() { window.location = "/dataedit"; },
+                error:   function() { $body.removeClass("loading"); }
+              });
+            });
+
+            /* DELETE row via /dataeditdel?jsdata=id,pass,year */
+            $("#del{{ i['id']}}").on("click", function(){
+              var nameVal2 = document.getElementById('name{{ i['id'] }}').value;
+              if (!confirm("ಈ ದಾಖಲೆ ಶಾಶ್ವತವಾಗಿ ಅಳಿಸುವುದೇ?nName: " + nameVal2)) return;
+              $body.addClass("loading");
+              var text = "{{ i['id']}}" + "," + "{{ i['pass']}}" + "," + "{{year}}";
+              $.ajax({
+                url: "/dataeditdel", type: "get", data: {jsdata: text},
+                complete: function() { window.location = "/dataedit"; }
+              });
+            });
+
+            /* ── Calculation functions ── */
+            function myFunction{{ i['id']}}(val) {
+              var value=parseFloat(val);
+              var v=((((value)-((value)%1))*40)*{{price['batha']}})+((((value)%1)*100)*{{price['batha']}});
+              document.getElementById("bkara{{ i['id']}}").value=parseFloat(v).toFixed(2);
+              var b=document.getElementById("kkara{{ i['id']}}").value;
+              var c=document.getElementById("tkara{{ i['id']}}").value;
+              var s=v+parseFloat(b)+parseFloat(c);
+              document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+              var t=document.getElementById("mtax{{ i['id']}}").value;
+              var tax=parseFloat(t)+s;
+              document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+              var bal=document.getElementById("bal{{ i['id']}}").value;
+              document.getElementById("t2{{ i['id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+            }
+            function my1Function{{ i['id']}}(val) {
+              var value=parseFloat(val);
+              var v=((((value)-((value)%1))*40)*{{price['kabbu']}})+((((value)%1)*100)*{{price['kabbu']}});
+              document.getElementById("kkara{{ i['id']}}").value=parseFloat(v).toFixed(2);
+              var a=document.getElementById("bkara{{ i['id']}}").value;
+              var c=document.getElementById("tkara{{ i['id']}}").value;
+              var s=parseFloat(a)+v+parseFloat(c);
+              document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+              var t=document.getElementById("mtax{{ i['id']}}").value;
+              var tax=parseFloat(t)+s;
+              document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+              var bal=document.getElementById("bal{{ i['id']}}").value;
+              document.getElementById("t2{{ i['id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+            }
+            function my2Function{{ i['id']}}(val) {
+              var value=parseFloat(val);
+              var v=((((value)-((value)%1))*40)*{{price['tota']}})+((((value)%1)*100)*{{price['tota']}});
+              document.getElementById("tkara{{ i['id']}}").value=parseFloat(v).toFixed(2);
+              var a=document.getElementById("bkara{{ i['id']}}").value;
+              var b=document.getElementById("kkara{{ i['id']}}").value;
+              var s=parseFloat(a)+parseFloat(b)+v;
+              document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+              var t=document.getElementById("mtax{{ i['id']}}").value;
+              var tax=parseFloat(t)+s;
+              document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+              var bal=document.getElementById("bal{{ i['id']}}").value;
+              document.getElementById("t2{{ i['id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+            }
+            function my3Function{{ i['id']}}(val) {
+              var value=parseFloat(val);
+              var v=((((value)-((value)%1))*40)*{{price['mtax']}})+((((value)%1)*100)*{{price['mtax']}});
+              document.getElementById("mtax{{ i['id']}}").value=parseFloat(v).toFixed(2);
+              var s=parseFloat(document.getElementById("wtax{{ i['id']}}").value);
+              var tax=v+s;
+              document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+              var bal=document.getElementById("bal{{ i['id']}}").value;
+              document.getElementById("t2{{ i['id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+            }
+            function my4Function{{ i['id']}}(val) {
+              var tax=document.getElementById("t1{{ i['id']}}").value;
+              document.getElementById("t2{{ i['id']}}").value=parseFloat(parseFloat(tax)+parseFloat(val)).toFixed(2);
+            }
+            function getval1{{ i['id']}}(val) {
+              var value=parseFloat(val);
+              var b=document.getElementById("kkara{{ i['id']}}").value;
+              var c=document.getElementById("tkara{{ i['id']}}").value;
+              var s=value+parseFloat(b)+parseFloat(c);
+              document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+              var t=document.getElementById("mtax{{ i['id']}}").value;
+              var tax=parseFloat(t)+s;
+              document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+              var bal=document.getElementById("bal{{ i['id']}}").value;
+              document.getElementById("t2{{ i['id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+            }
+            function getval2{{ i['id']}}(val) {
+              var value=parseFloat(val);
+              var a=document.getElementById("bkara{{ i['id']}}").value;
+              var c=document.getElementById("tkara{{ i['id']}}").value;
+              var s=parseFloat(a)+value+parseFloat(c);
+              document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+              var t=document.getElementById("mtax{{ i['id']}}").value;
+              var tax=parseFloat(t)+s;
+              document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+              var bal=document.getElementById("bal{{ i['id']}}").value;
+              document.getElementById("t2{{ i['id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+            }
+            function getval3{{ i['id']}}(val) {
+              var value=parseFloat(val);
+              var a=document.getElementById("bkara{{ i['id']}}").value;
+              var b=document.getElementById("kkara{{ i['id']}}").value;
+              var s=parseFloat(a)+parseFloat(b)+value;
+              document.getElementById("wtax{{ i['id']}}").value=parseFloat(s).toFixed(2);
+              var t=document.getElementById("mtax{{ i['id']}}").value;
+              var tax=parseFloat(t)+s;
+              document.getElementById("t1{{ i['id']}}").value=parseFloat(tax).toFixed(2);
+              var bal=document.getElementById("bal{{ i['id']}}").value;
+              document.getElementById("t2{{ i['id']}}").value=parseFloat(tax+parseFloat(bal)).toFixed(2);
+            }
+          </script>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
 </form>
+
+<!-- NEW RECORD Modal — posts to /dataeditup with new fields -->
+<div id="myModal" class="modal1">
+  <div class="modal1-content">
+    <div class="modal-hdr">
+      <h3><i class="fa fa-plus-circle" style="color:var(--primary);margin-right:6px;"></i>
+          <span id="modal-title">New Record</span></h3>
+      <button class="close-x" id="closeModal">&times;</button>
+    </div>
+    <div class="table-scroll">
+      <form action="/dataeditup" method="post" onkeydown="return event.key != 'Enter';">
+        <input type="hidden" name="year" value="{{year}}"/>
+        <table class="dt" style="min-width:820px;">
+          <thead>
+            <tr>
+              <th id="mth-pass">ಪಾಸ್</th>
+              <th id="mth-name">ರೈತರ ಹೆಸರು</th>
+              <th id="mth-sno">ಸರ್ವೇ ನಂ</th>
+              <th id="mth-area">ವಿಸ್ತೀರ್ಣ</th>
+              <th id="mth-batha">ಭತ್ತ</th>
+              <th id="mth-bkara">ಕರ</th>
+              <th id="mth-kabu">ಕಬ್ಬು</th>
+              <th id="mth-kkara">ಕರ</th>
+              <th id="mth-thota">ತೋಟ</th>
+              <th id="mth-tkara">ಕರ</th>
+              <th id="mth-wtax">ನೀರಿನ ಕರ</th>
+              <th id="mth-mtax">ನಿರ್ವಹಣಾ ಕರ</th>
+              <th id="mth-t1">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+              <th id="mth-bal">ಹಿಂದಿನ ಬಾಕಿ</th>
+              <th id="mth-t2">ಒಟ್ಟು ಮೊತ್ತ</th>
+              <th>-</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="number" name="pass" id="passnew" value=""/></td>
+              <td style="text-align:left;"><input type="text" name="name" id="namenew" value=""/></td>
+              <script>
+                function onLoadNew() {
+                  var optsN = {
+                    sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+                    destinationLanguage: [google.elements.transliteration.LanguageCode.KANNADA],
+                    shortcutKey: 'ctrl+g', transliterationEnabled: true
+                  };
+                  var ctrlN = new google.elements.transliteration.TransliterationControl(optsN);
+                  ctrlN.makeTransliteratable(["namenew"]);
+                }
+                google.setOnLoadCallback(onLoadNew);
+              </script>
+              <td><input type="text" name="sno" value=""/></td>
+              <td><input type="text" name="area" value="0" id="N_area" onchange="my3FN(this.value)"/></td>
+              <td><input type="text" name="batha" value="0" id="N_batha" onchange="myFN(this.value)"/></td>
+              <td><input type="text" name="bkara" value="0" id="N_bkara" onchange="getval1N(this.value)"/></td>
+              <td><input type="text" name="kabu" value="0" id="N_kabu" onchange="my1FN(this.value)"/></td>
+              <td><input type="text" name="kkara" value="0" id="N_kkara" onchange="getval2N(this.value)"/></td>
+              <td><input type="text" name="thota" value="0" id="N_thota" onchange="my2FN(this.value)"/></td>
+              <td><input type="text" name="tkara" value="0" id="N_tkara" onchange="getval3N(this.value)"/></td>
+              <td><input type="text" name="wtax" value="0" id="N_wtax"/></td>
+              <td><input type="text" name="mtax" value="0" id="N_mtax"/></td>
+              <td><input type="text" name="t1" value="0" id="N_t1"/></td>
+              <td><input type="text" name="bal" value="0" id="N_bal" onchange="my4FN(this.value)"/></td>
+              <td><input type="text" name="t2" value="0" id="N_t2"/></td>
+              <td>
+                <button type="submit" name="submit" value="Submit" class="btn btn-submit"
+                  onclick="if(!confirm('ಹೊಸ ದಾಖಲೆ ಸೇರಿಸುವುದೇ? / Save new record?')) return false; $('body').addClass('loading'); document.getElementById('myModal').style.display='none';">
+                  <i class="fa fa-check"></i> <span id="lbl-submit">Submit</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;text-align:right;">
+          <button type="button" class="btn btn-del" id="cancelModal">
+            <i class="fa fa-times"></i> <span id="lbl-cancel">Cancel</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* Modal controls */
+  var modal1 = document.getElementById("myModal");
+  document.getElementById("myBtn").onclick     = function(){ modal1.style.display="block"; };
+  document.getElementById("closeModal").onclick = function(){ modal1.style.display="none"; };
+  document.getElementById("cancelModal").onclick= function(){ modal1.style.display="none"; };
+  window.onclick = function(e){ if(e.target==modal1) modal1.style.display="none"; };
+
+  /* Loading overlay */
+  var $body=$("body");
+  $("#up").on("click",()=>{ $body.addClass("loading"); });
+  $(document).on({
+    ajaxStart: function(){ $body.addClass("loading"); },
+    ajaxStop:  function(){ $body.removeClass("loading"); }
+  });
+
+  /* New-record calc functions */
+  function myFN(val){
+    var value=parseFloat(val);
+    var v=((((value)-((value)%1))*40)*{{price['batha']}})+((((value)%1)*100)*{{price['batha']}});
+    document.getElementById("N_bkara").value=parseFloat(v).toFixed(2);
+    var b=document.getElementById("N_kkara").value, c=document.getElementById("N_tkara").value;
+    var s=v+parseFloat(b)+parseFloat(c);
+    document.getElementById("N_wtax").value=parseFloat(s).toFixed(2);
+    var t=document.getElementById("N_mtax").value, tax=parseFloat(t)+s;
+    document.getElementById("N_t1").value=parseFloat(tax).toFixed(2);
+    document.getElementById("N_t2").value=parseFloat(tax+parseFloat(document.getElementById("N_bal").value)).toFixed(2);
+  }
+  function my1FN(val){
+    var value=parseFloat(val);
+    var v=((((value)-((value)%1))*40)*{{price['kabbu']}})+((((value)%1)*100)*{{price['kabbu']}});
+    document.getElementById("N_kkara").value=parseFloat(v).toFixed(2);
+    var a=document.getElementById("N_bkara").value, c=document.getElementById("N_tkara").value;
+    var s=parseFloat(a)+v+parseFloat(c);
+    document.getElementById("N_wtax").value=parseFloat(s).toFixed(2);
+    var t=document.getElementById("N_mtax").value, tax=parseFloat(t)+s;
+    document.getElementById("N_t1").value=parseFloat(tax).toFixed(2);
+    document.getElementById("N_t2").value=parseFloat(tax+parseFloat(document.getElementById("N_bal").value)).toFixed(2);
+  }
+  function my2FN(val){
+    var value=parseFloat(val);
+    var v=((((value)-((value)%1))*40)*{{price['tota']}})+((((value)%1)*100)*{{price['tota']}});
+    document.getElementById("N_tkara").value=parseFloat(v).toFixed(2);
+    var a=document.getElementById("N_bkara").value, b=document.getElementById("N_kkara").value;
+    var s=parseFloat(a)+parseFloat(b)+v;
+    document.getElementById("N_wtax").value=parseFloat(s).toFixed(2);
+    var t=document.getElementById("N_mtax").value, tax=parseFloat(t)+s;
+    document.getElementById("N_t1").value=parseFloat(tax).toFixed(2);
+    document.getElementById("N_t2").value=parseFloat(tax+parseFloat(document.getElementById("N_bal").value)).toFixed(2);
+  }
+  function my3FN(val){
+    var value=parseFloat(val);
+    var v=((((value)-((value)%1))*40)*{{price['mtax']}})+((((value)%1)*100)*{{price['mtax']}});
+    document.getElementById("N_mtax").value=parseFloat(v).toFixed(2);
+    var s=parseFloat(document.getElementById("N_wtax").value), tax=v+s;
+    document.getElementById("N_t1").value=parseFloat(tax).toFixed(2);
+    document.getElementById("N_t2").value=parseFloat(tax+parseFloat(document.getElementById("N_bal").value)).toFixed(2);
+  }
+  function my4FN(val){
+    document.getElementById("N_t2").value=parseFloat(parseFloat(document.getElementById("N_t1").value)+parseFloat(val)).toFixed(2);
+  }
+  function getval1N(val){ var a=parseFloat(val),b=parseFloat(document.getElementById("N_kkara").value),c=parseFloat(document.getElementById("N_tkara").value),s=a+b+c; document.getElementById("N_wtax").value=parseFloat(s).toFixed(2); var t=parseFloat(document.getElementById("N_mtax").value),tax=t+s; document.getElementById("N_t1").value=parseFloat(tax).toFixed(2); document.getElementById("N_t2").value=parseFloat(tax+parseFloat(document.getElementById("N_bal").value)).toFixed(2); }
+  function getval2N(val){ var value=parseFloat(val),a=parseFloat(document.getElementById("N_bkara").value),c=parseFloat(document.getElementById("N_tkara").value),s=a+value+c; document.getElementById("N_wtax").value=parseFloat(s).toFixed(2); var t=parseFloat(document.getElementById("N_mtax").value),tax=t+s; document.getElementById("N_t1").value=parseFloat(tax).toFixed(2); document.getElementById("N_t2").value=parseFloat(tax+parseFloat(document.getElementById("N_bal").value)).toFixed(2); }
+  function getval3N(val){ var value=parseFloat(val),a=parseFloat(document.getElementById("N_bkara").value),b=parseFloat(document.getElementById("N_kkara").value),s=a+b+value; document.getElementById("N_wtax").value=parseFloat(s).toFixed(2); var t=parseFloat(document.getElementById("N_mtax").value),tax=t+s; document.getElementById("N_t1").value=parseFloat(tax).toFixed(2); document.getElementById("N_t2").value=parseFloat(tax+parseFloat(document.getElementById("N_bal").value)).toFixed(2); }
+
+  /* Language toggle */
+  var langKn=true;
+  var T={
+    en:{ 'org-title':'Water Users Cooperative Society Ltd, Kagekodamagge, Bhadravathi',
+      'lbl-new':'New Record','lbl-update':'UPDATE','modal-title':'New Record',
+      'lbl-submit':'Submit','lbl-cancel':'Cancel','langLabel':'ಕನ್ನಡ',
+      'th-no':'No','th-add':'Add','th-pass':'Pass','th-name':'Farmer Name','th-sno':'Survey No',
+      'th-area':'Area','th-batha':'Paddy','th-bkara':'Tax','th-kabu':'Sugarcane','th-kkara':'Tax',
+      'th-thota':'Garden','th-tkara':'Tax','th-wtax':'Water Tax','th-mtax':'Maintenance',
+      'th-t1':'Current Amt','th-bal':'Prev Due','th-t2':'Total Amt','th-del':'Delete',
+      'mth-pass':'Pass','mth-name':'Farmer Name','mth-sno':'Survey No','mth-area':'Area',
+      'mth-batha':'Paddy','mth-bkara':'Tax','mth-kabu':'Sugarcane','mth-kkara':'Tax',
+      'mth-thota':'Garden','mth-tkara':'Tax','mth-wtax':'Water Tax','mth-mtax':'Maintenance',
+      'mth-t1':'Current Amt','mth-bal':'Prev Due','mth-t2':'Total Amt' },
+    kn:{ 'org-title':'ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ',
+      'lbl-new':'ಹೊಸ ದಾಖಲೆ','lbl-update':'ನವೀಕರಿಸಿ','modal-title':'ಹೊಸ ದಾಖಲೆ',
+      'lbl-submit':'ಸಲ್ಲಿಸಿ','lbl-cancel':'ರದ್ದುಮಾಡಿ','langLabel':'English',
+      'th-no':'ನಂ','th-add':'ಸೇರಿಸು','th-pass':'ಪಾಸ್','th-name':'ರೈತರ ಹೆಸರು','th-sno':'ಸರ್ವೇ ನಂ',
+      'th-area':'ವಿಸ್ತೀರ್ಣ','th-batha':'ಭತ್ತ','th-bkara':'ಕರ','th-kabu':'ಕಬ್ಬು','th-kkara':'ಕರ',
+      'th-thota':'ತೋಟ','th-tkara':'ಕರ','th-wtax':'ನೀರಿನ ಕರ','th-mtax':'ನಿರ್ವಹಣಾ ಕರ',
+      'th-t1':'ಚಾಲ್ತಿ ಮೊತ್ತ','th-bal':'ಹಿಂದಿನ ಬಾಕಿ','th-t2':'ಒಟ್ಟು ಮೊತ್ತ','th-del':'ಅಳಿಸಿ',
+      'mth-pass':'ಪಾಸ್','mth-name':'ರೈತರ ಹೆಸರು','mth-sno':'ಸರ್ವೇ ನಂ','mth-area':'ವಿಸ್ತೀರ್ಣ',
+      'mth-batha':'ಭತ್ತ','mth-bkara':'ಕರ','mth-kabu':'ಕಬ್ಬು','mth-kkara':'ಕರ',
+      'mth-thota':'ತೋಟ','mth-tkara':'ಕರ','mth-wtax':'ನೀರಿನ ಕರ','mth-mtax':'ನಿರ್ವಹಣಾ ಕರ',
+      'mth-t1':'ಚಾಲ್ತಿ ಮೊತ್ತ','mth-bal':'ಹಿಂದಿನ ಬಾಕಿ','mth-t2':'ಒಟ್ಟು ಮೊತ್ತ' }
+  };
+  function toggleLang(){
+    langKn=!langKn;
+    var t=T[langKn?'kn':'en'];
+    Object.keys(t).forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent=t[id]; });
+  }
+
+  /* Sidebar */
+  function toggleSB(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('on');}
+  function closeSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('on');}
+  document.getElementById('sb-close-btn').addEventListener('click', closeSB);
+
+  /* Sticky column header: set top = navbar(48) + sticky-band height, then sync scroll */
+  (function(){
+    var navbar    = document.querySelector('.navbar');
+    var stickyBand= document.querySelector('.sticky-band');
+    var colHdr    = document.getElementById('sticky-col-hdr');
+    var colInner  = document.getElementById('sticky-col-hdr-inner');
+    var bodyScroll= document.getElementById('de-body-scroll');
+
+    function setTop(){
+      var h = (navbar ? navbar.offsetHeight : 48) + (stickyBand ? stickyBand.offsetHeight : 0);
+      colHdr.style.top = h + 'px';
+    }
+    setTop();
+    window.addEventListener('resize', setTop);
+
+    /* Sync horizontal scroll both ways */
+    if (colInner && bodyScroll) {
+      bodyScroll.addEventListener('scroll', function(){ colInner.scrollLeft = bodyScroll.scrollLeft; });
+      colInner.addEventListener('scroll',   function(){ bodyScroll.scrollLeft = colInner.scrollLeft; });
+    }
+  })();
+
+</script>
+
+<div class="modal"></div>
 
 <script type="text/javascript" src="static/js/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="static/js/jquery.dataTables.min.js"></script>
@@ -678,8 +784,6 @@ $(document).on({
 <script type="text/javascript" src="static/js/jquery.mark.min.js"></script>
 <script type="text/javascript" src="static/js/datatables.mark.js"></script>
 <script type="text/javascript" src="static/js/buttons.colVis.min.js"></script>
-
-
+<script src="static/carkan.js"></script>
 </body>
-
 </html>

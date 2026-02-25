@@ -1,237 +1,794 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kn">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WUCSKKM – Database Report</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+  <script src="static/carkan.js"></script>
 
-    <title>Database print</title>
-<style>
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 0px;
-  text-align: center;
-  page-break-inside: avoid;
-}
-tr {page-break-inside:avoid;}
-}
-@media print {
-tr {page-break-inside:avoid;}
-}
-@media print {
-td,th,tr {page-break-inside:avoid;}
-}
-.ok{
-    border: 1px solid ;
-  padding: 5px;
-  
-}
-.modal {
-    display:    none;
-    position:   fixed;
-    z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-    background: rgba( 255, 255, 255, .8 ) 
-                url('/static/ajax-loader.gif') 
-                50% 50% 
-                no-repeat;
-}
+  <style>
+  /* ══════════════════════════════════════════════════════════
+     DESIGN TOKENS — exact match with all other WUCSKKM pages
+  ══════════════════════════════════════════════════════════ */
+  :root {
+    --green:      #0d6e5a;
+    --dk:         #094a3c;
+    --accent:     #16a34a;
+    --teal:       #0d9488;
+    --bg:         #f0f7f4;
+    --card:       #ffffff;
+    --border:     #d1e7dd;
+    --text:       #1a2e28;
+    --muted:      #6b8f7e;
+    --danger:     #dc2626;
+    --yellow:     #fbbf24;
+    --ease:       .22s cubic-bezier(.4,0,.2,1);
+    --r:          12px;
+    --sh:         0 2px 16px rgba(0,0,0,.07);
+    --th:         54px;
+    --sw:         270px;
+    --sidebar-bg: #0a1f1a;
+    --sid-text:   #c8e6c9;
+    --sid-hover:  rgba(22,163,74,.15);
+    --sid-active: rgba(22,163,74,.25);
+    --topbar-bg:  rgba(10,31,26,.97);
+  }
 
-/* When the body has the loading class, we turn
-   the scrollbar off with overflow:hidden */
-body.loading .modal {
-    overflow: hidden;   
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Anytime the body has the loading class, our
-   modal element will be visible */
-body.loading .modal {
-    display: block;
-}
-button{
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding:0;
-  text-align: center;
-  text-decoration: none;
-  display: inline;
-  font-size: 16px;
-  margin: 0;
-  cursor: pointer;
-}
-@media print
-{
-.noprint {display:none;}
-}
+  body {
+    font-family: 'Poppins','Noto Sans Kannada',sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
+  /* ═══ SIDEBAR (matches index.html exactly) ═══ */
+  #sidebar {
+    position: fixed; top: 0; left: calc(-1 * var(--sw));
+    width: var(--sw); height: 100vh;
+    background: var(--sidebar-bg);
+    z-index: 1000; transition: transform var(--ease);
+    display: flex; flex-direction: column; overflow-y: auto;
+    box-shadow: 4px 0 24px rgba(0,0,0,.2);
+  }
+  #sidebar.open { transform: translateX(var(--sw)); }
 
-</style>
+  .sb-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    background: linear-gradient(135deg,var(--green),var(--dk));
+    position: relative;
+  }
+  .sb-logo { display: flex; align-items: center; gap: 11px; }
+  .sb-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg,#16a34a,#0d9488);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; color: #fff; flex-shrink: 0;
+  }
+  .sb-org { font-size: 11px; font-weight: 600; color: #a7f3d0; font-family: 'Noto Sans Kannada',sans-serif; line-height: 1.3; }
+  .sb-sub { font-size: 10px; color: rgba(255,255,255,.55); font-family: 'Noto Sans Kannada',sans-serif; }
+  .sb-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 26px; height: 26px;
+    background: rgba(255,255,255,.1); border: none; border-radius: 6px;
+    color: #fff; cursor: pointer; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background var(--ease);
+  }
+  .sb-close:hover { background: rgba(255,255,255,.22); }
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
-<script src="static/carkan.js"></script>
-<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+  .sb-nav { flex: 1; padding: 10px 0; }
+  .sb-label {
+    font-size: 10px; font-weight: 600; color: rgba(255,255,255,.35);
+    text-transform: uppercase; letter-spacing: 1.2px;
+    padding: 12px 20px 5px; display: block;
+  }
+  .sb-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 20px;
+    color: var(--sid-text); text-decoration: none; font-size: 14px;
+    transition: background var(--ease), color var(--ease);
+    border: none; background: transparent; width: 100%;
+    cursor: pointer; text-align: left;
+  }
+  .sb-link:hover  { background: var(--sid-hover); color: #fff; }
+  .sb-link.active { background: var(--sid-active); color: #4ade80; font-weight: 500; }
+  .sb-link .ic    { width: 20px; text-align: center; font-size: 15px; opacity: .8; flex-shrink: 0; }
+  .sb-footer { padding: 12px 14px; border-top: 1px solid rgba(255,255,255,.08); }
+
+  #overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.5); z-index: 999; backdrop-filter: blur(2px);
+  }
+  #overlay.on { display: block; }
+
+  /* ═══ TOPBAR (matches index.html exactly) ═══ */
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--th); background: var(--topbar-bg);
+    z-index: 998;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .tb-left  { display: flex; align-items: center; gap: 11px; }
+  .tb-right { display: flex; align-items: center; gap: 9px; }
+
+  #ham-btn {
+    width: 40px; height: 40px; background: transparent;
+    border: 1.5px solid rgba(255,255,255,.2);
+    border-radius: 8px; color: #fff; font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--ease);
+  }
+  #ham-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.4); }
+
+  #tb-title {
+    color: rgba(255,255,255,.85); font-size: 14px; font-weight: 500;
+    font-family: 'Noto Sans Kannada',sans-serif; display: none;
+  }
+  @media(min-width:480px){ #tb-title { display: block; } }
+
+  .lang-wrap {
+    display: flex; align-items: center;
+    background: rgba(255,255,255,.1); border-radius: 20px; padding: 2px;
+  }
+  .lang-btn {
+    padding: 4px 10px; border-radius: 18px;
+    font-size: 11px; font-weight: 600; border: none; cursor: pointer;
+    transition: all .2s; background: transparent;
+    color: rgba(255,255,255,.6); letter-spacing: .5px;
+  }
+  .lang-btn.on { background: var(--accent); color: #fff; }
+
+  #home-btn {
+    padding: 7px 16px;
+    background: linear-gradient(135deg,var(--green),var(--teal));
+    color: #fff; border: none; border-radius: 20px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+    transition: all var(--ease); white-space: nowrap;
+  }
+  #home-btn:hover { opacity: .88; transform: translateY(-1px); }
+
+  /* ═══ YEAR SELECTOR (in topbar) ═══ */
+  .yr-sel {
+    padding: 5px 10px; border-radius: 7px;
+    border: 1.5px solid rgba(255,255,255,.28);
+    background: rgba(255,255,255,.12); color: #fff;
+    font-size: 13px; font-weight: 600; outline: none;
+    min-width: 100px; cursor: pointer;
+    font-family: 'Poppins',sans-serif;
+  }
+  .yr-sel option { color: var(--text); background: #fff; }
+
+  /* ═══ PAGE LAYOUT ═══ */
+  #wrap { padding-top: var(--th); min-height: 100vh; }
+  .page-inner { max-width: 100%; padding: 0; }
+
+  /* ═══ TOOLBAR (export buttons + org title) ═══ */
+  .toolbar {
+    position: sticky; top: var(--th); z-index: 201;
+    background: linear-gradient(135deg,var(--green),var(--dk));
+    padding: 8px 16px;
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 12px rgba(0,0,0,.18);
+  }
+  .toolbar-left  { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .toolbar-center {
+    flex: 1; text-align: center;
+    font-family: 'Noto Sans Kannada',sans-serif;
+    font-size: 14px; font-weight: 700; color: #fff;
+    line-height: 1.3;
+  }
+  .toolbar-right { display: flex; align-items: center; gap: 8px; }
+
+  .year-badge-tb {
+    display: inline-flex; align-items: center;
+    background: rgba(255,255,255,.15);
+    border: 1.5px solid rgba(255,255,255,.25);
+    border-radius: 20px; padding: 3px 13px;
+    font-size: 13px; font-weight: 700; color: #fff;
+  }
+
+  /* Export buttons */
+  .exp-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 8px;
+    font-size: 12.5px; font-weight: 700; border: none; cursor: pointer;
+    transition: all var(--ease); font-family: 'Poppins',sans-serif;
+    white-space: nowrap;
+  }
+  .exp-excel { background: #16a34a; color: #fff; }
+  .exp-excel:hover { background: #15803d; transform: translateY(-1px); }
+  .exp-pdf   { background: var(--danger); color: #fff; }
+  .exp-pdf:hover   { background: #b91c1c; transform: translateY(-1px); }
+
+  /* ═══ STICKY HEADER BAND (outside overflow container) ═══
+     Lives between toolbar and tbl-outer. Sticks below topbar+toolbar.
+     Its inner scroll is driven by JS to mirror .tbl-outer scroll.
+  ══════════════════════════════════════════════════════════ */
+  .sticky-head-wrap {
+    position: sticky;
+    top: var(--th);          /* updated by JS to topbar+toolbar height   */
+    z-index: 199;
+    background: #e8f5e9;
+    overflow: hidden;        /* hides scrollbar, NOT scroll-x    */
+    border-bottom: 2px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,.09);
+  }
+  .sticky-head-inner {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;   /* Firefox */
+  }
+  .sticky-head-inner::-webkit-scrollbar { display: none; }
+
+  /* Clone table inside the sticky band */
+  .sticky-head-inner table {
+    width: 100%; border-collapse: collapse;
+    min-width: 900px;
+    font-size: 11.5px; font-family: 'Poppins','Noto Sans Kannada',sans-serif;
+    table-layout: fixed;
+  }
+  .sticky-head-inner table th {
+    padding: 9px 8px;
+    font-weight: 700; color: var(--green);
+    background: #e8f5e9;
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+    font-family: 'Noto Sans Kannada',sans-serif;
+    text-align: center;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .sticky-head-inner table th:last-child { border-right: none; }
+
+  /* ═══ DATA TABLE ═══ */
+  .tbl-outer {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    background: var(--card);
+  }
+  #tbl_exporttable_to_xls {
+    width: 100%; border-collapse: collapse;
+    min-width: 900px;
+    font-size: 12.5px; font-family: 'Poppins','Noto Sans Kannada',sans-serif;
+    table-layout: fixed;   /* ← must match sticky header table so columns align on mobile */
+  }
+  /* thead is HIDDEN – the sticky band above is the visible header */
+  #tbl_exporttable_to_xls thead { visibility: hidden; height: 0; }
+  #tbl_exporttable_to_xls thead tr { height: 0; }
+  #tbl_exporttable_to_xls thead th {
+    padding: 0; height: 0; border: none; font-size: 0; line-height: 0;
+  }
+
+  #tbl_exporttable_to_xls tbody tr { border-bottom: 1px solid #eef5ee; transition: background var(--ease); }
+  #tbl_exporttable_to_xls tbody tr:nth-child(even) { background: #fafdf9; }
+  #tbl_exporttable_to_xls tbody tr:hover { background: #f0fdf4; }
+  #tbl_exporttable_to_xls tbody tr.ok { border-top: 2px solid var(--border); }
+
+  #tbl_exporttable_to_xls td, #tbl_exporttable_to_xls th {
+    padding: 7px 8px; text-align: center; vertical-align: middle;
+    border-right: 1px solid #eef5ee;
+  }
+  #tbl_exporttable_to_xls td:last-child,
+  #tbl_exporttable_to_xls th:last-child { border-right: none; }
+
+  /* Left-align farmer name */
+  #tbl_exporttable_to_xls td.name-col { text-align: left; font-family: 'Noto Sans Kannada',sans-serif; font-size: 12px; }
+
+  /* Pass number column – make it stand out */
+  #tbl_exporttable_to_xls td.pass-col {
+    font-weight: 700; color: var(--green);
+    font-size: 12.5px;
+  }
+
+  /* Monetary cells */
+  #tbl_exporttable_to_xls td.money { font-weight: 600; }
+  #tbl_exporttable_to_xls td.due   { color: var(--danger); font-weight: 700; }
+  #tbl_exporttable_to_xls td.paid  { color: var(--accent); font-weight: 700; }
+
+  /* Year label row */
+  .year-section-hdr {
+    background: linear-gradient(135deg,var(--green),var(--teal));
+    color: #fff; text-align: center;
+    padding: 6px 10px;
+    font-size: 13px; font-weight: 700;
+    font-family: 'Noto Sans Kannada',sans-serif;
+    letter-spacing: .5px;
+  }
+
+  /* ═══ LOADER ═══ */
+  #idloader {
+    display: none; position: fixed; z-index: 9999; inset: 0;
+    background: rgba(255,255,255,.82); backdrop-filter: blur(3px);
+  }
+  #idloader::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 46px; height: 46px;
+    border: 4px solid #e0e0e0; border-top-color: var(--green);
+    border-radius: 50%; animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Legacy jQuery loader */
+  .modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(255,255,255,.8) url('/static/ajax-loader.gif') 50% 50% no-repeat; }
+  body.loading .modal { display: block; }
+
+  /* ═══ PRINT STYLES ═══ */
+  @media print {
+    .noprint { display: none !important; }
+    #topbar, #sidebar, #overlay, .toolbar, .sticky-head-wrap, #idloader { display: none !important; }
+    #wrap { padding-top: 0 !important; }
+    .tbl-outer { overflow: visible; }
+    #tbl_exporttable_to_xls { min-width: unset; font-size: 9pt; }
+    /* Show the real thead when printing */
+    #tbl_exporttable_to_xls thead { visibility: visible !important; height: auto !important; }
+    #tbl_exporttable_to_xls thead tr { height: auto !important; }
+    #tbl_exporttable_to_xls thead th {
+      padding: 6px 4px !important; height: auto !important;
+      border: 1px solid #ccc !important; font-size: 8pt !important;
+      line-height: normal !important; color: #000 !important;
+      background: #e8f5e9 !important;
+    }
+    tr, td, th { page-break-inside: avoid; }
+    .print-org-header { display: block !important; }
+  }
+  .print-org-header {
+    display: none;
+    text-align: center; font-family: 'Noto Sans Kannada',sans-serif;
+    margin-bottom: 12px;
+  }
+  .print-org-header h3 { font-size: 15pt; color: var(--green); }
+  .print-org-header p  { font-size: 11pt; color: #555; }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media(max-width:640px) {
+    .toolbar-center { display: none; }
+    .exp-btn { padding: 6px 10px; font-size: 11.5px; }
+  }
+  @media(max-width:420px) {
+    .year-badge-tb { display: none; }
+  }
+  </style>
 </head>
+<body>
 
-<body class="container">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  	<div style="    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: grey;
-    z-index: 99;
-    right: 0px;margin-bottom:50px;">
+<div id="idloader"></div>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside id="sidebar" aria-label="Admin navigation">
+  <div class="sb-header">
+    <div class="sb-logo">
+      <div class="sb-icon">💧</div>
+      <div>
+        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
+        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
+      </div>
+    </div>
+    <button class="sb-close" id="sb-close-btn">✕</button>
+  </div>
+
+  <div class="sb-user">
+    <div class="sb-avatar"><i class="fa fa-user-shield"></i></div>
+    <div>
+      <div class="sb-uname">Ravikumar A</div>
+      <div class="sb-urole" data-en="Administrator" data-kn="ನಿರ್ವಾಹಕರು">Administrator</div>
+    </div>
+  </div>
+
+  <nav class="sb-nav">
+    <span class="sb-label">Navigation</span>
+
+    <a href="/" class="sb-link active">
+      <i class="fa fa-home ic"></i>
+      <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
+    </a>
+    <a href="/list" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-list ic"></i>
+      <span data-en="List" data-kn="ಪಟ್ಟಿ">List</span>
+    </a>
+    <a href="/allmap" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-map ic"></i>
+      <span data-en="Map" data-kn="ನಕ್ಷೆ">Map</span>
+    </a>
+    <a href="/map" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-map-marker ic"></i>
+      <span data-en="Map-Edit" data-kn="ನಕ್ಷೆ ಸಂಪಾದಿಸಿ">Map-Edit</span>
+    </a>
+    <a href="/document" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-file ic"></i>
+      <span data-en="Documents" data-kn="ದಾಖಲೆಗಳು">Documents</span>
+    </a>
+    <a href="/socinfo" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-info-circle ic"></i>
+      <span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">Society Info</span>
+    </a>
+
+    <span class="sb-label" style="margin-top:6px" data-en="Admin Panel" data-kn="ನಿರ್ವಹಣೆ">Admin Panel</span>
+
+    <a href="/dataseepay" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-tint ic"></i>
+      <span data-en="Water Tax Payment" data-kn="ನೀರು ಕರ ಪಾವತಿ">Water Tax Payment</span>
+    </a>
+    <a href="/datapay" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-print ic"></i>
+      <span data-en="Print Tax Records" data-kn="ಕರ ಪಾವತಿ ಮುದ್ರಿಸಿ">Print Tax Records</span>
+    </a>
+    <a href="/dataedit" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-edit ic"></i>
+      <span data-en="Add / Update Account" data-kn="ಖಾತೆ ಸೇರಿಸಿ/ನವೀಕರಿಸಿ">Add / Update Account</span>
+    </a>
+    <a href="/dataindex" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-database ic"></i>
+      <span data-en="Print Full Database" data-kn="ಡೇಟಾಬೇಸ್ ಮುದ್ರಣ">Print Full Database</span>
+    </a>
+    <a href="/news" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-newspaper ic"></i>
+      <span data-en="Manage News" data-kn="ಸುದ್ದಿ ನಿರ್ವಹಣೆ">Manage News</span>
+    </a>
+
+    <span class="sb-label" style="margin-top:6px">Explore</span>
+    <button class="sb-link" onclick="showMo('gal-mo')">
+      <i class="fa fa-image ic"></i>
+      <span data-en="Gallery" data-kn="ಗ್ಯಾಲರಿ">Gallery</span>
+    </button>
+    <button class="sb-link" onclick="showMo('cont-mo')">
+      <i class="fa fa-phone ic"></i>
+      <span data-en="Contacts" data-kn="ಸಂಪರ್ಕ">Contacts</span>
+    </button>
+  </nav>
+
+  <div class="sb-footer">
+    <a href="/logout" class="sb-logout" onclick="showLoader()">
+      <i class="fa fa-sign-out"></i>
+      <span data-en="Logout" data-kn="ಲಾಗ್‌ಔಟ್">Logout</span>
+    </a>
+  </div>
+</aside>
+
+<div id="overlay" onclick="closeSB()"></div>
 
 
-         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
-<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
-</div>
-  <form action="/dataindex" method="post">
-    <select class="noprint" name="year" id="year" onchange="this.form.submit()" style="position:fixed;left:5px;top:5px;width:100px;height:20px;z-index:999;">
-            {% for y in dby %}
-                  {% if year==y%}
-                      <option value="{{y}}" selected>{{y}}</option>
-                  {%endif%}
-                  {% if year!=y%}
-                      <option value="{{y}}" >{{y}}</option>
-                  {%endif%}
-            {% endfor %}
-    </select>
-  </form>
-<div style="position:sticky;top:0;width:100%;background:gray;" class="noprint">
-    <center><h3 style="padding:0;margin:0;">
-<button onclick="ExportToExcel('xlsx')">Export to EXCEL</button><button style="background-color:red;marging-left:10;"id="btnExport" onclick="printFunction()">Export to PDF</button>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
-ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</h3></center>
-  <table style="width:100%">
 
-    
-    <tr>
-        <th style="width:3%;">ಪಾಸ್</th>
-        <th style="width:20%;">ರೈತರ ಹೆಸರು</th>
-        <th style="width:3%;">ಸರ್ವೇ ನಂಬರ್</th>
-        <th style="width:5%;">ವಿಸ್ತೀರ್ಣ</th>
-        <th style="width:4%;">ಭತ್ತ</th>
-        <th style="width:5%;">ಕರ</th>
-        <th style="width:4%;">ಕಬ್ಬು</th>
-      <th style="width:5%;">ಕರ</th>
-      <th style="width:4%;">ತೋಟ</th>
-      <th style="width:5%;">ಕರ</th>
-      <th style="width:6%;">ನೀರಿನ ಕರ</th>
-      <th style="width:6%;">ನಿರ್ವಹಣಾ ಕರ</th>
-      <th style="width:6%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
-      <th style="width:6%;">ಹಿಂದಿನ ಬಾಕಿ</th>
-      <th style="width:6%;">ಒಟ್ಟು ಮೊತ್ತ</th>
-      <th style="width:6%;">ಪಾವತಿ</th>
-      <th style="width:6%;">ಬಾಕಿ ಮೊತ್ತ</th>
-    </tr>
-  </table>
-</div>
-<div style="width:100%;"> 
-    <center>{{year}}</center>
-    <table style="width:100%" id="tbl_exporttable_to_xls">
-      
+<!-- ═══════════════════ TOPBAR ═══════════════════ -->
+<header id="topbar">
+  <div class="tb-left">
+    <button id="ham-btn" onclick="toggleSB()" aria-label="Menu"><i class="fa fa-bars"></i></button>
+    <span id="tb-title" data-en="Database Report" data-kn="ಡೇಟಾಬೇಸ್ ವರದಿ">Database Report</span>
+
+    <!-- Year selector lives in topbar for quick access -->
+    <form action="/dataindex" method="post" id="yrform" class="noprint">
+      <select class="yr-sel" name="year" id="year" onchange="this.form.submit()">
+        {% for y in dby %}
+          {% if year==y %}<option value="{{y}}" selected>{{y}}</option>{% endif %}
+          {% if year!=y %}<option value="{{y}}">{{y}}</option>{% endif %}
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+  <div class="tb-right">
+    <span class="admin-pill" style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:rgba(22,163,74,.18);border-radius:14px;font-size:11px;font-weight:700;color:#4ade80;">⚡ <span data-en="Admin" data-kn="ನಿರ್ವಾಹಕ">Admin</span></span>
+    <div class="lang-wrap">
+      <button class="lang-btn on" id="len" onclick="setLang('en')">EN</button>
+      <button class="lang-btn"    id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
+    </div>
+    <a href="/logout" onclick="showLoader()"
+       style="padding:8px 14px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
+      <i class="fa fa-sign-out"></i>
+      <span data-en="Logout" data-kn="ಲಾಗ್‌ಔಟ್">Logout</span>
+    </a>
+  </div>
+</header>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<div id="wrap">
+  <div class="page-inner">
+
+    <!-- ── Toolbar: export buttons + org title ── -->
+    <div class="toolbar noprint">
+      <div class="toolbar-left">
+        <button class="exp-btn exp-excel" onclick="ExportToExcel('xlsx')">
+          <i class="fa fa-file-excel"></i>
+          <span data-en="Export Excel" data-kn="Excel ರಫ್ತು">Export Excel</span>
+        </button>
+        <button class="exp-btn exp-pdf" id="btnExport" onclick="printFunction()">
+          <i class="fa fa-print"></i>
+          <span data-en="Print / PDF" data-kn="ಮುದ್ರಣ / PDF">Print / PDF</span>
+        </button>
+        <span class="year-badge-tb">
+          <i class="fa fa-calendar" style="margin-right:5px;font-size:11px"></i>
+          {{year}}
+        </span>
+      </div>
+      <div class="toolbar-center">
+        <div data-en="Water Users Co-operative Society Ltd." data-kn="ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ</div>
+        <div style="font-size:12px;opacity:.8;font-weight:400" data-en="Kagekodamagge, Bhadravathi" data-kn="ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ">ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
+      </div>
+    </div>
+
+    <!-- Print-only org header (hidden on screen, shown when printing) -->
+    <div class="print-org-header">
+      <h3>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ, ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</h3>
+      <p>ವರ್ಷ / Year: <strong>{{year}}</strong></p>
+    </div>
+
+    <!-- ── Sticky column header (outside overflow container → sticky works!) ── -->
+    <div class="sticky-head-wrap noprint">
+      <div class="sticky-head-inner" id="sticky-head-inner">
+        <table>
+          <colgroup>
+            <col style="width:3%">
+            <col style="width:18%">
+            <col style="width:4%">
+            <col style="width:5%">
+            <col style="width:4%">
+            <col style="width:5%">
+            <col style="width:4%">
+            <col style="width:5%">
+            <col style="width:4%">
+            <col style="width:5%">
+            <col style="width:5%">
+            <col style="width:5%">
+            <col style="width:6%">
+            <col style="width:6%">
+            <col style="width:6%">
+            <col style="width:6%">
+            <col style="width:6%">
+          </colgroup>
+          <tbody><tr>
+            <th data-en="Pass"          data-kn="ಪಾಸ್">ಪಾಸ್</th>
+            <th style="text-align:left" data-en="Farmer Name"  data-kn="ರೈತರ ಹೆಸರು">ರೈತರ ಹೆಸರು</th>
+            <th data-en="Survey No"     data-kn="ಸರ್ವೇ ನಂ">ಸರ್ವೇ ನಂ</th>
+            <th data-en="Area"          data-kn="ವಿಸ್ತೀರ್ಣ">ವಿಸ್ತೀರ್ಣ</th>
+            <th data-en="Paddy"         data-kn="ಭತ್ತ">ಭತ್ತ</th>
+            <th data-en="Tax"           data-kn="ಕರ">ಕರ</th>
+            <th data-en="Cane"          data-kn="ಕಬ್ಬು">ಕಬ್ಬು</th>
+            <th data-en="Tax"           data-kn="ಕರ">ಕರ</th>
+            <th data-en="Garden"        data-kn="ತೋಟ">ತೋಟ</th>
+            <th data-en="Tax"           data-kn="ಕರ">ಕರ</th>
+            <th data-en="Water Tax"     data-kn="ನೀರಿನ ಕರ">ನೀರಿನ ಕರ</th>
+            <th data-en="Maint.Tax"     data-kn="ನಿರ್ವ.ಕರ">ನಿರ್ವ.ಕರ</th>
+            <th data-en="Current"       data-kn="ಚಾಲ್ತಿ">ಚಾಲ್ತಿ</th>
+            <th data-en="Prev.Due"      data-kn="ಹಿಂ.ಬಾಕಿ">ಹಿಂ.ಬಾಕಿ</th>
+            <th data-en="Total"         data-kn="ಒಟ್ಟು">ಒಟ್ಟು</th>
+            <th data-en="Paid"          data-kn="ಪಾವತಿ">ಪಾವತಿ</th>
+            <th data-en="Balance"       data-kn="ಬಾಕಿ">ಬಾಕಿ</th>
+          </tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Data table (thead is hidden; sticky band above is the real header) ── -->
+    <div class="tbl-outer" id="tbl-outer">
+      <table id="tbl_exporttable_to_xls">
+        <!-- colgroup mirrors sticky-head-inner so table-layout:fixed aligns both on mobile -->
+        <colgroup>
+          <col style="width:3%">
+          <col style="width:18%">
+          <col style="width:4%">
+          <col style="width:5%">
+          <col style="width:4%">
+          <col style="width:5%">
+          <col style="width:4%">
+          <col style="width:5%">
+          <col style="width:4%">
+          <col style="width:5%">
+          <col style="width:5%">
+          <col style="width:5%">
+          <col style="width:6%">
+          <col style="width:6%">
+          <col style="width:6%">
+          <col style="width:6%">
+          <col style="width:6%">
+        </colgroup>
+        <thead>
           <tr>
-        <th style="width:3%;">ಪಾಸ್</th>
-        <th style="width:20%;">ರೈತರ ಹೆಸರು</th>
-        <th style="width:3%;">ಸರ್ವೇ ನಂಬರ್</th>
-        <th style="width:5%;">ವಿಸ್ತೀರ್ಣ</th>
-        <th style="width:4%;">ಭತ್ತ</th>
-        <th style="width:5%;">ಕರ</th>
-        <th style="width:4%;">ಕಬ್ಬು</th>
-      <th style="width:5%;">ಕರ</th>
-      <th style="width:4%;">ತೋಟ</th>
-      <th style="width:5%;">ಕರ</th>
-      <th style="width:6%;">ನೀರಿನ ಕರ</th>
-      <th style="width:6%;">ನಿರ್ವಹಣಾ ಕರ</th>
-      <th style="width:6%;">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
-      <th style="width:6%;">ಹಿಂದಿನ ಬಾಕಿ</th>
-      <th style="width:6%;">ಒಟ್ಟು ಮೊತ್ತ</th>
-      <th style="width:6%;">ಪಾವತಿ</th>
-      <th style="width:6%;">ಬಾಕಿ ಮೊತ್ತ</th>
-    </tr>
-      
-      {% for i in data %}
-      
-      {% if i['first']==1 %}
-      
-	    <tr class="ok">
+            <th style="width:3%" data-en="Pass" data-kn="ಪಾಸ್">ಪಾಸ್</th>
+            <th style="width:18%;text-align:left" data-en="Farmer Name" data-kn="ರೈತರ ಹೆಸರು">ರೈತರ ಹೆಸರು</th>
+            <th style="width:4%" data-en="Survey No" data-kn="ಸರ್ವೇ ನಂ">ಸರ್ವೇ ನಂ</th>
+            <th style="width:5%" data-en="Area" data-kn="ವಿಸ್ತೀರ್ಣ">ವಿಸ್ತೀರ್ಣ</th>
+            <th style="width:4%" data-en="Paddy" data-kn="ಭತ್ತ">ಭತ್ತ</th>
+            <th style="width:5%" data-en="Tax" data-kn="ಕರ">ಕರ</th>
+            <th style="width:4%" data-en="Cane" data-kn="ಕಬ್ಬು">ಕಬ್ಬು</th>
+            <th style="width:5%" data-en="Tax" data-kn="ಕರ">ಕರ</th>
+            <th style="width:4%" data-en="Garden" data-kn="ತೋಟ">ತೋಟ</th>
+            <th style="width:5%" data-en="Tax" data-kn="ಕರ">ಕರ</th>
+            <th style="width:5%" data-en="Water Tax" data-kn="ನೀರಿನ ಕರ">ನೀರಿನ ಕರ</th>
+            <th style="width:5%" data-en="Maint.Tax" data-kn="ನಿರ್ವಹಣಾ ಕರ">ನಿರ್ವ.ಕರ</th>
+            <th style="width:6%" data-en="Current" data-kn="ಚಾಲ್ತಿ ಮೊತ್ತ">ಚಾಲ್ತಿ</th>
+            <th style="width:6%" data-en="Previous Due" data-kn="ಹಿಂದಿನ ಬಾಕಿ">ಹಿಂ.ಬಾಕಿ</th>
+            <th style="width:6%" data-en="Total" data-kn="ಒಟ್ಟು ಮೊತ್ತ">ಒಟ್ಟು</th>
+            <th style="width:6%" data-en="Paid" data-kn="ಪಾವತಿ">ಪಾವತಿ</th>
+            <th style="width:6%" data-en="Balance" data-kn="ಬಾಕಿ ಮೊತ್ತ">ಬಾಕಿ</th>
+          </tr>
+        </thead>
+        <tbody>
 
-        
-        
-        <th style="width:3%;" rowspan="{{ i['count'] }}">{{ i['pass']}} </th>
-        <th style="width:20%;text-align: left;" rowspan="{{ i['count'] }}">{{ i['name']}} </th>
-        
+          {% for i in data %}
 
-        
-        <th style="width:3%;">{{ i['sno']}}</th>
-        <th style="width:5%;">{{ i['area']}}</th>
-        <th style="width:4%;">{{ i['batha']}}</th>
-        <th style="width:5%;">{{ i['bkara']}}</th>
-        <th style="width:4%;">{{ i['kabu']}}</th>
-      <th style="width:5%;">{{ i['kkara']}}</th>
-      <th style="width:4%;">{{ i['thota']}}</th>
-      <th style="width:5%;">{{ i['tkara']}}</th>
-      <th style="width:6%;">{{ i['wtax']}}</th>
-      <th style="width:6%;">{{ i['mtax']}}</th>
-      
-       
+          {% if i['first']==1 %}
+          <tr class="ok">
+            <td class="pass-col" rowspan="{{ i['count'] }}">{{ i['pass'] }}</td>
+            <td class="name-col" rowspan="{{ i['count'] }}">{{ i['name'] }}</td>
+            <td>{{ i['sno'] }}</td>
+            <td>{{ i['area'] }}</td>
+            <td>{{ i['batha'] }}</td>
+            <td class="money">{{ i['bkara'] }}</td>
+            <td>{{ i['kabu'] }}</td>
+            <td class="money">{{ i['kkara'] }}</td>
+            <td>{{ i['thota'] }}</td>
+            <td class="money">{{ i['tkara'] }}</td>
+            <td class="money">{{ i['wtax'] }}</td>
+            <td class="money">{{ i['mtax'] }}</td>
+            <td class="money" rowspan="{{ i['count'] }}">{{ i['rt'] }}</td>
+            <td class="due"   rowspan="{{ i['count'] }}">{{ i['old'] }}</td>
+            <td class="money" rowspan="{{ i['count'] }}">{{ i['total'] }}</td>
+            <td class="paid"  rowspan="{{ i['count'] }}">{{ i['paid'] }}</td>
+            <td class="due"   rowspan="{{ i['count'] }}">{{ i['balance'] }}</td>
+          </tr>
+          {% endif %}
 
-      <th style="width:6%;"rowspan="{{ i['count'] }}">{{ i['rt']}}</th>       
-      <th style="width:6%;"rowspan="{{ i['count'] }}">{{ i['old']}}</th>
-      <th style="width:6%;" rowspan="{{ i['count'] }}">{{ i['total']}}</th> 
-      <th style="width:6%;" rowspan="{{ i['count'] }}">{{ i['paid']}}</th>
-      <th style="width:6%;" rowspan="{{ i['count'] }}">{{ i['balance']}}</th> 
+          {% if i['first']==0 %}
+          <tr>
+            <td>{{ i['sno'] }}</td>
+            <td>{{ i['area'] }}</td>
+            <td>{{ i['batha'] }}</td>
+            <td class="money">{{ i['bkara'] }}</td>
+            <td>{{ i['kabu'] }}</td>
+            <td class="money">{{ i['kkara'] }}</td>
+            <td>{{ i['thota'] }}</td>
+            <td class="money">{{ i['tkara'] }}</td>
+            <td class="money">{{ i['wtax'] }}</td>
+            <td class="money">{{ i['mtax'] }}</td>
+          </tr>
+          {% endif %}
 
-    </tr>
-      {%endif%}
-      {% if i['first']==0 %}
-	    <tr>
+          {% endfor %}
 
-        
-        <th style="width:3%;">{{ i['sno']}}</th>
-        <th style="width:5%;">{{ i['area']}}</th>
-        <th style="width:4%;">{{ i['batha']}}</th>
-        <th style="width:5%;">{{ i['bkara']}}</th>
-        <th style="width:4%;">{{ i['kabu']}}</th>
-      <th style="width:5%;">{{ i['kkara']}}</th>
-      <th style="width:4%;">{{ i['thota']}}</th>
-      <th style="width:5%;">{{ i['tkara']}}</th>
-      <th style="width:6%;">{{ i['wtax']}}</th>
-      <th style="width:6%;">{{ i['mtax']}}</th>
-      
-       
-        
-    </tr>
-      {%endif%}      
-      {% endfor %}
-    </table>
-</div>
-    <script>
+        </tbody>
+      </table>
+    </div><!-- /tbl-outer -->
 
-        function ExportToExcel(type, fn, dl) {
-            var elt = document.getElementById('tbl_exporttable_to_xls');
-            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-            return dl ?
-                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
-                XLSX.writeFile(wb, fn || ('wucskkm2021.' + (type || 'xlsx')));
-        }
+  </div><!-- /page-inner -->
+</div><!-- /wrap -->
 
-    </script>
+<!-- Legacy jQuery loader div -->
+<div class="modal"></div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+/* ═══ Sidebar ═══ */
+function toggleSB() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('on');
+}
+function closeSB() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('on');
+}
+document.getElementById('sb-close-btn').addEventListener('click', closeSB);
 
-    <script>
-      function printFunction() { 
-        window.print(); 
+/* ═══ Language toggle ═══ */
+var LANG = 'kn';
+function setLang(lang) {
+  LANG = lang;
+  document.getElementById('len').classList.toggle('on', lang === 'en');
+  document.getElementById('lkn').classList.toggle('on', lang === 'kn');
+  document.querySelectorAll('[data-en][data-kn]').forEach(function(el) {
+    el.textContent = lang === 'kn' ? el.getAttribute('data-kn') : el.getAttribute('data-en');
+  });
+  document.documentElement.lang = lang === 'kn' ? 'kn' : 'en';
+}
+
+/* ═══ Excel export (original function preserved exactly) ═══ */
+function ExportToExcel(type, fn, dl) {
+  var elt = document.getElementById('tbl_exporttable_to_xls');
+  var wb  = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+  return dl
+    ? XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' })
+    : XLSX.writeFile(wb, fn || ('wucskkm2021.' + (type || 'xlsx')));
+}
+
+/* ═══ PDF / print (original function preserved exactly) ═══ */
+function printFunction() {
+  window.print();
+}
+
+/* ═══ Ajax loader ═══ */
+$body = $("body");
+$(document).on({
+  ajaxStart: function() { $body.addClass("loading"); },
+  ajaxStop:  function() { $body.removeClass("loading"); }
+});
+
+/* ═══ Sticky header: set correct top offset + sync horizontal scroll ═══
+   Problem: overflow-x:auto on .tbl-outer breaks position:sticky inside it.
+   Solution: sticky header band is OUTSIDE .tbl-outer so sticky works.
+             Its inner div scrolls horizontally in sync with the table.     */
+(function() {
+  var toolbar    = document.querySelector('.toolbar');
+  var stickyWrap = document.querySelector('.sticky-head-wrap');
+  var innerHead  = document.getElementById('sticky-head-inner');
+  var tableOuter = document.getElementById('tbl-outer');
+
+  /* ── Set top = topbar height + toolbar height ── */
+  function setTop() {
+    var topbarH  = document.getElementById('topbar').offsetHeight;
+    var toolbarH = toolbar ? toolbar.offsetHeight : 0;
+    stickyWrap.style.top = (topbarH + toolbarH) + 'px';
+  }
+  setTop();
+  window.addEventListener('resize', setTop);
+
+  /* ── Mirror horizontal scroll from table ↔ sticky header ── */
+  if (tableOuter && innerHead) {
+    tableOuter.addEventListener('scroll', function() {
+      innerHead.scrollLeft = tableOuter.scrollLeft;
+    });
+    innerHead.addEventListener('scroll', function() {
+      tableOuter.scrollLeft = innerHead.scrollLeft;
+    });
+  }
+
+  /* ── MOBILE FIX: sync actual pixel column widths after render ──
+     Both tables use table-layout:fixed + same colgroup percentages,
+     but pixel resolution can differ on small viewports. Copying the
+     computed widths from the data table to the sticky header ensures
+     perfect alignment on every screen size.                         */
+  function syncColumnWidths() {
+    var dataTable = document.getElementById('tbl_exporttable_to_xls');
+    var headTable = innerHead ? innerHead.querySelector('table') : null;
+    if (!dataTable || !headTable) return;
+
+    /* Use actual rendered widths of first row body cells */
+    var dataCols = dataTable.querySelectorAll('colgroup col');
+    var headCols = headTable.querySelectorAll('colgroup col');
+    if (!dataCols.length || !headCols.length) return;
+
+    /* Make both tables the same total width first */
+    var totalW = dataTable.offsetWidth;
+    if (totalW < 1) return;
+    headTable.style.width = totalW + 'px';
+    headTable.style.minWidth = totalW + 'px';
+
+    /* Now copy computed cell widths from first data row to header colgroup */
+    var firstRow = dataTable.querySelector('tbody tr');
+    if (!firstRow) return;
+    var cells = firstRow.querySelectorAll('td');
+    cells.forEach(function(cell, i) {
+      if (headCols[i]) {
+        headCols[i].style.width = cell.offsetWidth + 'px';
       }
-    </script>
-  
+    });
+  }
+
+  /* Run after full render + on resize (handles orientation changes) */
+  window.addEventListener('load', function() { syncColumnWidths(); setTop(); });
+  window.addEventListener('resize', function() {
+    /* Reset colgroup widths so they recalculate from percentage colgroup */
+    var headTable = innerHead ? innerHead.querySelector('table') : null;
+    if (headTable) { headTable.style.width = ''; headTable.style.minWidth = ''; }
+    setTimeout(function() { syncColumnWidths(); setTop(); }, 80);
+  });
+
+})();
+</script>
+
 <script type="text/javascript" src="static/js/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="static/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="static/js/dataTables.buttons.min.js"></script>
@@ -244,7 +801,10 @@ button{
 <script type="text/javascript" src="static/js/jquery.mark.min.js"></script>
 <script type="text/javascript" src="static/js/datatables.mark.js"></script>
 <script type="text/javascript" src="static/js/buttons.colVis.min.js"></script>
-
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    setLang('kn');
+  });
+</script>
 </body>
-
 </html>

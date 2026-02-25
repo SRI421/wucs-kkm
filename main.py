@@ -1,179 +1,17 @@
 import os
 import sqlite3
-from datetime import datetime
-
 from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 import base64
 from werkzeug.utils import secure_filename
 from contextlib import contextmanager
+from admin import init_admin
 from flask import send_file
+from datetime import datetime
 app = Flask(__name__, static_folder='./static', template_folder='./templates')
 
+admin = init_admin(app)
 # SQLite database configuration
 DB_PATH = os.path.join(os.path.dirname(__file__), 'wucskkm.db')
-
-
-def initialize_database_if_needed():
-    """
-    Check if database exists and initialize if it doesn't.
-    This ensures the application works on first deployment without .db file.
-    """
-    if not os.path.exists(DB_PATH):
-        print(f"⚠️  Database not found at: {DB_PATH}")
-        print("🔧 Initializing database...")
-        try:
-            # Import and run the initialization script
-            from init_db import init_database
-            init_database(DB_PATH)
-            print("✅ Database initialized successfully!")
-        except ImportError:
-            # If init_db.py is not available, create minimal database structure
-            print("⚠️  init_db.py not found. Creating minimal database structure...")
-            import sqlite3
-            conn = sqlite3.connect(DB_PATH)
-            cursor = conn.cursor()
-
-            # Create essential tables
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_news (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    headline TEXT,
-                    text1 TEXT,
-                    text2 TEXT,
-                    text3 TEXT
-                )
-            """)
-            cursor.execute("""
-                INSERT INTO farmers_news (id, headline, text1, text2, text3) 
-                VALUES (1, 'Welcome', 'Welcome to WUCSKKM', '', '')
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_years (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    years TEXT NOT NULL UNIQUE
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_year_data (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    y TEXT NOT NULL,
-                    batha REAL,
-                    kabbu REAL,
-                    tota REAL,
-                    mtax REAL,
-                    UNIQUE(y)
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_data (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    pass INTEGER,
-                    sno TEXT,
-                    area REAL,
-                    batha REAL,
-                    bkara REAL,
-                    kabu REAL,
-                    kkara REAL,
-                    thota REAL,
-                    tkara REAL,
-                    wtax REAL,
-                    mtax REAL,
-                    t1 REAL,
-                    name TEXT,
-                    share TEXT,
-                    year TEXT,
-                    first INTEGER DEFAULT 0,
-                    paid REAL DEFAULT 0,
-                    bal REAL DEFAULT 0,
-                    t2 REAL,
-                    old REAL DEFAULT 0,
-                    rt REAL,
-                    total REAL,
-                    balance REAL,
-                    count INTEGER,
-                    village TEXT,
-                    crop1 TEXT,
-                    area1 REAL,
-                    kara1 REAL,
-                    crop2 TEXT,
-                    area2 REAL,
-                    kara2 REAL,
-                    pp TEXT,
-                    phone TEXT
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_document (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    data BLOB,
-                    link TEXT,
-                    title TEXT,
-                    filename TEXT
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_board (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    data BLOB,
-                    content TEXT
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_crops (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    data BLOB,
-                    content TEXT
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_gallery (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    data BLOB,
-                    content TEXT
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_society (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    data BLOB
-                )
-            """)
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS farmers_map_data (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    mapid TEXT,
-                    name TEXT,
-                    pass INTEGER,
-                    sno TEXT,
-                    area REAL
-                )
-            """)
-
-            conn.commit()
-            conn.close()
-            print("✅ Minimal database structure created!")
-        except Exception as e:
-            print(f"❌ Error initializing database: {e}")
-            raise
-    else:
-        print(f"✓ Database found at: {DB_PATH}")
-
-
-# Initialize database on application startup
-initialize_database_if_needed()
-
-# NOW initialize Flask-Admin (after database is ready)
-from admin import init_admin
-admin = init_admin(app)
 
 
 def fix_base64_image(data_str):
@@ -1064,18 +902,44 @@ def userinfo():
 def bylist():
     with get_db() as conn:
         cursor = conn.cursor()
+
+        # Get all years
         cursor.execute("SELECT years FROM farmers_years ORDER BY id DESC")
         ye = [row['years'] for row in cursor.fetchall()]
-        year = request.values.get('year', ye[0] if ye else None)
 
-        cursor.execute("SELECT * FROM farmers_data WHERE first=1 AND year=?", (year,))
-        a = [dict_from_row(row) for row in cursor.fetchall()]
+        # Selected year (default latest)
+        year = request.values.get('year')
+        if not year:
+            year = ye[0] if ye else None
 
-        rows = [i for i in a if request.values.get(str(i['pass']))]
+        # Get all first=1 records for listing
+        cursor.execute(
+            "SELECT * FROM farmers_data WHERE first=1 AND year=? ORDER BY pass",
+            (year,)
+        )
+        farmer_list = [dict_from_row(row) for row in cursor.fetchall()]
+
+        # If user selected passes → show full print2 data
+        rows = []
+        for farmer in farmer_list:
+            if request.values.get(str(farmer['pass'])):
+                cursor.execute(
+                    "SELECT * FROM farmers_data WHERE pass=? AND year=? ORDER BY pass",
+                    (farmer['pass'], year)
+                )
+                rows.extend([dict_from_row(row) for row in cursor.fetchall()])
 
         if rows:
-            return render_template('print2.html', data=rows, dby=ye, year1=year)
-        return render_template('list2.html', data=a, dby=ye, year=year)
+            return render_template('print2.html',
+                                   data=rows,
+                                   dby=ye,
+                                   year1=year)
+
+        # Otherwise show list page
+        return render_template('list2.html',
+                               data=farmer_list,
+                               dby=ye,
+                               year=year)
 
 
 @app.route('/datasee', methods=['GET', 'POST'])
@@ -1540,7 +1404,7 @@ def dataeditup():
                 # Update aggregates for affected passes
                 affected_passes = set(u[1] for u in updates)
                 for pass_no in affected_passes:
-                    doalter(int(pass_no), y)
+                    doalter(int(pass_no), y, cursor)
 
     return redirect(url_for('dataedit'))
 
@@ -1598,7 +1462,7 @@ def datanewadd():
             total, first, 0, year
         ))
 
-        doalter(pass_no, year)
+        doalter(pass_no, year, cursor)
 
 
 @app.route('/dataeditadd')
@@ -1620,7 +1484,7 @@ def dataeditadd():
         name = b[0]['name'] if b else " "
         share = b[0]['share'] if b else 0
 
-        sql = """INSERT INTO farmers_data 
+        sql = """INSERT INTO farmers_data
                  (pass, sno, area, batha, bkara, kabu, kkara, thota, tkara,
                   wtax, mtax, t1, bal, t2, count, name, rt, old, total, paid,
                   balance, first, share, year)
@@ -1632,7 +1496,8 @@ def dataeditadd():
             count, name, 0.0, 0.0, 0.0, 0.0, 0.0, 0, share, year
         ))
 
-        doalter(pass_no, year)
+        # Pass cursor to avoid opening a second connection (fixes "database is locked")
+        doalter(pass_no, year, cursor)
 
     return redirect(url_for('dataedit'))
 
@@ -1652,55 +1517,56 @@ def dataeditdel():
         sql = "DELETE FROM farmers_data WHERE id=?"
         cursor.execute(sql, (rec_id,))
 
-        doalter(pass_no, year)
+        # Pass cursor to avoid opening a second connection (fixes "database is locked")
+        doalter(pass_no, year, cursor)
 
     return redirect(url_for('dataedit'))
 
 
-def doalter(a, b):
-    """Recalculate aggregates for a specific pass and year - OPTIMIZED"""
-    with get_db() as conn:
-        cursor = conn.cursor()
-        # Get all records for this pass/year
-        cursor.execute(
+def doalter(a, b, cursor=None):
+    """Recalculate aggregates for a specific pass and year.
+
+    Pass cursor= to reuse an existing connection (avoids 'database is locked').
+    Omit cursor to open a standalone connection.
+    """
+    def _do(cur):
+        cur.execute(
             "SELECT id, t1, bal, t2, paid FROM farmers_data WHERE pass=? AND year=?",
             (a, b)
         )
-        c = [dict_from_row(row) for row in cursor.fetchall()]
-
+        c = [dict_from_row(row) for row in cur.fetchall()]
         if not c:
             return
-
-        # Calculate aggregates
         count = len(c)
-        rt = sum(float(j['t1']) for j in c)
-        old = sum(float(j['bal']) for j in c)
-        tot = sum(float(j['t2']) for j in c)
+        rt   = sum(float(j['t1'])  for j in c)
+        old  = sum(float(j['bal']) for j in c)
+        tot  = sum(float(j['t2'])  for j in c)
         paid = float(c[0]['paid']) if c else 0.0
         tbal = tot - paid
-
-        # Prepare bulk update
         updates = []
         for idx, k in enumerate(c):
-            first = 1 if idx == 0 else 0
+            first  = 1 if idx == 0 else 0
             bcount = count if first == 1 else 0
-
             updates.append((
                 bcount,
-                round(float(rt), 2),
-                round(float(old), 2),
-                round(float(tot), 2),
+                round(float(rt),   2),
+                round(float(old),  2),
+                round(float(tot),  2),
                 round(float(paid), 2),
                 round(float(tbal), 2),
                 first,
                 k['id']
             ))
-
-        # Bulk update all records
-        sql = """UPDATE farmers_data 
+        sql = """UPDATE farmers_data
                  SET count=?, rt=?, old=?, total=?, paid=?, balance=?, first=?
                  WHERE id=?"""
-        cursor.executemany(sql, updates)
+        cur.executemany(sql, updates)
+
+    if cursor is not None:
+        _do(cursor)
+    else:
+        with get_db() as conn:
+            _do(conn.cursor())
 
 
 @app.route('/allmap', methods=['GET', 'POST'])
@@ -1923,7 +1789,6 @@ def datacorrection():
 
         return render_template('dataindex.html', data=rows, dby=ye, year=year)
 
-
 @app.route('/export_my_db', methods=['GET'])
 def export_my_db():
     """
@@ -1953,9 +1818,227 @@ def export_my_db():
     except Exception as e:
         return f"Error downloading database: {e}", 500
 
+"""
+=================================================================
+CHART API ROUTES  —  Paste into main.py
+Place AFTER the get_db() context-manager definition (~line 219).
+
+Also add at the very top of main.py (with other imports):
+    from collections import defaultdict
+=================================================================
+"""
+
+from collections import defaultdict
+
+
+def _to_real_acres(val):
+    """
+    Convert the app's field-format value to real decimal acres.
+    Format stored: integer part = acres, two-decimal digits = guntes
+    40 guntes = 1 acre
+    Examples:
+      2.30  →  2 acres 30 guntes  →  2 + 30/40 = 2.750 acres
+      1.10  →  1 acre  10 guntes  →  1 + 10/40 = 1.250 acres
+      0.20  →  0 acres 20 guntes  →  0 + 20/40 = 0.500 acres
+    """
+    if not val:
+        return 0.0
+    try:
+        val = float(val)
+        if val <= 0:
+            return 0.0
+        acres  = int(val)
+        guntes = round((val - acres) * 100)   # e.g. 0.30 → 30
+        return acres + (guntes / 40.0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+# ──────────────────────────────────────────────────────
+# 1. Year-wise Paid Amount  (bar + trend line)
+# ──────────────────────────────────────────────────────
+@app.route('/api/chart/paid-by-year')
+def api_paid_by_year():
+    """SUM(paid) grouped by last 4 financial years (joined table) where first=1."""
+    try:
+        with get_db() as conn:
+            cursor = conn.cursor()
+
+            cursor.execute("""
+                SELECT f.year,
+                       SUM(f.paid) AS total_paid
+                FROM farmers_data f
+                JOIN farmers_year_data fy 
+                     ON f.year = fy.y
+                WHERE f.first = 1
+                  AND f.year IN (
+                        SELECT y
+                        FROM farmers_year_data
+                        WHERE y IS NOT NULL
+                          AND TRIM(y) != ''
+                        GROUP BY y
+                        ORDER BY CAST(SUBSTR(y,1,4) AS UNSIGNED) DESC
+                        LIMIT 4
+                  )
+                GROUP BY f.year
+                ORDER BY CAST(SUBSTR(f.year,1,4) AS UNSIGNED) ASC
+            """)
+
+            rows = cursor.fetchall()
+
+        labels = [str(r['year']) for r in rows]
+        values = [round(float(r['total_paid'] or 0), 2) for r in rows]
+
+        return jsonify({'labels': labels, 'values': values})
+
+    except Exception as e:
+        print(f"[api_paid_by_year] {e}")
+        return jsonify({'labels': [], 'values': [], 'error': str(e)})
+
+
+# ──────────────────────────────────────────────────────
+# 2. Crops Distribution by Area  (doughnut)
+#    Main crops: batha (ಭತ್ತ)  kabu (ಕಬ್ಬು)  thota (ತೋಟ)
+#    Everything else in crop1/crop2 → ಇತರೆ
+#    Area conversion: int part = acres, frac*100 = guntes, 40g=1a
+# ──────────────────────────────────────────────────────
+@app.route('/api/chart/crops-area')
+def api_crops_area():
+    try:
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT batha, kabu, thota, crop1, area1, crop2, area2
+                FROM   farmers_data
+                WHERE  first = 1
+            """)
+            rows = cursor.fetchall()
+
+        # names that already map to the three main crops (don't double-count)
+        main_crop_names = {
+            'batha', 'bhath', 'rice',
+            'kabu',  'kabbu', 'sugarcane',
+            'thota', 'tota',  'garden'
+        }
+
+        total_batha = 0.0
+        total_kabu  = 0.0
+        total_thota = 0.0
+        total_other = 0.0
+
+        for row in rows:
+            total_batha += _to_real_acres(row['batha'])
+            total_kabu  += _to_real_acres(row['kabu'])
+            total_thota += _to_real_acres(row['thota'])
+
+            # crop1 / area1
+            c1 = (row['crop1'] or '').strip().lower()
+            a1 = row['area1']
+            if a1 and float(a1) > 0 and c1 not in main_crop_names:
+                total_other += _to_real_acres(a1)
+
+            # crop2 / area2
+            c2 = (row['crop2'] or '').strip().lower()
+            a2 = row['area2']
+            if a2 and float(a2) > 0 and c2 not in main_crop_names:
+                total_other += _to_real_acres(a2)
+
+        crop_data = [
+            ('ಭತ್ತ',  round(total_batha, 3)),
+            ('ಕಬ್ಬು', round(total_kabu,  3)),
+            ('ತೋಟ',   round(total_thota, 3)),
+            ('ಇತರೆ',  round(total_other, 3)),
+        ]
+
+        labels = [c[0] for c in crop_data if c[1] > 0]
+        values = [c[1] for c in crop_data if c[1] > 0]
+
+        return jsonify({'labels': labels, 'values': values})
+
+    except Exception as e:
+        print(f"[api_crops_area] {e}")
+        return jsonify({'labels': [], 'values': [], 'error': str(e)})
+
+
+# ──────────────────────────────────────────────────────
+# 3. Share vs Non-Share  (LATEST year only)
+#    share column: if it's a valid integer string → share member
+#    else (empty, null, or non-numeric)          → non-share
+# ──────────────────────────────────────────────────────
+@app.route('/api/chart/share-count')
+def api_share_count():
+    """
+    Counts unique farmers (first=1) in the latest year.
+    share = numeric string  →  ಷೇರುದಾರರು
+    share = blank / null    →  ಷೇರೇತರರು
+    """
+    try:
+        with get_db() as conn:
+            cursor = conn.cursor()
+
+            # --- resolve latest year ---
+            cursor.execute(
+                "SELECT years FROM farmers_years ORDER BY id DESC LIMIT 1"
+            )
+            row_yr = cursor.fetchone()
+            if row_yr:
+                latest_year = row_yr['years']
+            else:
+                cursor.execute("""
+                    SELECT year FROM farmers_data
+                    WHERE  year IS NOT NULL AND TRIM(year) != ''
+                    ORDER  BY year DESC LIMIT 1
+                """)
+                fb = cursor.fetchone()
+                latest_year = fb['year'] if fb else None
+
+            if not latest_year:
+                return jsonify({
+                    'labels': ['ಷೇರುದಾರರು', 'ಷೇರೇತರರು'],
+                    'values': [0, 0], 'year': None
+                })
+
+            # --- count ---
+            # Share member   = numeric integer AND value > 0  (e.g. "123")
+            # Non-share      = null / blank / "0" / non-numeric
+            cursor.execute("""
+                SELECT
+                    SUM(CASE
+                          WHEN share IS NOT NULL
+                           AND TRIM(share) != ''
+                           AND TRIM(share) GLOB '[1-9]*'
+                           AND CAST(TRIM(share) AS INTEGER) > 0
+                          THEN 1 ELSE 0 END) AS share_cnt,
+
+                    SUM(CASE
+                          WHEN share IS NULL
+                            OR TRIM(share) = ''
+                            OR TRIM(share) = '0'
+                            OR NOT (TRIM(share) GLOB '[1-9]*')
+                          THEN 1 ELSE 0 END) AS non_share_cnt
+
+                FROM farmers_data
+                WHERE year  = ?
+                  AND first = 1
+            """, (latest_year,))
+
+            r = cursor.fetchone()
+
+        return jsonify({
+            'labels': ['ಷೇರುದಾರರು', 'ಷೇರೇತರರು'],
+            'values': [int(r['share_cnt'] or 0), int(r['non_share_cnt'] or 0)],
+            'year':   latest_year
+        })
+
+    except Exception as e:
+        print(f"[api_share_count] {e}")
+        return jsonify({
+            'labels': ['ಷೇರುದಾರರು', 'ಷೇರೇತರರು'],
+            'values': [0, 0], 'error': str(e)        })
+
 # Initialize SQLAdmin
 if __name__ == '__main__':
     # Import and initialize admin
-    initialize_database_if_needed()
+
     app.secret_key = os.urandom(12)
     app.run(debug=False, use_reloader=False, host='0.0.0.0', port=5000)

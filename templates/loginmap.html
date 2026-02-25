@@ -1,118 +1,222 @@
+<div id="newone">
+<style>
+  * { box-sizing: border-box; }
+  
+  .owners-container {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    padding: 0;
+  }
 
+  .table-wrapper {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  }
 
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #0d1e30;
+    font-size: 13px;
+  }
+  caption {
+    font-size: 14px;
+    font-weight: 700;
+    color: #7ec8e3;
+    padding: 14px 12px 10px;
+    text-align: center;
+    line-height: 1.6;
+    background: #0a1825;
+    border-bottom: 1px solid #1a3a5a;
+  }
+  thead th {
+    background: #0d2840;
+    color: #7ec8e3;
+    padding: 10px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    text-align: center;
+    border-bottom: 2px solid #2a5070;
+    white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid #1a3050; }
+  tbody tr:hover { background: rgba(126,200,227,.06); }
+  td {
+    padding: 7px 8px;
+    vertical-align: middle;
+    text-align: center;
+  }
 
-    <div id="newone">
+  /* Editable inputs */
+  td input[type="text"],
+  td input[type="number"] {
+    background: rgba(255,255,255,.07);
+    border: 1px solid #2a4060;
+    color: #d0e8f5;
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-size: 12px;
+    width: 100%;
+    min-width: 80px;
+    transition: border-color .2s, background .2s;
+    outline: none;
+  }
+  td input[type="text"]:focus,
+  td input[type="number"]:focus {
+    border-color: #4a9ec0;
+    background: rgba(126,200,227,.12);
+  }
 
+  /* Buttons */
+  .btn-del, .btn-update {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    transition: background .2s, transform .1s;
+    white-space: nowrap;
+  }
+  .btn-del {
+    background: rgba(220,60,60,.2);
+    border: 1px solid rgba(220,60,60,.4);
+    color: #ff7070;
+  }
+  .btn-del:hover { background: rgba(220,60,60,.4); }
+  .btn-del:active { transform: scale(.94); }
 
+  .btn-update {
+    background: rgba(72,200,100,.15);
+    border: 1px solid rgba(72,200,100,.35);
+    color: #60d080;
+  }
+  .btn-update:hover { background: rgba(72,200,100,.35); }
+  .btn-update:active { transform: scale(.94); }
 
-<div style="overflow-x:auto">
-<table style="width:100%">
-  <caption>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
-ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</caption>
-  <tr>
-    <th>..</th>
-    <th>ಖಾತೆದಾರರ ಹೆಸರು</th>
-    <th>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
-    <th>ಸರ್ವೆ ನಂ.</th>
-    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+  /* Add row section */
+  .add-row-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #0a1825;
+    border-top: 1px solid #1a3a5a;
+    border-radius: 0 0 10px 10px;
+  }
+  .add-row-section input[type="number"] {
+    background: rgba(255,255,255,.07);
+    border: 1px solid #2a4060;
+    color: #d0e8f5;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 13px;
+    width: 130px;
+    outline: none;
+  }
+  .add-row-section input[type="number"]:focus {
+    border-color: #4a9ec0;
+  }
+  .btn-add {
+    background: linear-gradient(135deg, #1a5a80, #0d3a5a);
+    border: 1px solid #2a7090;
+    color: #7ec8e3;
+    border-radius: 6px;
+    padding: 7px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+  }
+  .btn-add:hover { background: linear-gradient(135deg, #2a6a90, #1a4a6a); }
+  .btn-add:active { transform: scale(.95); }
+</style>
 
+<div class="owners-container">
+  <div class="table-wrapper">
+    <table>
+      <caption>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ<br>ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</caption>
+      <thead>
+        <tr>
+          <th>ಕ್ರ.ಸಂ.</th>
+          <th>ಖಾತೆದಾರರ ಹೆಸರು</th>
+          <th>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+          <th>ಸರ್ವೆ ನಂ.</th>
+          <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+          <th>ಕ್ರಿಯೆ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in data %}
+        <tr>
+          <td>
+            <button class="btn-del" id="del{{ i['id'] }}" name="delete">🗑</button>
+          </td>
+          <td><input type="text"   id="name{{ i['id'] }}" value="{{ i['name'] }}" placeholder="ಹೆಸರು" /></td>
+          <td><input type="text"   id="pass{{ i['id'] }}" value="{{ i['pass'] }}" placeholder="ಪಾಸ್ ಸಂ." /></td>
+          <td><input type="text"   id="sno{{ i['id'] }}"  value="{{ i['sno'] }}"  placeholder="ಸರ್ವೆ ನಂ." /></td>
+          <td><input type="text"   id="area{{ i['id'] }}" value="{{ i['area'] }}" placeholder="ಎಕರೆ" /></td>
+          <td>
+            <button class="btn-update" id="update{{ i['id'] }}" name="update">💾 Update</button>
+          </td>
+        </tr>
 
-  </tr>
-
-
-  {% for i in data %}
-
-
-
-  <tr>
-    <td><input type="submit" id="del{{ i['id'] }}" name="delete" value="del"/>
-    <td><input  type="text"  id="name{{ i['id'] }}" value="{{ i['name'] }}" />
-
-
-    </td>
-
-<td><input type="text" id="pass{{ i['id'] }}" value="{{ i['pass'] }}"/></td>
-<td><input type="text" id="sno{{ i['id'] }}" value="{{ i['sno'] }}"/></td>
-<td><input type="text" id="area{{ i['id'] }}" value="{{ i['area'] }}"/></td>
-
-<td><input type="submit" id="update{{ i['id'] }}" name="update" value="update"/></td>
-
-
-
-
-<script>
-
-$("#del{{ i['id'] }}").click(function(){
-    text="{{ i['id'] }}"+","+"{{ i['mapid'] }}";
-    $.ajax({
-      url: "/ownersdel",
-      type: "get",
-      data: {jsdata: text},
-      success: function(response) {
-        $("#newone").html(response);
-      },
-      error: function(xhr) {
-        //Do Something to handle error
-      }
-    });
-});
-</script>
-<script>
-
-$("#update{{ i['id'] }}").click(function(){
-    v=document.getElementById('pass{{ i["id"] }}').value
-    x=document.getElementById('name{{ i["id"] }}').value
-    y=document.getElementById('sno{{ i["id"] }}').value
-    z=document.getElementById('area{{ i["id"] }}').value
-    text="{{ i['id'] }}"+","+"{{ i['mapid'] }}"+","+v+","+x+","+y+","+z;
-    $.ajax({
-      url: "/ownersupdate",
-      type: "get",
-      data: {jsdata: text},
-      success: function(response) {
-        $("#newone").html(response);
-      },
-      error: function(xhr) {
-        //Do Something to handle error
-      }
-    });
-});
-</script>
-  </tr>
-
-  {% endfor %}
-  </table>
-</div>
-  <div>
-  <input type="number" placeholder="no of rows" value="" name="noof" id="num"/>
-  <input type="submit" value="addRow" id="addRow" name="addcolumn"/>
+        <script>
+        (function() {
+          $("#del{{ i['id'] }}").click(function(){
+            if (!confirm('ಅಳಿಸಲು ಖಚಿತಪಡಿಸಿ?')) return;
+            var text = "{{ i['id'] }}" + "," + "{{ i['mapid'] }}";
+            $.ajax({
+              url: "/ownersdel", type: "get", data: {jsdata: text},
+              success: function(r){ $("#newone").html(r); },
+              error: function(){}
+            });
+          });
+          $("#update{{ i['id'] }}").click(function(){
+            var v = document.getElementById('pass{{ i["id"] }}').value;
+            var x = document.getElementById('name{{ i["id"] }}').value;
+            var y = document.getElementById('sno{{ i["id"] }}').value;
+            var z = document.getElementById('area{{ i["id"] }}').value;
+            var text = "{{ i['id'] }}" + "," + "{{ i['mapid'] }}" + "," + v + "," + x + "," + y + "," + z;
+            $.ajax({
+              url: "/ownersupdate", type: "get", data: {jsdata: text},
+              success: function(r){ $("#newone").html(r); },
+              error: function(){}
+            });
+          });
+        })();
+        </script>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
-  <script>
 
-$("#addRow").click(function(){
-    a=document.getElementById('num').value
-    text=a+","+"{{ data[0]['mapid'] }}";
-    $.ajax({
-      url: "/ownersadd",
-      type: "get",
-      data: {jsdata: text},
-      success: function(response) {
-        $("#newone").html(response);
-      },
-      error: function(xhr) {
-        //Do Something to handle error
-      }
-    });
-});
-</script>
+  <div class="add-row-section">
+    <input type="number" placeholder="ಸೇರಿಸಬೇಕಾದ ಸಾಲು ಸಂಖ್ಯೆ" value="" name="noof" id="num" min="1" max="50"/>
+    <button class="btn-add" id="addRow" name="addcolumn">+ ಸೇರಿಸಿ</button>
+  </div>
 </div>
+
+<script>
+(function() {
+  $("#addRow").click(function(){
+    var a = document.getElementById('num').value;
+    var text = a + "," + "{{ data[0]['mapid'] }}";
+    $.ajax({
+      url: "/ownersadd", type: "get", data: {jsdata: text},
+      success: function(r){ $("#newone").html(r); },
+      error: function(){}
+    });
+  });
+})();
+</script>
+
 <div class="modal"><!-- Place at bottom of page --></div>
 <script>
 $body = $("body");
-
 $(document).on({
-    ajaxStart: function() { $body.addClass("loading");    },
-     ajaxStop: function() { $body.removeClass("loading"); }
+  ajaxStart: function(){ $body.addClass("loading"); },
+  ajaxStop:  function(){ $body.removeClass("loading"); }
 });
 </script>
-
+</div>

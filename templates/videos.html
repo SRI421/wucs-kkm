@@ -6,6 +6,9 @@
 <title>Home</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="http://fonts.googleapis.com/css?family=Lato:300|Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href= "{{ url_for('static',filename='styles/all.css') }}">
 
 <link rel="stylesheet" href= "{{ url_for('static',filename='menu.css') }}">
@@ -24,7 +27,99 @@
 </script>
 
 <style>
-
+:root {
+  --sw: 270px; --th: 56px;
+  --green: #0d6e5a; --green-dark: #094a3c; --accent: #16a34a; --teal: #0d9488;
+  --sidebar-bg: #0a1f1a; --sid-text: #c8e6c9;
+  --sid-hover: rgba(22,163,74,.15); --sid-active: rgba(22,163,74,.25);
+  --topbar-bg: rgba(10,31,26,.97);
+  --ease: .3s cubic-bezier(.4,0,.2,1);
+}
+#sidebar {
+  position: fixed; top: 0; left: calc(-1 * var(--sw));
+  width: var(--sw); height: 100vh; background: var(--sidebar-bg);
+  z-index: 1000; transition: transform var(--ease);
+  display: flex; flex-direction: column; overflow-y: auto;
+  box-shadow: 4px 0 24px rgba(0,0,0,.2);
+}
+#sidebar.open { transform: translateX(var(--sw)); }
+.sb-header {
+  padding: 18px 20px 14px; border-bottom: 1px solid rgba(255,255,255,.08);
+  background: linear-gradient(135deg,var(--green),var(--green-dark)); position: relative;
+}
+.sb-logo { display: flex; align-items: center; gap: 11px; }
+.sb-icon {
+  width: 38px; height: 38px; background: linear-gradient(135deg,#16a34a,#0d9488);
+  border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  font-size: 19px; color: #fff; flex-shrink: 0;
+}
+.sb-org { font-size: 11px; font-weight: 600; color: #a7f3d0; font-family: 'Noto Sans Kannada',sans-serif; line-height: 1.3; }
+.sb-sub { font-size: 10px; color: rgba(255,255,255,.55); font-family: 'Noto Sans Kannada',sans-serif; }
+.sb-close {
+  position: absolute; top: 12px; right: 12px; width: 26px; height: 26px;
+  background: rgba(255,255,255,.1); border: none; border-radius: 6px;
+  color: #fff; cursor: pointer; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+}
+.sb-nav { flex: 1; padding: 10px 0; }
+.sb-label {
+  font-size: 10px; font-weight: 600; color: rgba(255,255,255,.35);
+  text-transform: uppercase; letter-spacing: 1.2px; padding: 12px 20px 5px; display: block;
+}
+.sb-link {
+  display: flex; align-items: center; gap: 12px; padding: 11px 20px;
+  color: var(--sid-text); text-decoration: none; font-size: 14px;
+  transition: background var(--ease), color var(--ease);
+  border: none; background: transparent; width: 100%; cursor: pointer; text-align: left;
+}
+.sb-link:hover  { background: var(--sid-hover); color: #fff; }
+.sb-link.active { background: var(--sid-active); color: #4ade80; font-weight: 500; }
+.sb-link .ic    { width: 20px; text-align: center; font-size: 15px; opacity: .8; flex-shrink: 0; }
+.sb-footer { padding: 12px 14px; border-top: 1px solid rgba(255,255,255,.08); }
+#overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.5); z-index: 999; backdrop-filter: blur(2px);
+}
+#overlay.on { display: block; }
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--th);
+  background: var(--topbar-bg); z-index: 998;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.tb-left  { display: flex; align-items: center; gap: 11px; }
+.tb-right { display: flex; align-items: center; gap: 9px; }
+#ham-btn {
+  width: 40px; height: 40px; background: transparent;
+  border: 1.5px solid rgba(255,255,255,.2); border-radius: 8px;
+  color: #fff; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+#tb-title {
+  color: rgba(255,255,255,.85); font-size: 14px; font-weight: 500;
+  font-family: 'Noto Sans Kannada',sans-serif; display: none;
+}
+@media(min-width:480px){ #tb-title { display: block; } }
+.lang-wrap {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,.1); border-radius: 20px; padding: 2px;
+}
+.lang-btn {
+  padding: 4px 10px; border-radius: 18px; font-size: 11px; font-weight: 600;
+  border: none; cursor: pointer; transition: all .2s;
+  background: transparent; color: rgba(255,255,255,.6);
+}
+.lang-btn.on { background: var(--accent); color: #fff; }
+#home-btn {
+  padding: 8px 16px; background: linear-gradient(135deg,var(--green),var(--teal));
+  color: #fff; border: none; border-radius: 20px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+}
+/* Push page content below topbar */
+body { padding-top: var(--th); }
+@media print { #sidebar, #overlay, #topbar { display: none !important; } body { padding-top: 0; } }
 .moda {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -866,6 +961,59 @@ button {
 
 </head>
 <body>
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside id="sidebar">
+  <div class="sb-header">
+    <div class="sb-logo">
+      <div class="sb-icon">💧</div>
+      <div>
+        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
+        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
+      </div>
+    </div>
+    <button class="sb-close" id="sb-close-btn">✕</button>
+  </div>
+  <nav class="sb-nav">
+    <span class="sb-label">Navigation / ನ್ಯಾವಿಗೇಷನ್</span>
+    <a href="/"         class="sb-link" onclick="showLoader()"><i class="fa fa-home ic"></i><span data-en="Home"        data-kn="ಮುಖಪುಟ">Home</span></a>
+    <a href="/feeds"    class="sb-link"><i class="fa fa-comment ic"></i><span data-en="Feedback"    data-kn="ಪ್ರತಿಕ್ರಿಯೆ">Feedback</span></a>
+    <a href="/list"     class="sb-link" onclick="showLoader()"><i class="fa fa-list ic"></i><span data-en="List"        data-kn="ಪಟ್ಟಿ">List</span></a>
+    <a href="/allmap"   class="sb-link" onclick="showLoader()"><i class="fa fa-map ic"></i><span data-en="Map"         data-kn="ನಕ್ಷೆ">Map</span></a>
+    <a href="/map"      class="sb-link" onclick="showLoader()"><i class="fa fa-map-marker ic"></i><span data-en="Click-Map"  data-kn="ಕ್ಲಿಕ್-ನಕ್ಷೆ">Click-Map</span></a>
+    <a href="/document" class="sb-link" onclick="showLoader()"><i class="fa fa-file ic"></i><span data-en="Documents"   data-kn="ದಾಖಲೆಗಳು">Documents</span></a>
+    <a href="/socinfo"  class="sb-link" onclick="showLoader()"><i class="fa fa-info-circle ic"></i><span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">Society Info</span></a>
+    <span class="sb-label" style="margin-top:6px">Explore / ಅನ್ವೇಷಿಸಿ</span>
+    <!-- Replace ACTIVE_PAGE below with the correct active link per page -->
+    <!-- e.g. for /list: add class="sb-link active" to the list link -->
+  </nav>
+  <div class="sb-footer">
+    <button class="sb-link" onclick="showMo('login-mo')"
+      style="background:rgba(22,163,74,.15);border-radius:8px;color:#4ade80;">
+      <i class="fa fa-lock ic"></i>
+      <span data-en="Login" data-kn="ಲಾಗಿನ್">Login</span>
+    </button>
+  </div>
+</aside>
+
+<div id="overlay" onclick="closeSB()"></div>
+
+<!-- ═══════ TOPBAR ═══════ -->
+<header id="topbar">
+  <div class="tb-left">
+    <button id="ham-btn" onclick="toggleSB()"><i class="fa fa-bars"></i></button>
+    <span id="tb-title">WUCSKKM</span>  <!-- replace with page title -->
+  </div>
+  <div class="tb-right">
+    <div class="lang-wrap">
+      <button class="lang-btn on" id="len" onclick="setLang('en')">EN</button>
+      <button class="lang-btn"    id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
+    </div>
+    <a href="/" id="home-btn">
+      <i class="fa fa-home"></i>
+      <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
+    </a>
+  </div>
+</header>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   	<div style="    position: fixed;
     top: 0;
@@ -890,6 +1038,43 @@ button {
 <center>
 
 </center>
+<script>
+function toggleSB() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('on');
+}
+function closeSB() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('on');
+}
+document.getElementById('sb-close-btn').addEventListener('click', closeSB);
 
+function showLoader() {
+  var el = document.getElementById('idloader');
+  if (el) el.style.display = 'block';
+}
+function hideLoader() {
+  var el = document.getElementById('idloader');
+  if (el) el.style.display = 'none';
+}
+window.addEventListener('load', hideLoader);
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) { hideLoader(); closeSB(); }
+});
+
+var LANG = 'kn';
+function setLang(lang) {
+  LANG = lang;
+  document.getElementById('len').classList.toggle('on', lang === 'en');
+  document.getElementById('lkn').classList.toggle('on', lang === 'kn');
+  document.querySelectorAll('[data-en][data-kn]').forEach(function(el) {
+    el.textContent = lang === 'kn' ? el.getAttribute('data-kn') : el.getAttribute('data-en');
+  });
+}
+</script><script>
+  document.addEventListener('DOMContentLoaded', function() {
+    setLang('kn');
+  });
+</script>
 </body>
 </html>

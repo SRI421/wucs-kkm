@@ -1,202 +1,567 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html class="supernova"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-<link rel="alternate" type="text/xml+oembed" 
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1" />
 <meta name="HandheldFriendly" content="true" />
-<title>news</title>
+<title>ಸುದ್ದಿ ನಿರ್ವಹಣೆ – WUCSKKM</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <script type="text/javascript" src="static/google_jsapi.js">
-  </script>
-  <script type="text/javascript">
-
-    // Load the Google Transliterate API
-    google.load("elements", "1", {
-          packages: "transliteration"
-        });
-
-
-  </script>
-
-
-
-
-
-
+<script type="text/javascript" src="static/google_jsapi.js"></script>
+<script type="text/javascript">
+  google.load("elements", "1", { packages: "transliteration" });
+</script>
 <script src="static/carkan.js"></script>
 
+<style>
+  /* ── Variables ── */
+  :root {
+    --sw: 270px;
+    --th: 56px;
+    --green:      #0d6e5a;
+    --green-dark: #094a3c;
+    --accent:     #16a34a;
+    --sidebar-bg: #0a1f1a;
+    --sid-text:   #c8e6c9;
+    --sid-hover:  rgba(22,163,74,.15);
+    --sid-active: rgba(22,163,74,.25);
+    --topbar-bg:  rgba(10,31,26,.97);
+    --card-bg:    rgba(255,255,255,.92);
+    --text:       #1a2e28;
+    --muted:      #5a7a72;
+    --radius:     16px;
+    --shadow:     0 8px 40px rgba(0,0,0,.14);
+    --ease:       .3s cubic-bezier(.4,0,.2,1);
+  }
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  body {
+    font-family: 'Poppins','Noto Sans Kannada',sans-serif;
+    background: url('/static/views/14.jpg') center/cover fixed;
+    color: var(--text);
+    min-height: 100vh;
+    padding-top: var(--th);
+  }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    position: fixed; top: 0; left: calc(-1 * var(--sw));
+    width: var(--sw); height: 100vh;
+    background: var(--sidebar-bg); z-index: 1000;
+    transition: transform var(--ease);
+    display: flex; flex-direction: column;
+    overflow-y: auto; box-shadow: 4px 0 24px rgba(0,0,0,.2);
+  }
+  #sidebar.open { transform: translateX(var(--sw)); }
+
+  .sb-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    background: linear-gradient(135deg,var(--green),var(--green-dark));
+    position: relative;
+  }
+  .sb-logo { display: flex; align-items: center; gap: 11px; }
+  .sb-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg,#16a34a,#0d9488);
+    border-radius: 9px; display: flex; align-items: center;
+    justify-content: center; font-size: 19px; color: #fff; flex-shrink: 0;
+  }
+  .sb-org { font-size: 11px; font-weight: 600; color: #a7f3d0; font-family: 'Noto Sans Kannada',sans-serif; line-height: 1.3; }
+  .sb-sub { font-size: 10px; color: rgba(255,255,255,.55); font-family: 'Noto Sans Kannada',sans-serif; }
+  .sb-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 26px; height: 26px; background: rgba(255,255,255,.1);
+    border: none; border-radius: 6px; color: #fff; cursor: pointer;
+    font-size: 13px; display: flex; align-items: center; justify-content: center;
+    transition: background var(--ease);
+  }
+  .sb-close:hover { background: rgba(255,255,255,.22); }
+
+  .sb-user {
+    margin: 10px 12px; background: rgba(255,255,255,.07);
+    border-radius: 10px; padding: 11px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sb-avatar {
+    width: 35px; height: 35px;
+    background: linear-gradient(135deg,#16a34a,#0d9488);
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; color: #fff; font-size: 15px; flex-shrink: 0;
+  }
+  .sb-uname { font-size: 13px; color: #fff; font-weight: 500; }
+  .sb-urole { font-size: 11px; color: rgba(255,255,255,.45); }
+
+  .sb-nav { flex: 1; padding: 8px 0; }
+  .sb-label {
+    font-size: 10px; font-weight: 600; color: rgba(255,255,255,.35);
+    text-transform: uppercase; letter-spacing: 1.2px; padding: 10px 20px 4px;
+    display: block;
+  }
+  .sb-link {
+    display: flex; align-items: center; gap: 12px; padding: 10px 20px;
+    color: var(--sid-text); text-decoration: none; font-size: 13.5px;
+    transition: background var(--ease), color var(--ease);
+    border: none; background: transparent; width: 100%; cursor: pointer; text-align: left;
+  }
+  .sb-link:hover  { background: var(--sid-hover); color: #fff; }
+  .sb-link.active { background: var(--sid-active); color: #4ade80; font-weight: 500; }
+  .sb-link .ic    { width: 20px; text-align: center; font-size: 14px; opacity: .8; flex-shrink: 0; }
+
+  .sb-footer { padding: 12px; border-top: 1px solid rgba(255,255,255,.08); }
+  .sb-logout {
+    display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+    background: rgba(239,68,68,.15); color: #fca5a5;
+    border-radius: 8px; text-decoration: none;
+    font-size: 13px; font-weight: 500; transition: background var(--ease);
+    width: 100%; border: none; cursor: pointer; text-align: left;
+  }
+  .sb-logout:hover { background: rgba(239,68,68,.28); color: #f87171; }
+
+  /* ── Overlay ── */
+  #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999; backdrop-filter: blur(2px); }
+  #overlay.on { display: block; }
+
+  /* ── Topbar ── */
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--th); background: var(--topbar-bg); z-index: 998;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .tb-left { display: flex; align-items: center; gap: 11px; }
+  .tb-right { display: flex; align-items: center; gap: 9px; }
+
+  #ham-btn {
+    width: 40px; height: 40px; background: transparent;
+    border: 1.5px solid rgba(255,255,255,.2); border-radius: 8px;
+    color: #fff; font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--ease);
+  }
+  #ham-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.4); }
+
+  #tb-title { color: rgba(255,255,255,.85); font-size: 14px; font-weight: 500; display: none; }
+  @media (min-width: 480px) { #tb-title { display: block; } }
+
+  .admin-pill {
+    padding: 4px 12px; background: rgba(22,163,74,.18);
+    border: 1px solid rgba(22,163,74,.3); border-radius: 20px;
+    color: #4ade80; font-size: 11.5px; font-weight: 600; display: none;
+  }
+  @media (min-width: 480px) { .admin-pill { display: block; } }
+
+  .lang-wrap { display: flex; align-items: center; background: rgba(255,255,255,.1); border-radius: 20px; padding: 2px; }
+  .lang-btn {
+    padding: 4px 10px; border-radius: 18px; font-size: 11px; font-weight: 600;
+    border: none; cursor: pointer; transition: all .2s;
+    background: transparent; color: rgba(255,255,255,.6);
+  }
+  .lang-btn.on { background: var(--accent); color: #fff; }
+
+  .tb-logout {
+    padding: 7px 15px; background: rgba(239,68,68,.15); color: #fca5a5;
+    border: 1px solid rgba(239,68,68,.25); border-radius: 20px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: all var(--ease); text-decoration: none; white-space: nowrap;
+  }
+  .tb-logout:hover { background: rgba(239,68,68,.28); color: #f87171; }
+
+  /* ── Main content area ── */
+  #wrap {
+    min-height: calc(100vh - var(--th));
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 32px 16px 48px;
+  }
+
+  /* ── News management card ── */
+  .news-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,.95);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    width: 100%; max-width: 640px;
+    padding: 32px 36px;
+    animation: fadeUp .35s ease;
+  }
+  @keyframes fadeUp { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .card-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 24px; padding-bottom: 18px;
+    border-bottom: 2px solid rgba(22,163,74,.12);
+  }
+  .card-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg,#16a34a,#0d9488);
+    border-radius: 11px; display: flex; align-items: center;
+    justify-content: center; font-size: 20px; color: #fff; flex-shrink: 0;
+  }
+  .card-title { font-size: 18px; font-weight: 700; color: var(--text); font-family: 'Noto Sans Kannada',sans-serif; }
+  .card-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* Field groups */
+  .field-group { margin-bottom: 20px; }
+  .field-label {
+    display: block; font-size: 12px; font-weight: 600;
+    color: var(--muted); text-transform: uppercase; letter-spacing: .8px;
+    margin-bottom: 7px;
+  }
+  .field-label span {
+    font-family: 'Noto Sans Kannada',sans-serif;
+    font-size: 13px; text-transform: none;
+    letter-spacing: 0; font-weight: 600; color: var(--text);
+  }
+
+  textarea.field-input,
+  input.field-input {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid rgba(13,110,90,.18);
+    border-radius: 10px;
+    font-size: 14px; font-family: 'Noto Sans Kannada','Poppins',sans-serif;
+    color: var(--text); background: rgba(255,255,255,.85);
+    transition: border-color var(--ease), box-shadow var(--ease);
+    outline: none; resize: vertical;
+  }
+  textarea.field-input:focus,
+  input.field-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(22,163,74,.12);
+    background: #fff;
+  }
+  textarea.field-input { min-height: 130px; }
+
+  .field-hint { font-size: 11px; color: var(--muted); margin-top: 5px; }
+
+  .field-divider { border: none; border-top: 1px solid rgba(13,110,90,.1); margin: 24px 0; }
+
+  .section-label {
+    font-size: 11px; font-weight: 600; color: rgba(13,110,90,.5);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(13,110,90,.1); }
+
+  /* Submit button */
+  .submit-btn {
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg,#16a34a,#0d9488);
+    color: #fff; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600;
+    font-family: 'Noto Sans Kannada','Poppins',sans-serif;
+    cursor: pointer; transition: all var(--ease);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 8px;
+  }
+  .submit-btn:hover {
+    background: linear-gradient(135deg,#15803d,#0c7a70);
+    transform: translateY(-1px); box-shadow: 0 6px 20px rgba(22,163,74,.3);
+  }
+  .submit-btn:active { transform: none; }
+
+  /* Push notification result area */
+  .result-card {
+    margin-top: 24px;
+    background: rgba(255,255,255,.92);
+    border: 1.5px solid rgba(22,163,74,.2);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 18px rgba(0,0,0,.08);
+  }
+  .result-headline {
+    font-size: 15px; font-weight: 700;
+    color: #0a1f1a; font-family: 'Noto Sans Kannada',sans-serif;
+    margin-bottom: 12px; line-height: 1.5;
+  }
+  .push-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    background: linear-gradient(135deg,#16a34a,#0d9488);
+    color: #fff; text-decoration: none; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+    transition: all var(--ease);
+  }
+  .push-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(22,163,74,.3); }
+
+  /* ── Loader ── */
+  #idloader { display: none; position: fixed; z-index: 9999; inset: 0; background: rgba(255,255,255,.82); backdrop-filter: blur(3px); }
+  #idloader::after {
+    content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 46px; height: 46px; border: 4px solid #e0e0e0; border-top-color: var(--green);
+    border-radius: 50%; animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 600px) {
+    .news-card { padding: 20px 16px; }
+    #wrap { padding: 20px 10px 40px; }
+  }
+</style>
 </head>
 <body>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  	<div style="    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: grey;
-    z-index: 99;
-    right: 0px;margin-bottom:50px;">
 
-
-         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
-<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
-</div>
-<div style="padding-bottom:30px">
-<a href="/" style="text-decoration:none" class="close" >&times;</a>
-</div>
-
-
-          <div class="header-text httal htvam">
-            <h3 id="header_11" class="form-header" data-component="header">
-              <center>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ 
-            </h3>
-</div>
-
-  	  
-  
-	  <form class="jotform-form" action="/news" style="padding: 5px 0;"  method="post" name="form_202194261189456" id="202194261189456" accept-charset="utf-8" autocomplete="on">
-        <center>
-        <h3>ಮುಖ್ಯಾಂಶಗಳು </h3>
-        <div id="cid_5" class="form-input">
-              <textarea type="text"  name="headline"   style="width:400px;" value=" {{ data }}"  id="bar" onKeyUp="transcrire(this)" rows="6" >{{ data }}</textarea>
-        </div>
-            <script>
-          function onLoadheadline() {
-            var optionsheadline = {
-                sourceLanguage:
-                    google.elements.transliteration.LanguageCode.ENGLISH,
-                destinationLanguage:
-                    [google.elements.transliteration.LanguageCode.KANNADA],
-                shortcutKey: 'ctrl+g',
-                transliterationEnabled: true
-            };
-
-            // Create an instance on TransliterationControl with the required
-            // options.
-            var controlheadline =
-                new google.elements.transliteration.TransliterationControl(optionsheadline);
-
-            // Enable transliteration in the textbox with id
-            // 'transliterateTextarea'.
-              a="headline"
-              controlheadline.makeTransliteratable([a]);        
-
-          }
-          google.setOnLoadCallback(onLoadheadline);
-              
-          function onLoadheadline1() {
-                var optionsheadline1 = {
-                    sourceLanguage:
-                        google.elements.transliteration.LanguageCode.ENGLISH,
-                    destinationLanguage:
-                        [google.elements.transliteration.LanguageCode.KANNADA],
-                    shortcutKey: 'ctrl+g',
-                    transliterationEnabled: true
-                };
-
-                // Create an instance on TransliterationControl with the required
-                // options.
-                var controlheadline1 =
-                    new google.elements.transliteration.TransliterationControl(optionsheadline1);
-
-                // Enable transliteration in the textbox with id
-                // 'transliterateTextarea'.
-                  a="text1"
-                  controlheadline1.makeTransliteratable([a]);        
-
-              }
-              google.setOnLoadCallback(onLoadheadline1);
-
-              function onLoadheadline2() {
-                var optionsheadline2 = {
-                    sourceLanguage:
-                        google.elements.transliteration.LanguageCode.ENGLISH,
-                    destinationLanguage:
-                        [google.elements.transliteration.LanguageCode.KANNADA],
-                    shortcutKey: 'ctrl+g',
-                    transliterationEnabled: true
-                };
-
-                // Create an instance on TransliterationControl with the required
-                // options.
-                var controlheadline2 =
-                    new google.elements.transliteration.TransliterationControl(optionsheadline2);
-
-                // Enable transliteration in the textbox with id
-                // 'transliterateTextarea'.
-                  a="text2"
-                  controlheadline2.makeTransliteratable([a]);        
-
-              }
-              google.setOnLoadCallback(onLoadheadline2);
-              
-              function onLoadheadline3() {
-                var optionsheadline3 = {
-                    sourceLanguage:
-                        google.elements.transliteration.LanguageCode.ENGLISH,
-                    destinationLanguage:
-                        [google.elements.transliteration.LanguageCode.KANNADA],
-                    shortcutKey: 'ctrl+g',
-                    transliterationEnabled: true
-                };
-
-                // Create an instance on TransliterationControl with the required
-                // options.
-                var controlheadline3 =
-                    new google.elements.transliteration.TransliterationControl(optionsheadline3);
-
-                // Enable transliteration in the textbox with id
-                // 'transliterateTextarea'.
-                  a="text3"
-                  controlheadline3.makeTransliteratable([a]);        
-
-              }
-              google.setOnLoadCallback(onLoadheadline3);
-            </script>
-          <h3>text1 </h3>
-          <div id="cid_5" class="form-input">
-                <input type="text"  name="text1"   style="width:400px;" value=" {{ text1 }}"  id="bar"  />
-          </div>
-
-          <h3>text2 </h3>
-          <div id="cid_5" class="form-input">
-                <input type="text"  name="text2"   style="width:400px;" value=" {{ text2 }}"  id="bar"  rows="2" />
-          </div>
-
-          <h3>text3 </h3>
-          <div id="cid_5" class="form-input">
-                <input type="text"  name="text3"   style="width:400px;" value=" {{ text3 }}"  id="bar"  rows="2" />
-          </div>
-
-      </center>
-                      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-
-
-          <div style="text-align:center" data-align="center" class="form-buttons-wrapper form-buttons-center   jsTest-button-wrapperField">
-            <input type="submit" id="submit" name="submit" value="Update"/>
-              
-
-
-
-          </div>
-	
-
-</form>
-{% if data %}
-<div style="background-color:white">
-<center>
-<h4 style="color:red">{{ data }}</h4>
-  <div style="padding-bottom:5px;">
-			<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="/push_v1/"> Push Notification</a>
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside id="sidebar" aria-label="Admin navigation">
+  <div class="sb-header">
+    <div class="sb-logo">
+      <div class="sb-icon">💧</div>
+      <div>
+        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
+        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
+      </div>
     </div>
-</center>
-</div>
-{% endif %}
+    <button class="sb-close" id="sb-close-btn">✕</button>
+  </div>
 
-	<script src="{{ url_for('static',filename='main.js') }}"></script>
-	<script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+  <div class="sb-user">
+    <div class="sb-avatar"><i class="fa fa-user-shield"></i></div>
+    <div>
+      <div class="sb-uname">Ravikumar A</div>
+      <div class="sb-urole" data-en="Administrator" data-kn="ನಿರ್ವಾಹಕರು">ನಿರ್ವಾಹಕರು</div>
+    </div>
+  </div>
+
+  <nav class="sb-nav">
+    <span class="sb-label">Navigation</span>
+    <a href="/" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-home ic"></i>
+      <span data-en="Home" data-kn="ಮುಖಪುಟ">ಮುಖಪುಟ</span>
+    </a>
+    <a href="/list" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-list ic"></i>
+      <span data-en="List" data-kn="ಪಟ್ಟಿ">ಪಟ್ಟಿ</span>
+    </a>
+    <a href="/allmap" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-map ic"></i>
+      <span data-en="Map" data-kn="ನಕ್ಷೆ">ನಕ್ಷೆ</span>
+    </a>
+    <a href="/map" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-map-marker ic"></i>
+      <span data-en="Map-Edit" data-kn="ನಕ್ಷೆ ಸಂಪಾದಿಸಿ">ನಕ್ಷೆ ಸಂಪಾದಿಸಿ</span>
+    </a>
+    <a href="/document" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-file ic"></i>
+      <span data-en="Documents" data-kn="ದಾಖಲೆಗಳು">ದಾಖಲೆಗಳು</span>
+    </a>
+    <a href="/socinfo" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-circle-info ic"></i>
+      <span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">ಸಂಘದ ಮಾಹಿತಿ</span>
+    </a>
+
+    <span class="sb-label" style="margin-top:6px" data-en="Admin Panel" data-kn="ನಿರ್ವಹಣೆ">ನಿರ್ವಹಣೆ</span>
+    <a href="/dataseepay" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-droplet ic"></i>
+      <span data-en="Water Tax Payment" data-kn="ನೀರು ಕರ ಪಾವತಿ">ನೀರು ಕರ ಪಾವತಿ</span>
+    </a>
+    <a href="/datapay" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-print ic"></i>
+      <span data-en="Print Tax Records" data-kn="ಕರ ಪಾವತಿ ಮುದ್ರಿಸಿ">ಕರ ಪಾವತಿ ಮುದ್ರಿಸಿ</span>
+    </a>
+    <a href="/dataedit" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-pen ic"></i>
+      <span data-en="Add / Update Account" data-kn="ಖಾತೆ ಸೇರಿಸಿ/ನವೀಕರಿಸಿ">ಖಾತೆ ಸೇರಿಸಿ/ನವೀಕರಿಸಿ</span>
+    </a>
+    <a href="/dataindex" class="sb-link" onclick="showLoader()">
+      <i class="fa fa-database ic"></i>
+      <span data-en="Print Full Database" data-kn="ಡೇಟಾಬೇಸ್ ಮುದ್ರಣ">ಡೇಟಾಬೇಸ್ ಮುದ್ರಣ</span>
+    </a>
+    <a href="/news" class="sb-link active">
+      <i class="fa fa-newspaper ic"></i>
+      <span data-en="Manage News" data-kn="ಸುದ್ದಿ ನಿರ್ವಹಣೆ">ಸುದ್ದಿ ನಿರ್ವಹಣೆ</span>
+    </a>
+  </nav>
+
+  <div class="sb-footer">
+    <a href="/logout" class="sb-logout" onclick="showLoader()">
+      <i class="fa fa-right-from-bracket"></i>
+      <span data-en="Logout" data-kn="ಲಾಗ್‌ಔಟ್">ಲಾಗ್‌ಔಟ್</span>
+    </a>
+  </div>
+</aside>
+
+<div id="overlay" onclick="closeSB()"></div>
+
+<!-- ═══════ TOPBAR ═══════ -->
+<header id="topbar">
+  <div class="tb-left">
+    <button id="ham-btn" onclick="toggleSB()"><i class="fa fa-bars"></i></button>
+    <span id="tb-title">WUCSKKM</span>
+  </div>
+  <div class="tb-right">
+    <span class="admin-pill">⚡ <span data-en="Admin" data-kn="ನಿರ್ವಾಹಕ">ನಿರ್ವಾಹಕ</span></span>
+
+    <div class="lang-wrap">
+      <button class="lang-btn" id="len" onclick="setLang('en')">EN</button>
+      <button class="lang-btn on" id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
+    </div>
+
+    <a href="/logout" class="tb-logout" onclick="showLoader()">
+      <i class="fa fa-right-from-bracket" style="margin-right:4px"></i>
+      <span data-en="Logout" data-kn="ಲಾಗ್‌ಔಟ್">ಲಾಗ್‌ಔಟ್</span>
+    </a>
+  </div>
+</header>
+
+<div id="idloader"></div>
+
+<!-- ═══════ MAIN ═══════ -->
+<main id="wrap">
+  <div class="news-card">
+
+    <div class="card-header">
+      <div class="card-icon">📰</div>
+      <div>
+        <div class="card-title" data-en="Manage News" data-kn="ಸುದ್ದಿ ನಿರ್ವಹಣೆ">ಸುದ್ದಿ ನಿರ್ವಹಣೆ</div>
+        <div class="card-sub" data-en="Water Users Co-operative Society Ltd." data-kn="ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ</div>
+      </div>
+    </div>
+
+    <form action="/news" method="post" name="form_202194261189456" id="202194261189456" accept-charset="utf-8" autocomplete="on">
+
+      <!-- Headline -->
+      <div class="field-group">
+        <label class="field-label" for="headline">
+          <span data-en="Headlines / Marquee Text" data-kn="ಮುಖ್ಯಾಂಶಗಳು">ಮುಖ್ಯಾಂಶಗಳು</span>
+        </label>
+        <textarea class="field-input" name="headline" id="headline" rows="5" onKeyUp="transcrire(this)">{{ data }}</textarea>
+        <div class="field-hint" data-en="Scrolls as a marquee on the home page. Type English → Ctrl+G for Kannada." data-kn="ಮುಖಪುಟದಲ್ಲಿ ಮಾರ್ಕ್ಯೂ ಆಗಿ ತೋರಿಸಲ್ಪಡುತ್ತದೆ. ಇಂಗ್ಲಿಷ್ ಟೈಪ್ ಮಾಡಿ → Ctrl+G ಕನ್ನಡಕ್ಕೆ.">ಮುಖಪುಟದಲ್ಲಿ ಮಾರ್ಕ್ಯೂ ಆಗಿ ತೋರಿಸಲ್ಪಡುತ್ತದೆ. ಇಂಗ್ಲಿಷ್ ಟೈಪ್ ಮಾಡಿ → Ctrl+G ಕನ್ನಡಕ್ಕೆ.</div>
+      </div>
+
+      <hr class="field-divider">
+      <div class="section-label" data-en="Quick Link Labels" data-kn="ತ್ವರಿತ ಲಿಂಕ್ ಶೀರ್ಷಿಕೆಗಳು">ತ್ವರಿತ ಲಿಂಕ್ ಶೀರ್ಷಿಕೆಗಳು</div>
+
+      <!-- Text 1 -->
+      <div class="field-group">
+        <label class="field-label" for="text1">
+          <span data-en="Button Label 1 (Crops page)" data-kn="ಬಟನ್ ಶೀರ್ಷಿಕೆ 1 (ಬೆಳೆಗಳ ಪುಟ)">ಬಟನ್ ಶೀರ್ಷಿಕೆ 1 (ಬೆಳೆಗಳ ಪುಟ)</span>
+        </label>
+        <input class="field-input" type="text" name="text1" id="text1" value=" {{ text1 }}" />
+      </div>
+
+      <!-- Text 2 -->
+      <div class="field-group">
+        <label class="field-label" for="text2">
+          <span data-en="Button Label 2 (Board page)" data-kn="ಬಟನ್ ಶೀರ್ಷಿಕೆ 2 (ಬೋರ್ಡ್ ಪುಟ)">ಬಟನ್ ಶೀರ್ಷಿಕೆ 2 (ಬೋರ್ಡ್ ಪುಟ)</span>
+        </label>
+        <input class="field-input" type="text" name="text2" id="text2" value=" {{ text2 }}" />
+      </div>
+
+      <!-- Text 3 -->
+      <div class="field-group">
+        <label class="field-label" for="text3">
+          <span data-en="Button Label 3 (News page)" data-kn="ಬಟನ್ ಶೀರ್ಷಿಕೆ 3 (ಸುದ್ದಿ ಪುಟ)">ಬಟನ್ ಶೀರ್ಷಿಕೆ 3 (ಸುದ್ದಿ ಪುಟ)</span>
+        </label>
+        <input class="field-input" type="text" name="text3" id="text3" value=" {{ text3 }}" />
+      </div>
+
+      <button type="submit" class="submit-btn">
+        <i class="fa fa-floppy-disk"></i>
+        <span data-en="Save Changes" data-kn="ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ">ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ</span>
+      </button>
+
+    </form>
+
+    <!-- Google Transliterate -->
+    <script>
+      function onLoadheadline() {
+        var opts = { sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH, destinationLanguage: [google.elements.transliteration.LanguageCode.KANNADA], shortcutKey: 'ctrl+g', transliterationEnabled: true };
+        new google.elements.transliteration.TransliterationControl(opts).makeTransliteratable(['headline']);
+      }
+      google.setOnLoadCallback(onLoadheadline);
+
+      function onLoadtext1() {
+        var opts = { sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH, destinationLanguage: [google.elements.transliteration.LanguageCode.KANNADA], shortcutKey: 'ctrl+g', transliterationEnabled: true };
+        new google.elements.transliteration.TransliterationControl(opts).makeTransliteratable(['text1']);
+      }
+      google.setOnLoadCallback(onLoadtext1);
+
+      function onLoadtext2() {
+        var opts = { sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH, destinationLanguage: [google.elements.transliteration.LanguageCode.KANNADA], shortcutKey: 'ctrl+g', transliterationEnabled: true };
+        new google.elements.transliteration.TransliterationControl(opts).makeTransliteratable(['text2']);
+      }
+      google.setOnLoadCallback(onLoadtext2);
+
+      function onLoadtext3() {
+        var opts = { sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH, destinationLanguage: [google.elements.transliteration.LanguageCode.KANNADA], shortcutKey: 'ctrl+g', transliterationEnabled: true };
+        new google.elements.transliteration.TransliterationControl(opts).makeTransliteratable(['text3']);
+      }
+      google.setOnLoadCallback(onLoadtext3);
+    </script>
+
+    {% if data %}
+    <div class="result-card">
+      <div class="result-headline">{{ data }}</div>
+      <a class="push-btn" href="/push_v1/">
+        <i class="fa fa-bell"></i>
+        <span data-en="Send Push Notification" data-kn="ಪುಶ್ ಅಧಿಸೂಚನೆ ಕಳುಹಿಸಿ">ಪುಶ್ ಅಧಿಸೂಚನೆ ಕಳುಹಿಸಿ</span>
+      </a>
+    </div>
+    {% endif %}
+
+  </div>
+</main>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="{{ url_for('static',filename='main.js') }}"></script>
+<script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+<script>
+/* ── Sidebar ── */
+function toggleSB() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('on');
+}
+function closeSB() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('on');
+}
+document.getElementById('sb-close-btn').addEventListener('click', closeSB);
+
+/* ── Loader ── */
+function showLoader() {
+  document.getElementById('idloader').style.display = 'block';
+}
+function hideLoader() {
+  var el = document.getElementById('idloader');
+  if (el) el.style.display = 'none';
+}
+if (document.readyState === 'complete') { hideLoader(); }
+else { window.addEventListener('load', hideLoader); }
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) {
+    hideLoader();
+    var sb = document.getElementById('sidebar');
+    var ov = document.getElementById('overlay');
+    if (sb) sb.classList.remove('open');
+    if (ov) ov.classList.remove('on');
+  }
+});
+
+/* ── Language toggle ── */
+var LANG = 'kn';
+function setLang(lang) {
+  LANG = lang;
+  document.getElementById('len').classList.toggle('on', lang === 'en');
+  document.getElementById('lkn').classList.toggle('on', lang === 'kn');
+  document.querySelectorAll('[data-en][data-kn]').forEach(function(el) {
+    el.textContent = (lang === 'kn') ? el.getAttribute('data-kn') : el.getAttribute('data-en');
+  });
+  document.documentElement.lang = (lang === 'kn') ? 'kn' : 'en';
+}
+
+/* ── Init: start in Kannada ── */
+window.addEventListener('DOMContentLoaded', function() {
+  setLang('kn');
+});
+</script>
+
 </body>
 </html>
