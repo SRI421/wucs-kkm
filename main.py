@@ -735,34 +735,45 @@ def ownersadd():
         cursor = conn.cursor()
         sql = "INSERT INTO farmers_map_data (mapid, name, pass, sno, area) VALUES (?, ?, ?, ?, ?)"
         cursor.execute(sql, (mid, " ", 0, 0, 0.0))
+        cursor.execute("SELECT * FROM farmers_map_data WHERE mapid=?", (mid,))
+        out1 = [dict_from_row(row) for row in cursor.fetchall()]
 
-    return redirect(url_for('map'))
+    template = 'loginmap.html' if session.get('logged_in') else 'sinfomap.html'
+    return render_template(template, data=out1, data1=mid)
 
 
 @app.route('/ownersdel')
 def ownersdel():
     text = request.args.get('jsdata', '')
     a = text.split(",")
+    mid = getnext(int(a[1]))
 
     with get_db() as conn:
         cursor = conn.cursor()
         sql = "DELETE FROM farmers_map_data WHERE id=?"
         cursor.execute(sql, (a[0],))
+        cursor.execute("SELECT * FROM farmers_map_data WHERE mapid=?", (mid,))
+        out1 = [dict_from_row(row) for row in cursor.fetchall()]
 
-    return redirect(url_for('map'))
+    template = 'loginmap.html' if session.get('logged_in') else 'sinfomap.html'
+    return render_template(template, data=out1, data1=mid)
 
 
 @app.route('/ownersupdate')
 def ownersupdate():
     text = request.args.get('jsdata', '')
     a = text.split(",")
+    mid = getnext(int(a[1]))
 
     with get_db() as conn:
         cursor = conn.cursor()
         sql = "UPDATE farmers_map_data SET name=?, pass=?, sno=?, area=? WHERE id=?"
         cursor.execute(sql, (a[3], int(a[2]), a[4], float(a[5]), a[0]))
+        cursor.execute("SELECT * FROM farmers_map_data WHERE mapid=?", (mid,))
+        out1 = [dict_from_row(row) for row in cursor.fetchall()]
 
-    return redirect(url_for('map'))
+    template = 'loginmap.html' if session.get('logged_in') else 'sinfomap.html'
+    return render_template(template, data=out1, data1=mid)
 
 
 @app.route('/imginsert', methods=['GET', 'POST'])

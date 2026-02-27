@@ -1,48 +1,88 @@
-<div style="overflow-x:auto">
-<table style="width:100%">
-  <caption>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ
-ಕಾಗೆಕೊಡಮಗ್ಗೆ ,ಭದ್ರಾವತಿ</caption>
-  <tr>
+<style>
+  * { box-sizing: border-box; }
 
-    <th>ಖಾತೆದಾರರ ಹೆಸರು</th>
-    <th>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
-    <th>ಸರ್ವೆ ನಂ.</th>
-    <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+  .info-container {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    padding: 0;
+  }
 
-    
-  </tr>
+  .table-wrapper {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  }
 
-  {% for i in data %}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #0d1e30;
+    font-size: 13px;
+  }
+  caption {
+    font-size: 14px;
+    font-weight: 700;
+    color: #7ec8e3;
+    padding: 14px 12px 10px;
+    text-align: center;
+    line-height: 1.6;
+    background: #0a1825;
+    border-bottom: 1px solid #1a3a5a;
+  }
+  thead th {
+    background: #0d2840;
+    color: #7ec8e3;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 2px solid #2a5070;
+    white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid rgba(126,200,227,.09); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(126,200,227,.07); transition: background .15s; }
+  td {
+    padding: 11px 14px;
+    color: #c8dde8;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 13px;
+  }
 
-  <tr>
-    <td><input type="button" style="width:100%" name="submit" value="{{ i['name'] }}" ></td>
-<td>{{ i['pass'] }}</td>
-<td>{{ i['sno'] }}</td>
-<td>{{ i['area'] }}</td>
-  </tr>
-  
-   
-  {% endfor %}
+  .empty-state {
+    padding: 32px;
+    text-align: center;
+    color: #4a7090;
+    font-size: 14px;
+  }
+</style>
 
-
-</table>
-    <form id="myform" action="/frommap" method="post">
-    <input type="text" hidden value="" name="pass" id="pass" />
-  </form>
-<script> 
-function myfun(a){
-    console.log(a)
-    document.getElementById("pass").value=a;
-  document.getElementById("myform").submit();
-}
-</script>   
+<div class="info-container">
+  <div class="table-wrapper">
+    <table>
+      <caption>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ<br>ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</caption>
+      <thead>
+        <tr>
+          <th>ಖಾತೆದಾರರ ಹೆಸರು</th>
+          <th>ಪಾಸ್ ಪುಸ್ತಕ ಸಂಖ್ಯೆ</th>
+          <th>ಸರ್ವೆ ನಂ.</th>
+          <th>ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if data %}
+          {% for i in data %}
+          <tr>
+            <td>{{ i['name'] }}</td>
+            <td>{{ i['pass'] }}</td>
+            <td>{{ i['sno'] }}</td>
+            <td>{{ i['area'] }}</td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr><td colspan="4" class="empty-state">ಯಾವುದೇ ಮಾಹಿತಿ ಇಲ್ಲ</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
 </div>
-<div class="modal"><!-- Place at bottom of page --></div>
-<script>
-$body = $("body");
-
-$(document).on({
-    ajaxStart: function() { $body.addClass("loading");    },
-     ajaxStop: function() { $body.removeClass("loading"); }    
-});
-</script>

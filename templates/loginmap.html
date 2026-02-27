@@ -40,8 +40,9 @@
     border-bottom: 2px solid #2a5070;
     white-space: nowrap;
   }
-  tbody tr { border-bottom: 1px solid #1a3050; }
-  tbody tr:hover { background: rgba(126,200,227,.06); }
+  tbody tr { border-bottom: 1px solid rgba(126,200,227,.09); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(126,200,227,.07); transition: background .12s; }
   td {
     padding: 7px 8px;
     vertical-align: middle;
@@ -168,7 +169,7 @@
             var text = "{{ i['id'] }}" + "," + "{{ i['mapid'] }}";
             $.ajax({
               url: "/ownersdel", type: "get", data: {jsdata: text},
-              success: function(r){ $("#newone").html(r); },
+              success: function(r){ $("#newone").replaceWith(r); },
               error: function(){}
             });
           });
@@ -180,7 +181,7 @@
             var text = "{{ i['id'] }}" + "," + "{{ i['mapid'] }}" + "," + v + "," + x + "," + y + "," + z;
             $.ajax({
               url: "/ownersupdate", type: "get", data: {jsdata: text},
-              success: function(r){ $("#newone").html(r); },
+              success: function(r){ $("#newone").replaceWith(r); },
               error: function(){}
             });
           });
@@ -204,7 +205,7 @@
     var text = a + "," + "{{ data[0]['mapid'] }}";
     $.ajax({
       url: "/ownersadd", type: "get", data: {jsdata: text},
-      success: function(r){ $("#newone").html(r); },
+      success: function(r){ $("#newone").replaceWith(r); },
       error: function(){}
     });
   });
