@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <title>Home</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link href="http://fonts.googleapis.com/css?family=Lato:300|Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
+      <link href="https://fonts.googleapis.com/css?family=Lato:300|Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
       <link rel="stylesheet" href= "{{ url_for('static',filename='styles/all.css') }}">
       <link rel="stylesheet" href= "{{ url_for('static',filename='styles/gallery.css') }}">
       <link rel="stylesheet" href= "{{ url_for('static',filename='styles/menu.css') }}">
@@ -517,7 +517,7 @@ body { padding-top: var(--th); }
          font-size: 50px;
          font-family: "Noto Sans Kannada", sans-serif;
          }
-         @import url(http://fonts.googleapis.com/earlyaccess/notosanskannada.css);
+         @import url(https://fonts.googleapis.com/earlyaccess/notosanskannada.css);
          /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
          @media screen and (max-width: 500px) {
          .modal1 {
@@ -693,82 +693,15 @@ body { padding-top: var(--th); }
    </head>
    <body style="background-color:lightgray;">
    <!-- ═══════ SIDEBAR ═══════ -->
-<aside id="sidebar">
-  <div class="sb-header">
-    <div class="sb-logo">
-      <div class="sb-icon">💧</div>
-      <div>
-        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
-        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
-      </div>
-    </div>
-    <button class="sb-close" id="sb-close-btn">✕</button>
-  </div>
-  <nav class="sb-nav">
-    <span class="sb-label">Navigation / ನ್ಯಾವಿಗೇಷನ್</span>
-    <a href="/"         class="sb-link" onclick="showLoader()"><i class="fa fa-home ic"></i><span data-en="Home"        data-kn="ಮುಖಪುಟ">Home</span></a>
-    <a href="/feeds"    class="sb-link"><i class="fa fa-comment ic"></i><span data-en="Feedback"    data-kn="ಪ್ರತಿಕ್ರಿಯೆ">Feedback</span></a>
-    <a href="/list"     class="sb-link" onclick="showLoader()"><i class="fa fa-list ic"></i><span data-en="List"        data-kn="ಪಟ್ಟಿ">List</span></a>
-    <a href="/allmap"   class="sb-link" onclick="showLoader()"><i class="fa fa-map ic"></i><span data-en="Map"         data-kn="ನಕ್ಷೆ">Map</span></a>
-    <a href="/map"      class="sb-link" onclick="showLoader()"><i class="fa fa-map-marker ic"></i><span data-en="Click-Map"  data-kn="ಕ್ಲಿಕ್-ನಕ್ಷೆ">Click-Map</span></a>
-    <a href="/document" class="sb-link" onclick="showLoader()"><i class="fa fa-file ic"></i><span data-en="Documents"   data-kn="ದಾಖಲೆಗಳು">Documents</span></a>
-    <a href="/socinfo"  class="sb-link" onclick="showLoader()"><i class="fa fa-info-circle ic"></i><span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">Society Info</span></a>
-    <span class="sb-label" style="margin-top:6px">Explore / ಅನ್ವೇಷಿಸಿ</span>
-    <!-- Replace ACTIVE_PAGE below with the correct active link per page -->
-    <!-- e.g. for /list: add class="sb-link active" to the list link -->
-  </nav>
-  <div class="sb-footer">
-    <button class="sb-link" onclick="showMo('login-mo')"
-      style="background:rgba(22,163,74,.15);border-radius:8px;color:#4ade80;">
-      <i class="fa fa-lock ic"></i>
-      <span data-en="Login" data-kn="ಲಾಗಿನ್">Login</span>
-    </button>
-  </div>
-</aside>
-
-<div id="overlay" onclick="closeSB()"></div>
-
-<!-- ═══════ TOPBAR ═══════ -->
-<header id="topbar">
-  <div class="tb-left">
-    <button id="ham-btn" onclick="toggleSB()"><i class="fa fa-bars"></i></button>
-    <span id="tb-title">WUCSKKM</span>  <!-- replace with page title -->
-  </div>
-  <div class="tb-right">
-    <div class="lang-wrap">
-      <button class="lang-btn on" id="len" onclick="setLang('en')">EN</button>
-      <button class="lang-btn"    id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
-    </div>
-    <a href="/" id="home-btn">
-      <i class="fa fa-home"></i>
-      <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
-    </a>
-  </div>
-</header>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-      <div style="    position: fixed;
-         top: 0;
-         width: 100%;
-         background-color: grey;
-         z-index: 99;
-         right: 0px;margin-bottom:50px;">
-         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
-         <a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
-      </div>
-      <div style="    position: fixed;
-         top: 0;
-         width: 100%;
-         background-color: grey;
-         z-index: 99;
-         right: 0px;">
-         {% if sup %}
-         <div class="topnav" id="myTopnav" style="display: inline-block;float:left; padding-left:0;padding-right:0;width:120px;">
-            <a onclick="document.getElementById('id01').style.display='block'">Add</a>
-         </div>
-         {% endif %}
-         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
-         <a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
-      </div>
+{% include '_site_nav.html' %}
+{% if sup %}
+<div class="page-action-bar noprint">
+  <button type="button" onclick="document.getElementById('id01').style.display='block'">
+    <i class="fa fa-plus"></i> Add Crop
+  </button>
+</div>
+{% endif %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <div id="id01" class="modal" style="z-index:999;">
          <div class="imgcontainer">
             <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>

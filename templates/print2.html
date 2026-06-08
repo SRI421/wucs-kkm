@@ -137,66 +137,8 @@ table {page-break-inside:avoid;}
 </head>
 <body >
 <!-- ═══════ SIDEBAR ═══════ -->
-<aside id="sidebar">
-  <div class="sb-header">
-    <div class="sb-logo">
-      <div class="sb-icon">💧</div>
-      <div>
-        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
-        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
-      </div>
-    </div>
-    <button class="sb-close" id="sb-close-btn">✕</button>
-  </div>
-  <div class="sb-user">
-    <div class="sb-avatar"><i class="fa fa-user-shield"></i></div>
-    <div>
-      <div class="sb-uname">Ravikumar A</div>
-      <div class="sb-urole" data-en="Administrator" data-kn="ನಿರ್ವಾಹಕರು">ನಿರ್ವಾಹಕರು</div>
-    </div>
-  </div>
-  <nav class="sb-nav">
-    <span class="sb-label">Navigation / ನ್ಯಾವಿಗೇಷನ್</span>
-    <a href="/"         class="sb-link" onclick="showLoader()"><i class="fa fa-home ic"></i><span data-en="Home"        data-kn="ಮುಖಪುಟ">Home</span></a>
-    <a href="/feeds"    class="sb-link"><i class="fa fa-comment ic"></i><span data-en="Feedback"    data-kn="ಪ್ರತಿಕ್ರಿಯೆ">Feedback</span></a>
-    <a href="/list"     class="sb-link" onclick="showLoader()"><i class="fa fa-list ic"></i><span data-en="List"        data-kn="ಪಟ್ಟಿ">List</span></a>
-    <a href="/allmap"   class="sb-link" onclick="showLoader()"><i class="fa fa-map ic"></i><span data-en="Map"         data-kn="ನಕ್ಷೆ">Map</span></a>
-    <a href="/map"      class="sb-link" onclick="showLoader()"><i class="fa fa-map-marker ic"></i><span data-en="Click-Map"  data-kn="ಕ್ಲಿಕ್-ನಕ್ಷೆ">Click-Map</span></a>
-    <a href="/document" class="sb-link" onclick="showLoader()"><i class="fa fa-file ic"></i><span data-en="Documents"   data-kn="ದಾಖಲೆಗಳು">Documents</span></a>
-    <a href="/socinfo"  class="sb-link" onclick="showLoader()"><i class="fa fa-info-circle ic"></i><span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">Society Info</span></a>
-    <span class="sb-label" style="margin-top:6px">Explore / ಅನ್ವೇಷಿಸಿ</span>
-    <!-- Replace ACTIVE_PAGE below with the correct active link per page -->
-    <!-- e.g. for /list: add class="sb-link active" to the list link -->
-  </nav>
-  <div class="sb-footer">
-    <button class="sb-link" onclick="showMo('login-mo')"
-      style="background:rgba(22,163,74,.15);border-radius:8px;color:#4ade80;">
-      <i class="fa fa-lock ic"></i>
-      <span data-en="Login" data-kn="ಲಾಗಿನ್">Login</span>
-    </button>
-  </div>
-</aside>
-
-<div id="overlay" onclick="closeSB()"></div>
-
-<!-- ═══════ TOPBAR ═══════ -->
-<header id="topbar">
-  <div class="tb-left">
-    <button id="ham-btn" onclick="toggleSB()"><i class="fa fa-bars"></i></button>
-    <span id="tb-title">WUCSKKM</span>  <!-- replace with page title -->
-  </div>
-  <div class="tb-right">
-    <div class="lang-wrap">
-      <button class="lang-btn"    id="len" onclick="setLang('en')">EN</button>
-      <button class="lang-btn on" id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
-    </div>
-    <a href="/" id="home-btn">
-      <i class="fa fa-home"></i>
-      <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
-    </a>
-  </div>
-</header>
-  <h1></h1>
+{% include '_site_nav.html' %}
+<h1></h1>
   <form action="/datapayup" method="post" style="padding-top:16px;">
                 <select name="year1" id="year1" onchange="this.form.submit()" style="width:100px;height:28px;margin-bottom:12px;">
             {% for y in dby %}

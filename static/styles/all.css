@@ -1,0 +1,27 @@
+@import url("site-nav.css");
+
+html {
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+img,
+iframe,
+canvas,
+video {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.noprint {
+  print-color-adjust: exact;
+}

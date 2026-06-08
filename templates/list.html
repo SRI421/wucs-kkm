@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WUCSKKM – Member List</title>
 
+  <script type="text/javascript" src="static/google_jsapi.js"></script>
+  <script type="text/javascript">
+    google.load("elements", "1", { packages: "transliteration" });
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -179,6 +183,26 @@
     font-size: 14px; font-weight: 600; color: #fff;
     font-family: 'Noto Sans Kannada',sans-serif;
   }
+  .list-search-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 380px; }
+  .search-wrap i {
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 13px;
+  }
+  .search-input {
+    width: 100%; height: 34px; padding: 0 10px 0 32px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    background: #fff; color: var(--text);
+    font-family: 'Noto Sans Kannada','Poppins',sans-serif;
+    font-size: 13px; font-weight: 500; outline: none;
+  }
+  .search-input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(13,110,90,.1);
+  }
   .list-count {
     margin-left: auto; background: rgba(255,255,255,.2);
     color: #fff; font-size: 11.5px; font-weight: 700;
@@ -252,55 +276,8 @@
 <body>
 
 <!-- ═══════ SIDEBAR ═══════ -->
-<aside id="sidebar" aria-label="Main navigation">
-  <div class="sb-header">
-    <div class="sb-logo">
-      <div class="sb-icon">💧</div>
-      <div>
-        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
-        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
-      </div>
-    </div>
-    <button class="sb-close" id="sb-close-btn" aria-label="Close">✕</button>
-  </div>
-  <nav class="sb-nav">
-    <span class="sb-label">Navigation / ನ್ಯಾವಿಗೇಷನ್</span>
-    <a href="/"         class="sb-link"><i class="fa fa-home ic"></i><span data-en="Home"        data-kn="ಮುಖಪುಟ">Home</span></a>
-    <a href="/feeds"    class="sb-link"><i class="fa fa-comment ic"></i><span data-en="Feedback"    data-kn="ಪ್ರತಿಕ್ರಿಯೆ">Feedback</span></a>
-    <a href="/list"     class="sb-link active"><i class="fa fa-list ic"></i><span data-en="List"        data-kn="ಪಟ್ಟಿ">List</span></a>
-    <a href="/allmap"   class="sb-link"><i class="fa fa-map ic"></i><span data-en="Map"         data-kn="ನಕ್ಷೆ">Map</span></a>
-    <a href="/map"      class="sb-link"><i class="fa fa-map-marker ic"></i><span data-en="Click-Map"  data-kn="ಕ್ಲಿಕ್-ನಕ್ಷೆ">Click-Map</span></a>
-    <a href="/document" class="sb-link"><i class="fa fa-file ic"></i><span data-en="Documents"   data-kn="ದಾಖಲೆಗಳು">Documents</span></a>
-  </nav>
-  <div class="sb-footer">
-    <a href="/" class="sb-link" style="background:rgba(22,163,74,.15);border-radius:8px;color:#4ade80;">
-      <i class="fa fa-arrow-left ic"></i>
-      <span data-en="Back to Home" data-kn="ಮುಖಪುಟಕ್ಕೆ">Back to Home</span>
-    </a>
-  </div>
-</aside>
+{% include '_site_nav.html' %}
 
-<div id="overlay" onclick="closeSB()"></div>
-
-<!-- ═══════ TOPBAR ═══════ -->
-<header id="topbar" class="noprint">
-  <div class="tb-left">
-    <button id="ham-btn" onclick="toggleSB()" aria-label="Menu"><i class="fa fa-bars"></i></button>
-    <span id="tb-title" data-en="Member List" data-kn="ಸದಸ್ಯರ ಪಟ್ಟಿ">ಸದಸ್ಯರ ಪಟ್ಟಿ</span>
-  </div>
-  <div class="tb-right">
-    <div class="lang-wrap">
-      <button class="lang-btn on" id="len" onclick="setLang('en')">EN</button>
-      <button class="lang-btn"    id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
-    </div>
-    <a href="/" id="home-btn">
-      <i class="fa fa-home"></i>
-      <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
-    </a>
-  </div>
-</header>
-
-<!-- ═══════ MAIN ═══════ -->
 <div id="wrap">
   <div class="page-inner">
 
@@ -318,6 +295,19 @@
         ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ — ಸದಸ್ಯರ ಪಟ್ಟಿ
       </h2>
       <p data-en="Kagekodamagge, Bhadravathi" data-kn="ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ">ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</p>
+    </div>
+
+    <div class="list-search-row noprint">
+      <div class="search-wrap">
+        <i class="fa fa-search"></i>
+        <input list="list-browsers" id="list-searchname" class="search-input"
+          onkeyup="search_member_list()" placeholder="ರೈತರ ಹೆಸರು ಹುಡುಕಿ..."/>
+        <datalist id="list-browsers">
+          {% for j in data %}
+          <option value="{{ j['name'] }}">{{ j['name'] }}</option>
+          {% endfor %}
+        </datalist>
+      </div>
     </div>
 
     <!-- Member list card -->
@@ -338,7 +328,7 @@
         <tbody>
           {% for i in data %}
           <form action="/bylist" method="post">
-            <tr>
+            <tr class="member-row" data-search="{{ i['pass'] }} {{ i['name'] }}">
               <td class="pass-cell">
                 <span class="pass-badge">{{ i["pass"] }}</span>
               </td>
@@ -383,6 +373,29 @@ function setLang(lang) {
     el.textContent = lang === 'kn' ? el.getAttribute('data-kn') : el.getAttribute('data-en');
   });
   document.documentElement.lang = lang === 'kn' ? 'kn' : 'en';
+  var search = document.getElementById('list-searchname');
+  if (search) search.placeholder = lang === 'kn' ? 'ರೈತರ ಹೆಸರು ಹುಡುಕಿ...' : 'Search farmer name...';
+}
+
+function onLoadListSearch() {
+  var searchInput = document.getElementById('list-searchname');
+  if (!searchInput || !window.google || !google.elements) return;
+  var opt = {
+    sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+    destinationLanguage: [google.elements.transliteration.LanguageCode.KANNADA],
+    shortcutKey: 'ctrl+g', transliterationEnabled: true
+  };
+  var con = new google.elements.transliteration.TransliterationControl(opt);
+  con.makeTransliteratable(['list-searchname']);
+}
+google.setOnLoadCallback(onLoadListSearch);
+
+function search_member_list() {
+  var input = (document.getElementById('list-searchname').value || '').trim().toLowerCase();
+  document.querySelectorAll('.member-row').forEach(function(row) {
+    var text = (row.getAttribute('data-search') || '').toLowerCase();
+    row.style.display = text.indexOf(input) !== -1 ? '' : 'none';
+  });
 }
 </script><script>
   document.addEventListener('DOMContentLoaded', function() {

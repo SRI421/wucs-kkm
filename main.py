@@ -61,6 +61,37 @@ def dict_from_row(row):
     return {k: row[k] for k in row.keys()} if row else None
 
 
+def latest_financial_years(cursor, limit=1):
+    """Return latest financial-year labels such as 2024-2025, newest first."""
+    cursor.execute(
+        """
+        SELECT years AS year_label
+        FROM farmers_years
+        WHERE years IS NOT NULL AND TRIM(years) != ''
+        GROUP BY years
+        ORDER BY CAST(SUBSTR(years, 1, 4) AS INTEGER) DESC, id DESC
+        LIMIT ?
+        """,
+        (limit,)
+    )
+    years = [row['year_label'] for row in cursor.fetchall()]
+    if years:
+        return years
+
+    cursor.execute(
+        """
+        SELECT year AS year_label
+        FROM farmers_data
+        WHERE year IS NOT NULL AND TRIM(year) != ''
+        GROUP BY year
+        ORDER BY CAST(SUBSTR(year, 1, 4) AS INTEGER) DESC
+        LIMIT ?
+        """,
+        (limit,)
+    )
+    return [row['year_label'] for row in cursor.fetchall()]
+
+
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
@@ -348,9 +379,83 @@ def docdownload(doc_id):
         return redirect(url_for('document'))
 
 
-@app.route('/videos', methods=['GET', 'POST'])
+def youtube_url_to_embed(url):
+    """
+    Convert any YouTube URL format to an embed URL.
+    Handles:
+      https://www.youtube.com/watch?v=VIDEO_ID
+      https://youtu.be/VIDEO_ID
+      https://www.youtube.com/embed/VIDEO_ID  (already embed)
+    """
+    import re
+    if not url:
+        return None
+    url = url.strip()
+    # Already embed
+    if 'youtube.com/embed/' in url:
+        return url
+    # youtu.be short link
+    m = re.search(r'youtu\.be/([A-Za-z0-9_\-]+)', url)
+    if m:
+        return f"https://www.youtube.com/embed/{m.group(1)}"
+    # Standard watch URL
+    m = re.search(r'[?&]v=([A-Za-z0-9_\-]+)', url)
+    if m:
+        return f"https://www.youtube.com/embed/{m.group(1)}"
+    return None
+
+
+def init_videos_table():
+    """Create farmers_videos table if it does not exist."""
+    with get_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS farmers_videos (
+                id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                url       TEXT NOT NULL,
+                embed_url TEXT NOT NULL,
+                added_on  TEXT DEFAULT (datetime('now','localtime'))
+            )
+        """)
+
+
+@app.route('/videos', methods=['GET'])
 def videos():
-    return render_template('videos.html')
+    """GET – show all saved videos (+ hardcoded fallback if DB empty)."""
+    init_videos_table()
+    sup = 3 if session.get('logged_in') else None
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, url, embed_url FROM farmers_videos ORDER BY id DESC")
+        data = [dict_from_row(r) for r in cursor.fetchall()]
+    return render_template('videos.html', data=data, sup=sup)
+
+
+@app.route('/videoinsert', methods=['POST'])
+def videoinsert():
+    """POST – add a new YouTube video URL (login required)."""
+    if not session.get('logged_in'):
+        return redirect(url_for('videos'))
+    init_videos_table()
+    raw_url = (request.form.get('url') or '').strip()
+    embed_url = youtube_url_to_embed(raw_url)
+    if raw_url and embed_url:
+        with get_db() as conn:
+            conn.execute(
+                "INSERT INTO farmers_videos (url, embed_url) VALUES (?, ?)",
+                (raw_url, embed_url)
+            )
+    return redirect(url_for('videos'))
+
+
+@app.route('/videodelete/<int:video_id>', methods=['POST'])
+def videodelete(video_id):
+    """POST – delete a video by id (login required)."""
+    if not session.get('logged_in'):
+        return redirect(url_for('videos'))
+    init_videos_table()
+    with get_db() as conn:
+        conn.execute("DELETE FROM farmers_videos WHERE id=?", (video_id,))
+    return redirect(url_for('videos'))
 
 
 @app.route('/google256f32c4755af706.html', methods=['GET', 'POST'])
@@ -643,9 +748,8 @@ def feed():
 @app.route("/every", methods=['GET', 'POST'])
 def every():
     if session.get('logged_in') and request.values.get("printview"):
-        pass_no = request.values.get("pass1")
-    else:
-        return redirect(url_for('home'))
+        return redirect(url_for('bylist', pass1=request.values.get("pass1")))
+    return redirect(url_for('home'))
 
 
 @app.route('/map', methods=['GET', 'POST'])
@@ -1009,8 +1113,8 @@ def bylist():
                                    dby=ye,
                                    year1=year)
 
-        # Otherwise show list page
-        return render_template('list2.html',
+        # Otherwise show the existing member list page.
+        return render_template('bylist.html',
                                data=farmer_list,
                                dby=ye,
                                year=year)
@@ -1261,23 +1365,19 @@ def datapayup():
     if request.values.get("year1"):
         year1 = request.values.get("year1")
         pass1 = request.values.get('pass')
-
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT years FROM farmers_years ORDER BY id DESC")
             ye = [row['years'] for row in cursor.fetchall()]
-
             cursor.execute(
                 "SELECT * FROM farmers_data WHERE pass=? AND year=?",
                 (int(pass1), year1)
             )
             rows = [dict_from_row(row) for row in cursor.fetchall()]
-
             return render_template('print2.html', data=rows, dby=ye, year1=year1)
 
     if request.values.get("up"):
         year = request.values.get('year')
-
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -1285,57 +1385,67 @@ def datapayup():
                 (year,)
             )
             b = [dict_from_row(row) for row in cursor.fetchall()]
+            updates = []          # paid/balance updates for current year only
+            name_share_updates = []  # name/share updates across ALL years
 
-            # Collect all updates for bulk operation
-            updates = []
             for i in b:
-                p = int(request.values.get(f"pass{i['id']}"))
-                name = request.values.get(f"name{i['id']}")
-                paid = request.values.get(f"paid{i['id']}")
-                tbal = request.values.get(f"tbal{i['id']}")
+                p     = int(request.values.get(f"pass{i['id']}"))
+                name  = request.values.get(f"name{i['id']}")
+                paid  = request.values.get(f"paid{i['id']}")
+                tbal  = request.values.get(f"tbal{i['id']}")
                 share = request.values.get(f"share{i['id']}")
+                paid  = 0.0 if paid  == "None" or not paid  else round(float(paid),  2)
+                tbal  = 0.0 if tbal  == "None" or not tbal  else round(float(tbal),  2)
+                try:
+                    share_form = int(share or 0)
+                    share_db   = int(i['share'] or 0)
+                    share_changed = share_form != share_db
+                except (ValueError, TypeError):
+                    share_form    = 0
+                    share_changed = False
 
-                paid = 0.0 if paid == "None" else round(float(paid), 2)
-                tbal = 0.0 if tbal == "None" else round(float(tbal), 2)
+                name_changed = name != i['name']
 
-                # Check if anything changed
-                changed = (name != i['name'] or
-                           (share and int(share) != int(i['share'])) or
-                           round(float(paid), 2) != round(float(i['paid']), 2) or
-                           round(float(tbal), 2) != round(float(i['balance']), 2))
+                # If name or share changed → queue update across ALL years for this pass
+                if name_changed or share_changed:
+                    name_share_updates.append((name, share_form, p))
 
-                if changed:
-                    # Get all records for this pass
+                # paid / balance changes → current year only
+                pay_changed = (
+                    round(float(paid), 2) != round(float(i['paid']),    2) or
+                    round(float(tbal), 2) != round(float(i['balance']), 2)
+                )
+                if pay_changed:
                     cursor.execute(
                         "SELECT id FROM farmers_data WHERE year=? AND pass=?",
                         (year, int(p))
                     )
                     ids = [row['id'] for row in cursor.fetchall()]
-
                     for rec_id in ids:
-                        updates.append((name, share, paid, tbal, rec_id))
+                        updates.append((name, share_form, paid, tbal, rec_id))
 
-            # Bulk update
+            # Bulk update paid/balance for current year
             if updates:
                 sql = "UPDATE farmers_data SET name=?, share=?, paid=?, balance=? WHERE id=?"
                 cursor.executemany(sql, updates)
 
+            # Propagate name/share to ALL years for each affected pass
+            if name_share_updates:
+                sql = "UPDATE farmers_data SET name=?, share=? WHERE pass=?"
+                cursor.executemany(sql, name_share_updates)
+
             return redirect(url_for('datapay'))
 
-    # Print preview for selected passes
     year = request.values.get('year')
-
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT years FROM farmers_years ORDER BY id DESC")
         ye = [row['years'] for row in cursor.fetchall()]
-
         cursor.execute(
             "SELECT DISTINCT pass FROM farmers_data WHERE year=? AND first=1 ORDER BY pass",
             (year,)
         )
         b = [dict_from_row(row) for row in cursor.fetchall()]
-
         rows = []
         for i in b:
             if request.values.get(str(i['pass'])):
@@ -1344,7 +1454,6 @@ def datapayup():
                     (ye[0], i['pass'])
                 )
                 rows.extend([dict_from_row(row) for row in cursor.fetchall()])
-
         return render_template('print2.html', data=rows, dby=ye, year1=ye[0] if ye else None)
 
 
@@ -1937,26 +2046,22 @@ def api_paid_by_year():
     try:
         with get_db() as conn:
             cursor = conn.cursor()
+            years = latest_financial_years(cursor, limit=4)
+            if not years:
+                return jsonify({'labels': [], 'values': []})
 
-            cursor.execute("""
+            placeholders = ','.join('?' for _ in years)
+            cursor.execute(f"""
                 SELECT f.year,
                        SUM(f.paid) AS total_paid
                 FROM farmers_data f
                 JOIN farmers_year_data fy 
                      ON f.year = fy.y
                 WHERE f.first = 1
-                  AND f.year IN (
-                        SELECT y
-                        FROM farmers_year_data
-                        WHERE y IS NOT NULL
-                          AND TRIM(y) != ''
-                        GROUP BY y
-                        ORDER BY CAST(SUBSTR(y,1,4) AS UNSIGNED) DESC
-                        LIMIT 4
-                  )
+                  AND f.year IN ({placeholders})
                 GROUP BY f.year
-                ORDER BY CAST(SUBSTR(f.year,1,4) AS UNSIGNED) ASC
-            """)
+                ORDER BY CAST(SUBSTR(f.year,1,4) AS INTEGER) ASC
+            """, years)
 
             rows = cursor.fetchall()
 
@@ -1981,11 +2086,17 @@ def api_crops_area():
     try:
         with get_db() as conn:
             cursor = conn.cursor()
-            cursor.execute("""
+            latest_years = latest_financial_years(cursor, limit=1)
+            if not latest_years:
+                return jsonify({'labels': [], 'values': [], 'years': []})
+
+            placeholders = ','.join('?' for _ in latest_years)
+            cursor.execute(f"""
                 SELECT batha, kabu, thota, crop1, area1, crop2, area2
                 FROM   farmers_data
                 WHERE  first = 1
-            """)
+                  AND  year IN ({placeholders})
+            """, latest_years)
             rows = cursor.fetchall()
 
         # names that already map to the three main crops (don't double-count)
@@ -2007,15 +2118,15 @@ def api_crops_area():
 
             # crop1 / area1
             c1 = (row['crop1'] or '').strip().lower()
-            a1 = row['area1']
-            if a1 and float(a1) > 0 and c1 not in main_crop_names:
-                total_other += _to_real_acres(a1)
+            a1 = _to_real_acres(row['area1'])
+            if a1 > 0 and c1 not in main_crop_names:
+                total_other += a1
 
             # crop2 / area2
             c2 = (row['crop2'] or '').strip().lower()
-            a2 = row['area2']
-            if a2 and float(a2) > 0 and c2 not in main_crop_names:
-                total_other += _to_real_acres(a2)
+            a2 = _to_real_acres(row['area2'])
+            if a2 > 0 and c2 not in main_crop_names:
+                total_other += a2
 
         crop_data = [
             ('ಭತ್ತ',  round(total_batha, 3)),
@@ -2027,7 +2138,12 @@ def api_crops_area():
         labels = [c[0] for c in crop_data if c[1] > 0]
         values = [c[1] for c in crop_data if c[1] > 0]
 
-        return jsonify({'labels': labels, 'values': values})
+        return jsonify({
+            'labels': labels,
+            'values': values,
+            'years': latest_years,
+            'year': latest_years[0]
+        })
 
     except Exception as e:
         print(f"[api_crops_area] {e}")
@@ -2051,20 +2167,8 @@ def api_share_count():
             cursor = conn.cursor()
 
             # --- resolve latest year ---
-            cursor.execute(
-                "SELECT years FROM farmers_years ORDER BY id DESC LIMIT 1"
-            )
-            row_yr = cursor.fetchone()
-            if row_yr:
-                latest_year = row_yr['years']
-            else:
-                cursor.execute("""
-                    SELECT year FROM farmers_data
-                    WHERE  year IS NOT NULL AND TRIM(year) != ''
-                    ORDER  BY year DESC LIMIT 1
-                """)
-                fb = cursor.fetchone()
-                latest_year = fb['year'] if fb else None
+            years = latest_financial_years(cursor, limit=1)
+            latest_year = years[0] if years else None
 
             if not latest_year:
                 return jsonify({

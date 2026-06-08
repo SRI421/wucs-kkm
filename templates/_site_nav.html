@@ -1,0 +1,133 @@
+{% set is_admin_nav = session.get('logged_in') %}
+{% set current_path = request.path %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/site-nav.css') }}">
+<aside id="sidebar" class="site-sidebar" aria-label="{{ 'Admin navigation' if is_admin_nav else 'Main navigation' }}">
+  <div class="sb-header">
+    <div class="sb-logo">
+      <div class="sb-icon"><i class="fa fa-tint"></i></div>
+      <div>
+        <div class="sb-org" data-en="Water Users Co-operative Society" data-kn="ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
+        <div class="sb-sub" data-en="Kagekodamagge, Bhadravathi" data-kn="ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
+      </div>
+    </div>
+    <button class="sb-close" id="sb-close-btn" type="button" aria-label="Close menu">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+
+  {% if is_admin_nav %}
+  <div class="sb-user">
+    <div class="sb-avatar"><i class="fa fa-user-shield"></i></div>
+    <div>
+      <div class="sb-uname">Ravikumar A</div>
+      <div class="sb-urole" data-en="Administrator" data-kn="ನಿರ್ವಾಹಕರು">ನಿರ್ವಾಹಕರು</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <nav class="sb-nav">
+    <span class="sb-label" data-en="Navigation" data-kn="ಮೆನು">ಮೆನು</span>
+    <a href="/" class="sb-link {{ 'active' if current_path == '/' else '' }}">
+      <i class="fa fa-home ic"></i><span data-en="Home" data-kn="ಮುಖಪುಟ">ಮುಖಪುಟ</span>
+    </a>
+    <a href="/list" class="sb-link {{ 'active' if current_path == '/list' else '' }}" onclick="showLoader()">
+      <i class="fa fa-list ic"></i><span data-en="Member List" data-kn="ಸದಸ್ಯರ ಪಟ್ಟಿ">ಸದಸ್ಯರ ಪಟ್ಟಿ</span>
+    </a>
+    <a href="/allmap" class="sb-link {{ 'active' if current_path == '/allmap' else '' }}" onclick="showLoader()">
+      <i class="fa fa-map ic"></i><span data-en="Map" data-kn="ನಕ್ಷೆ">ನಕ್ಷೆ</span>
+    </a>
+    <a href="/map" class="sb-link {{ 'active' if current_path == '/map' else '' }}" onclick="showLoader()">
+      <i class="fa fa-map-marker ic"></i><span data-en="Click Map" data-kn="ಕ್ಲಿಕ್ ನಕ್ಷೆ">ಕ್ಲಿಕ್ ನಕ್ಷೆ</span>
+    </a>
+    <a href="/document" class="sb-link {{ 'active' if current_path == '/document' else '' }}" onclick="showLoader()">
+      <i class="fa fa-file ic"></i><span data-en="Documents" data-kn="ದಾಖಲೆಗಳು">ದಾಖಲೆಗಳು</span>
+    </a>
+    <a href="/socinfo" class="sb-link {{ 'active' if current_path == '/socinfo' else '' }}" onclick="showLoader()">
+      <i class="fa fa-info-circle ic"></i><span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">ಸಂಘದ ಮಾಹಿತಿ</span>
+    </a>
+    <a href="/crops" class="sb-link {{ 'active' if current_path == '/crops' else '' }}" onclick="showLoader()">
+      <i class="fa fa-seedling ic"></i><span data-en="Crops" data-kn="ಬೆಳೆಗಳು">ಬೆಳೆಗಳು</span>
+    </a>
+    <a href="/board" class="sb-link {{ 'active' if current_path == '/board' else '' }}" onclick="showLoader()">
+      <i class="fa fa-clipboard ic"></i><span data-en="Notice Board" data-kn="ಸೂಚನಾ ಫಲಕ">ಸೂಚನಾ ಫಲಕ</span>
+    </a>
+    <a href="/gallery" class="sb-link {{ 'active' if current_path == '/gallery' else '' }}" onclick="showLoader()">
+      <i class="fa fa-image ic"></i><span data-en="Gallery" data-kn="ಗ್ಯಾಲರಿ">ಗ್ಯಾಲರಿ</span>
+    </a>
+    <a href="/videos" class="sb-link {{ 'active' if current_path == '/videos' else '' }}" onclick="showLoader()">
+      <i class="fa fa-video ic"></i><span data-en="Videos" data-kn="ವೀಡಿಯೊಗಳು">ವೀಡಿಯೊಗಳು</span>
+    </a>
+    <a href="/feeds" class="sb-link {{ 'active' if current_path == '/feeds' else '' }}">
+      <i class="fa fa-comment ic"></i><span data-en="Feedback" data-kn="ಪ್ರತಿಕ್ರಿಯೆ">ಪ್ರತಿಕ್ರಿಯೆ</span>
+    </a>
+
+    {% if is_admin_nav %}
+    <span class="sb-label" data-en="Admin Panel" data-kn="ನಿರ್ವಹಣೆ">ನಿರ್ವಹಣೆ</span>
+    <a href="/dataseepay" class="sb-link {{ 'active' if current_path == '/dataseepay' else '' }}" onclick="showLoader()">
+      <i class="fa fa-tint ic"></i><span data-en="Water Tax Payment" data-kn="ನೀರು ಕರ ಪಾವತಿ">ನೀರು ಕರ ಪಾವತಿ</span>
+    </a>
+    <a href="/datapay" class="sb-link {{ 'active' if current_path == '/datapay' else '' }}" onclick="showLoader()">
+      <i class="fa fa-print ic"></i><span data-en="Print Tax Records" data-kn="ಕರ ದಾಖಲೆ ಮುದ್ರಿಸಿ">ಕರ ದಾಖಲೆ ಮುದ್ರಿಸಿ</span>
+    </a>
+    <a href="/dataedit" class="sb-link {{ 'active' if current_path == '/dataedit' else '' }}" onclick="showLoader()">
+      <i class="fa fa-edit ic"></i><span data-en="Add / Update Account" data-kn="ಖಾತೆ ಸೇರಿಸಿ / ನವೀಕರಿಸಿ">ಖಾತೆ ಸೇರಿಸಿ / ನವೀಕರಿಸಿ</span>
+    </a>
+    <a href="/dataindex" class="sb-link {{ 'active' if current_path == '/dataindex' else '' }}" onclick="showLoader()">
+      <i class="fa fa-database ic"></i><span data-en="Print Full Database" data-kn="ಪೂರ್ಣ ಡೇಟಾಬೇಸ್ ಮುದ್ರಿಸಿ">ಪೂರ್ಣ ಡೇಟಾಬೇಸ್ ಮುದ್ರಿಸಿ</span>
+    </a>
+    <a href="/news" class="sb-link {{ 'active' if current_path == '/news' else '' }}" onclick="showLoader()">
+      <i class="fa fa-newspaper ic"></i><span data-en="Manage News" data-kn="ಸುದ್ದಿ ನಿರ್ವಹಣೆ">ಸುದ್ದಿ ನಿರ್ವಹಣೆ</span>
+    </a>
+    <a href="/year" class="sb-link {{ 'active' if current_path == '/year' else '' }}" onclick="showLoader()">
+      <i class="fa fa-calendar ic"></i><span data-en="Financial Years" data-kn="ಹಣಕಾಸು ವರ್ಷಗಳು">ಹಣಕಾಸು ವರ್ಷಗಳು</span>
+    </a>
+    <a href="/wucscalc" class="sb-link {{ 'active' if current_path == '/wucscalc' else '' }}" onclick="showLoader()">
+      <i class="fa fa-calculator ic"></i><span data-en="Calculator" data-kn="ಗಣಕಯಂತ್ರ">ಗಣಕಯಂತ್ರ</span>
+    </a>
+    {% endif %}
+  </nav>
+
+  <div class="sb-footer">
+    {% if is_admin_nav %}
+    <a href="/logout" class="sb-link sb-action danger" onclick="showLoader()">
+      <i class="fa fa-sign-out ic"></i><span data-en="Logout" data-kn="ಲಾಗ್ ಔಟ್">ಲಾಗ್ ಔಟ್</span>
+    </a>
+    {% else %}
+    <button class="sb-link sb-action" type="button" onclick="showMo('login-mo')">
+      <i class="fa fa-lock ic"></i><span data-en="Login" data-kn="ಲಾಗಿನ್">ಲಾಗಿನ್</span>
+    </button>
+    {% endif %}
+  </div>
+</aside>
+
+<div id="overlay" onclick="closeSB()" aria-hidden="true"></div>
+
+<header id="topbar" class="site-topbar noprint">
+  <div class="tb-left">
+    <button id="ham-btn" type="button" onclick="toggleSB()" aria-label="Menu">
+      <i class="fa fa-bars"></i>
+    </button>
+    <span id="tb-title">{{ nav_title|default('WUCSKKM') }}</span>
+  </div>
+  <div class="tb-right">
+    {% if is_admin_nav %}
+    <span class="admin-pill"><i class="fa fa-bolt"></i> <span data-en="Admin" data-kn="ನಿರ್ವಾಹಕ">ನಿರ್ವಾಹಕ</span></span>
+    {% endif %}
+    <div class="lang-wrap" aria-label="Language">
+      <button class="lang-btn" id="len" type="button" onclick="setLang('en')">EN</button>
+      <button class="lang-btn on" id="lkn" type="button" onclick="setLang('kn')">ಕನ್ನಡ</button>
+    </div>
+    {% if is_admin_nav %}
+    <a href="/logout" class="top-action danger" onclick="showLoader()">
+      <i class="fa fa-sign-out"></i><span data-en="Logout" data-kn="ಲಾಗ್ ಔಟ್">ಲಾಗ್ ಔಟ್</span>
+    </a>
+    {% else %}
+    <button id="login-btn" class="top-action" type="button" onclick="showMo('login-mo')">
+      <i class="fa fa-lock"></i><span data-en="Login" data-kn="ಲಾಗಿನ್">ಲಾಗಿನ್</span>
+    </button>
+    {% endif %}
+  </div>
+</header>
+
+<div id="idloader" aria-hidden="true"></div>
+<script src="{{ url_for('static', filename='site-nav.js') }}"></script>

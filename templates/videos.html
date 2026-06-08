@@ -5,7 +5,7 @@
 <meta name="contentription" content="wucskkm,kaagekodamagge,water Society bdvt, kaagekodamaggi, wucs, gondi"/>
 <title>Home</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="http://fonts.googleapis.com/css?family=Lato:300|Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Lato:300|Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -801,7 +801,7 @@ h1 {
   font-size: 50px;
   font-family: "Noto Sans Kannada", sans-serif;
 }
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskannada.css);
+@import url(https://fonts.googleapis.com/earlyaccess/notosanskannada.css);
 
 /* column layout - makes the three columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 500px) {
@@ -957,87 +957,76 @@ button {
 
 }
   </style>
-  <script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='dragscroll.js') }}"></script>
 
 </head>
 <body>
 <!-- ═══════ SIDEBAR ═══════ -->
-<aside id="sidebar">
-  <div class="sb-header">
-    <div class="sb-logo">
-      <div class="sb-icon">💧</div>
-      <div>
-        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
-        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
-      </div>
-    </div>
-    <button class="sb-close" id="sb-close-btn">✕</button>
-  </div>
-  <nav class="sb-nav">
-    <span class="sb-label">Navigation / ನ್ಯಾವಿಗೇಷನ್</span>
-    <a href="/"         class="sb-link" onclick="showLoader()"><i class="fa fa-home ic"></i><span data-en="Home"        data-kn="ಮುಖಪುಟ">Home</span></a>
-    <a href="/feeds"    class="sb-link"><i class="fa fa-comment ic"></i><span data-en="Feedback"    data-kn="ಪ್ರತಿಕ್ರಿಯೆ">Feedback</span></a>
-    <a href="/list"     class="sb-link" onclick="showLoader()"><i class="fa fa-list ic"></i><span data-en="List"        data-kn="ಪಟ್ಟಿ">List</span></a>
-    <a href="/allmap"   class="sb-link" onclick="showLoader()"><i class="fa fa-map ic"></i><span data-en="Map"         data-kn="ನಕ್ಷೆ">Map</span></a>
-    <a href="/map"      class="sb-link" onclick="showLoader()"><i class="fa fa-map-marker ic"></i><span data-en="Click-Map"  data-kn="ಕ್ಲಿಕ್-ನಕ್ಷೆ">Click-Map</span></a>
-    <a href="/document" class="sb-link" onclick="showLoader()"><i class="fa fa-file ic"></i><span data-en="Documents"   data-kn="ದಾಖಲೆಗಳು">Documents</span></a>
-    <a href="/socinfo"  class="sb-link" onclick="showLoader()"><i class="fa fa-info-circle ic"></i><span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">Society Info</span></a>
-    <span class="sb-label" style="margin-top:6px">Explore / ಅನ್ವೇಷಿಸಿ</span>
-    <!-- Replace ACTIVE_PAGE below with the correct active link per page -->
-    <!-- e.g. for /list: add class="sb-link active" to the list link -->
-  </nav>
-  <div class="sb-footer">
-    <button class="sb-link" onclick="showMo('login-mo')"
-      style="background:rgba(22,163,74,.15);border-radius:8px;color:#4ade80;">
-      <i class="fa fa-lock ic"></i>
-      <span data-en="Login" data-kn="ಲಾಗಿನ್">Login</span>
-    </button>
-  </div>
-</aside>
-
-<div id="overlay" onclick="closeSB()"></div>
-
-<!-- ═══════ TOPBAR ═══════ -->
-<header id="topbar">
-  <div class="tb-left">
-    <button id="ham-btn" onclick="toggleSB()"><i class="fa fa-bars"></i></button>
-    <span id="tb-title">WUCSKKM</span>  <!-- replace with page title -->
-  </div>
-  <div class="tb-right">
-    <div class="lang-wrap">
-      <button class="lang-btn on" id="len" onclick="setLang('en')">EN</button>
-      <button class="lang-btn"    id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
-    </div>
-    <a href="/" id="home-btn">
-      <i class="fa fa-home"></i>
-      <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
-    </a>
-  </div>
-</header>
+{% include '_site_nav.html' %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  	<div style="    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: grey;
-    z-index: 99;
-    right: 0px;margin-bottom:50px;">
 
-
-         <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
-<a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px; '></i></a>
+<!-- ═══ ADD VIDEO MODAL ═══ -->
+<div id="vid-modal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);">
+  <div style="background:#fff;margin:10% auto;padding:30px;width:90%;max-width:460px;border-radius:12px;position:relative;box-shadow:0 8px 32px rgba(0,0,0,.3);">
+    <span onclick="document.getElementById('vid-modal').style.display='none'"
+      style="position:absolute;top:10px;right:16px;font-size:26px;cursor:pointer;color:#888;line-height:1;">&times;</span>
+    <h3 style="margin-top:0;font-family:'Poppins',sans-serif;font-size:16px;color:#0a1f1a;">
+      <i class="fa fa-youtube-play" style="color:#dc2626;"></i> Add YouTube Video
+    </h3>
+    <form action="/videoinsert" method="POST">
+      <label style="font-size:13px;color:#555;font-family:'Poppins',sans-serif;">YouTube URL</label><br>
+      <input type="text" name="url" placeholder="https://www.youtube.com/watch?v=..."
+        style="width:100%;padding:10px;margin:8px 0 18px;border:1.5px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box;outline:none;">
+      <div style="display:flex;gap:10px;">
+        <input type="submit" value="Add Video"
+          style="flex:1;padding:11px;background:linear-gradient(135deg,#16a34a,#0d9488);color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600;">
+        <button type="button" onclick="document.getElementById('vid-modal').style.display='none'"
+          style="flex:1;padding:11px;background:#f3f4f6;color:#555;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600;width:auto;">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>
-    <div class="imgcontainer">
-      <span onclick="window.location.href='{{ url_for( 'home') }}';" class="close" title="Close Modal">&times;</span>
-<iframe width="340" height="280" src="https://www.youtube.com/embed/QObTgyI4UPY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<iframe width="340" height="280" src="https://www.youtube.com/embed/hAIDd2zRa0I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<iframe width="340" height="280" src="https://www.youtube.com/embed/T-mzNhJOAA4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<iframe width="340" height="280" src="https://www.youtube.com/embed/fAR4wDydRDc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<iframe width="340" height="280" src="https://www.youtube.com/embed/2FxU3fYC5sY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-    </div>
-<center>
+  <div style="position:fixed;top:var(--th);width:100%;background-color:grey;z-index:997;right:0px;margin-bottom:50px;">
+    {% if sup %}
+    <button type="button" onclick="document.getElementById('vid-modal').style.display='block'"
+      style="margin:8px 0 8px 12px;padding:8px 14px;background:linear-gradient(135deg,#16a34a,#0d9488);color:#fff;border:0;border-radius:8px;font-weight:600;cursor:pointer;">
+      <i class="fa fa-plus"></i> Add Video
+    </button>
+    {% endif %}
+    <h4 style="display:inline-block;padding:15;margin:0;float:left;"></h4>
+    <a href="/"><i class='fa fa-home' style='font-size:25px;color:black;float:right;padding:7px;'></i></a>
+  </div>
 
-</center>
+  <div class="imgcontainer" style="padding-top:70px;display:flex;flex-wrap:wrap;gap:16px;justify-content:center;padding-left:16px;padding-right:16px;">
+    <span onclick="window.location.href='{{ url_for('home') }}';" class="close" title="Close Modal">&times;</span>
+
+    {% if data %}
+      {% for v in data %}
+      <div style="display:inline-block;vertical-align:top;">
+        <iframe width="340" height="280" src="{{ v['embed_url'] }}"
+          title="YouTube video player" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+        {% if sup %}
+        <form action="/videodelete/{{ v['id'] }}" method="POST" style="margin:0;">
+          <button type="submit"
+            style="width:100%;padding:5px 0;background:#dc2626;color:#fff;border:none;cursor:pointer;font-size:12px;border-radius:0 0 4px 4px;font-weight:600;">
+            <i class="fa fa-trash"></i> Delete
+          </button>
+        </form>
+        {% endif %}
+      </div>
+      {% endfor %}
+    {% else %}
+      <!-- Fallback hardcoded videos shown when DB is empty -->
+      <iframe width="340" height="280" src="https://www.youtube.com/embed/QObTgyI4UPY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe width="340" height="280" src="https://www.youtube.com/embed/hAIDd2zRa0I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe width="340" height="280" src="https://www.youtube.com/embed/T-mzNhJOAA4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe width="340" height="280" src="https://www.youtube.com/embed/fAR4wDydRDc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe width="340" height="280" src="https://www.youtube.com/embed/2FxU3fYC5sY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    {% endif %}
+  </div>
 <script>
 function toggleSB() {
   document.getElementById('sidebar').classList.toggle('open');

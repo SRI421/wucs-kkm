@@ -32,7 +32,7 @@
     body {
       font-family: 'DM Sans', 'Noto Sans Kannada', sans-serif;
       background: var(--bg); color: var(--text); font-size: 13px;
-      padding-top: 48px; /* push below fixed navbar */
+      padding-top: var(--th); /* push below shared topbar */
     }
 
     /* Loading overlay */
@@ -75,9 +75,9 @@
     .lang-btn.on { background: #16a34a; color: #fff; }
     .lang-btn:hover { background: rgba(255,255,255,.2); }
 
-    /* Sticky band below navbar */
+    /* Sticky band below shared topbar */
     .sticky-band {
-      position: sticky; top: 48px; z-index: 300;
+      position: sticky; top: var(--th); z-index: 300;
       background: var(--header-bg);
     }
     .org-banner {
@@ -91,6 +91,14 @@
       padding: 6px 10px; background: #f8fafc;
       border-bottom: 2px solid var(--border); flex-wrap: wrap;
     }
+    .search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 360px; }
+    .search-wrap i { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px; }
+    .search-input {
+      width: 100%; height: 30px; padding: 0 8px 0 30px;
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 500; outline: none; font-family: inherit;
+    }
+    .search-input:focus { border-color: var(--primary); }
 
     /* Buttons */
     .btn {
@@ -132,7 +140,7 @@
       border-bottom: 2px solid var(--primary);
     }
 
-    /* content pushed below navbar via body padding-top:48px */
+    /* content is pushed below topbar via body padding-top */
     .main-content { margin-top: 0; }
 
     /* Modal */
@@ -217,7 +225,7 @@
     /* ── Sticky column header band (outside overflow-x container) ── */
     .sticky-col-hdr {
       position: sticky;
-      top: 48px;           /* set precisely by JS: navbar + sticky-band height */
+      top: var(--th);      /* set precisely by JS: topbar + sticky-band height */
       z-index: 299;
       background: var(--header-bg);
       overflow: hidden;    /* hides scrollbar */
@@ -254,125 +262,53 @@
 <body>
 
 <!-- ═══════ SIDEBAR ═══════ -->
-<aside id="sidebar" aria-label="Admin navigation">
-  <div class="sb-header">
-    <div class="sb-logo">
-      <div class="sb-icon">💧</div>
-      <div>
-        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
-        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
-      </div>
-    </div>
-    <button class="sb-close" id="sb-close-btn">✕</button>
-  </div>
+{% include '_site_nav.html' %}
 
-  <div class="sb-user">
-    <div class="sb-avatar"><i class="fa fa-user-shield"></i></div>
-    <div>
-      <div class="sb-uname">Ravikumar A</div>
-      <div class="sb-urole" data-en="Administrator" data-kn="ನಿರ್ವಾಹಕರು">Administrator</div>
-    </div>
-  </div>
-
-  <nav class="sb-nav">
-    <span class="sb-label">Navigation</span>
-
-    <a href="/" class="sb-link active">
-      <i class="fa fa-home ic"></i>
-      <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
-    </a>
-    <a href="/list" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-list ic"></i>
-      <span data-en="List" data-kn="ಪಟ್ಟಿ">List</span>
-    </a>
-    <a href="/allmap" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-map ic"></i>
-      <span data-en="Map" data-kn="ನಕ್ಷೆ">Map</span>
-    </a>
-    <a href="/map" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-map-marker ic"></i>
-      <span data-en="Map-Edit" data-kn="ನಕ್ಷೆ ಸಂಪಾದಿಸಿ">Map-Edit</span>
-    </a>
-    <a href="/document" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-file ic"></i>
-      <span data-en="Documents" data-kn="ದಾಖಲೆಗಳು">Documents</span>
-    </a>
-    <a href="/socinfo" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-info-circle ic"></i>
-      <span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">Society Info</span>
-    </a>
-
-    <span class="sb-label" style="margin-top:6px" data-en="Admin Panel" data-kn="ನಿರ್ವಹಣೆ">Admin Panel</span>
-
-    <a href="/dataseepay" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-tint ic"></i>
-      <span data-en="Water Tax Payment" data-kn="ನೀರು ಕರ ಪಾವತಿ">Water Tax Payment</span>
-    </a>
-    <a href="/datapay" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-print ic"></i>
-      <span data-en="Print Tax Records" data-kn="ಕರ ಪಾವತಿ ಮುದ್ರಿಸಿ">Print Tax Records</span>
-    </a>
-    <a href="/dataedit" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-edit ic"></i>
-      <span data-en="Add / Update Account" data-kn="ಖಾತೆ ಸೇರಿಸಿ/ನವೀಕರಿಸಿ">Add / Update Account</span>
-    </a>
-    <a href="/dataindex" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-database ic"></i>
-      <span data-en="Print Full Database" data-kn="ಡೇಟಾಬೇಸ್ ಮುದ್ರಣ">Print Full Database</span>
-    </a>
-    <a href="/news" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-newspaper ic"></i>
-      <span data-en="Manage News" data-kn="ಸುದ್ದಿ ನಿರ್ವಹಣೆ">Manage News</span>
-    </a>
-
-    <span class="sb-label" style="margin-top:6px">Explore</span>
-    <button class="sb-link" onclick="showMo('gal-mo')">
-      <i class="fa fa-image ic"></i>
-      <span data-en="Gallery" data-kn="ಗ್ಯಾಲರಿ">Gallery</span>
-    </button>
-    <button class="sb-link" onclick="showMo('cont-mo')">
-      <i class="fa fa-phone ic"></i>
-      <span data-en="Contacts" data-kn="ಸಂಪರ್ಕ">Contacts</span>
-    </button>
-  </nav>
-
-  <div class="sb-footer">
-    <a href="/logout" class="sb-logout" onclick="showLoader()">
-      <i class="fa fa-sign-out"></i>
-      <span data-en="Logout" data-kn="ಲಾಗ್‌ಔಟ್">Logout</span>
-    </a>
-  </div>
-</aside>
-
-<div id="overlay" onclick="closeSB()"></div>
-
-
-
-<!-- Navbar -->
-<nav class="navbar noprint">
-  <div class="navbar-left">
-    <button id="ham-btn" onclick="toggleSB()"><i class="fa fa-bars"></i></button>
-    <a href="/"><i class="fa fa-home"></i></a>
-    <form action="/dataedit" method="post" style="margin:0;">
-      <select name="year" class="year-select" onchange="this.form.submit()">
-        {% for y in dby %}
-          <option value="{{y}}" {% if year==y %}selected{% endif %}>{{y}}</option>
-        {% endfor %}
-      </select>
-    </form>
-  </div>
-  <div class="lang-wrap">
-    <button class="lang-btn" id="len" onclick="setLang('en')">EN</button>
-    <button class="lang-btn on" id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
-  </div>
-</nav>
-
-<!-- Sticky band: org title + action strip -->
+<!-- Sticky band: year selector + page actions -->
 <div class="sticky-band noprint">
   <div class="org-banner">
     <h2 id="org-title">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ ಕಾಗೆಕೊಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</h2>
   </div>
   <div class="action-strip">
+    <form action="/dataedit" method="post" style="margin:0;">
+      <select name="year" class="year-select" onchange="this.form.submit()" aria-label="Financial year">
+        {% for y in dby %}
+          <option value="{{y}}" {% if year==y %}selected{% endif %}>{{y}}</option>
+        {% endfor %}
+      </select>
+    </form>
+    <div class="search-wrap">
+      <i class="fa fa-search"></i>
+      <input list="de-browsers" id="de-searchname" class="search-input"
+        onkeyup="search_dataedit()" placeholder="ರೈತರ ಹೆಸರು ಹುಡುಕಿ..."/>
+      <datalist id="de-browsers">
+        {% for j in data %}
+        <option value="{{ j['name'] }}">{{ j['name'] }}</option>
+        {% endfor %}
+      </datalist>
+    </div>
+    <script>
+      function onLoadDataEditSearch() {
+        var searchInput = document.getElementById('de-searchname');
+        if (!searchInput || !window.google || !google.elements) return;
+        var opt = {
+          sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+          destinationLanguage: [google.elements.transliteration.LanguageCode.KANNADA],
+          shortcutKey: 'ctrl+g', transliterationEnabled: true
+        };
+        var con = new google.elements.transliteration.TransliterationControl(opt);
+        con.makeTransliteratable(['de-searchname']);
+      }
+      google.setOnLoadCallback(onLoadDataEditSearch);
+
+      function search_dataedit() {
+        var input = (document.getElementById('de-searchname').value || '').trim().toLowerCase();
+        document.querySelectorAll('#de-body-scroll tbody tr.animals').forEach(function (row) {
+          var text = (row.getAttribute('data-search') || row.innerText || '').toLowerCase();
+          row.style.display = text.indexOf(input) !== -1 ? '' : 'none';
+        });
+      }
+    </script>
     <button type="button" class="btn btn-new" id="myBtn">
       <i class="fa fa-plus"></i> <span id="lbl-new">New Record</span>
     </button>
@@ -383,43 +319,34 @@
   </div>
 </div>
 
-<!-- Sticky column header band — OUTSIDE overflow container so position:sticky works -->
+<!-- Sticky column header band stays below the shared topbar and action strip. -->
 <div class="sticky-col-hdr noprint" id="sticky-col-hdr">
   <div class="sticky-col-hdr-inner" id="sticky-col-hdr-inner">
     <table>
-      <colgroup>
-        <col style="width:3%"><col style="width:5%"><col style="width:4%">
-        <col style="width:18%"><col style="width:4%"><col style="width:5%">
-        <col style="width:4%"><col style="width:5%"><col style="width:4%">
-        <col style="width:5%"><col style="width:4%"><col style="width:5%">
-        <col style="width:5%"><col style="width:5%"><col style="width:5%">
-        <col style="width:5%"><col style="width:5%"><col style="width:5%">
-      </colgroup>
       <tbody><tr>
-        <th class="noprint" id="th-no">No</th>
-        <th class="noprint" id="th-add">ADD</th>
-        <th id="th-pass">ಪಾಸ್</th>
-        <th id="th-name">ರೈತರ ಹೆಸರು</th>
-        <th id="th-sno">ಸರ್ವೇ ನಂ</th>
-        <th id="th-area">ವಿಸ್ತೀರ್ಣ</th>
-        <th id="th-batha">ಭತ್ತ</th>
-        <th id="th-bkara">ಕರ</th>
-        <th id="th-kabu">ಕಬ್ಬು</th>
-        <th id="th-kkara">ಕರ</th>
-        <th id="th-thota">ತೋಟ</th>
-        <th id="th-tkara">ಕರ</th>
-        <th id="th-wtax">ನೀರಿನ ಕರ</th>
-        <th id="th-mtax">ನಿರ್ವಹಣಾ ಕರ</th>
-        <th id="th-t1">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
-        <th id="th-bal">ಹಿಂದಿನ ಬಾಕಿ</th>
-        <th id="th-t2">ಒಟ್ಟು ಮೊತ್ತ</th>
-        <th class="noprint" id="th-del">Delete</th>
+        <th style="width:3%;" class="noprint" id="th-no">No</th>
+        <th style="width:5%;" class="noprint" id="th-add">ADD</th>
+        <th style="width:4%;" id="th-pass">ಪಾಸ್</th>
+        <th style="width:18%;" id="th-name">ರೈತರ ಹೆಸರು</th>
+        <th style="width:4%;" id="th-sno">ಸರ್ವೇ ನಂ</th>
+        <th style="width:5%;" id="th-area">ವಿಸ್ತೀರ್ಣ</th>
+        <th style="width:4%;" id="th-batha">ಭತ್ತ</th>
+        <th style="width:5%;" id="th-bkara">ಕರ</th>
+        <th style="width:4%;" id="th-kabu">ಕಬ್ಬು</th>
+        <th style="width:5%;" id="th-kkara">ಕರ</th>
+        <th style="width:4%;" id="th-thota">ತೋಟ</th>
+        <th style="width:5%;" id="th-tkara">ಕರ</th>
+        <th style="width:5%;" id="th-wtax">ನೀರಿನ ಕರ</th>
+        <th style="width:5%;" id="th-mtax">ನಿರ್ವಹಣಾ ಕರ</th>
+        <th style="width:5%;" id="th-t1">ಚಾಲ್ತಿ ಮೊತ್ತ</th>
+        <th style="width:5%;" id="th-bal">ಹಿಂದಿನ ಬಾಕಿ</th>
+        <th style="width:5%;" id="th-t2">ಒಟ್ಟು ಮೊತ್ತ</th>
+        <th style="width:5%;" class="noprint" id="th-del">Delete</th>
       </tr></tbody>
     </table>
   </div>
 </div>
 
-<!-- Main form: UPDATE existing records -->
 <form id="main-form" action="/dataeditup" onkeydown="return event.key != 'Enter';" method="post">
   <input type="hidden" name="year" value="{{year}}"/>
 
@@ -451,7 +378,7 @@
         <tbody>
 
           {% for i in data %}
-          <tr>
+          <tr class="animals" data-search="{{ i['pass'] }} {{ i['name'] }}">
             <td class="noprint">{{ i['no'] }}</td>
 
             <!-- ADD button: calls /dataeditadd with pass,year → reloads page -->
@@ -811,6 +738,8 @@
     });
     document.getElementById('len').classList.toggle('on', lang === 'en');
     document.getElementById('lkn').classList.toggle('on', lang === 'kn');
+    var search = document.getElementById('de-searchname');
+    if (search) search.placeholder = langKn ? 'ರೈತರ ಹೆಸರು ಹುಡುಕಿ...' : 'Search farmer name...';
   }
 
   /* Sidebar */
@@ -818,16 +747,22 @@
   function closeSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('on');}
   document.getElementById('sb-close-btn').addEventListener('click', closeSB);
 
-  /* Sticky column header: set top = navbar(48) + sticky-band height, then sync scroll */
+  /* Sticky column header: set top = shared topbar + sticky-band height, then sync scroll */
   (function(){
-    var navbar    = document.querySelector('.navbar');
+    var topbar    = document.querySelector('.site-topbar') || document.getElementById('topbar');
     var stickyBand= document.querySelector('.sticky-band');
     var colHdr    = document.getElementById('sticky-col-hdr');
     var colInner  = document.getElementById('sticky-col-hdr-inner');
     var bodyScroll= document.getElementById('de-body-scroll');
 
+    function topbarHeight(){
+      var cssHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--th')) || 56;
+      return topbar ? topbar.offsetHeight : cssHeight;
+    }
+
     function setTop(){
-      var h = (navbar ? navbar.offsetHeight : 48) + (stickyBand ? stickyBand.offsetHeight : 0);
+      if (!colHdr) return;
+      var h = topbarHeight() + (stickyBand ? stickyBand.offsetHeight : 0);
       colHdr.style.top = h + 'px';
     }
     setTop();

@@ -32,7 +32,7 @@
     body {
       font-family: 'DM Sans', 'Noto Sans Kannada', sans-serif;
       background: var(--bg); color: var(--text); font-size: 13px;
-      padding-top: 48px;
+      padding-top: var(--th);
     }
 
     /* Loading overlay */
@@ -75,7 +75,7 @@
 
     /* Sticky band */
     .sticky-band {
-      position: sticky; top: 48px; z-index: 300;
+      position: sticky; top: var(--th); z-index: 300;
       background: var(--surface);
       border-bottom: 2px solid var(--border);
       box-shadow: 0 2px 6px rgba(0,0,0,.08);
@@ -150,7 +150,7 @@
     }
     table.data-table input[disabled] { color:var(--text-muted); background:#f0f4f8; }
 
-    /* Push content below fixed navbar */
+    /* Push content below shared topbar */
     .main-content { margin-top:0; }
 
     /* Print */
@@ -208,121 +208,8 @@
 <body>
 
 <!-- ═══════ SIDEBAR ═══════ -->
-<aside id="sidebar" aria-label="Admin navigation">
-  <div class="sb-header">
-    <div class="sb-logo">
-      <div class="sb-icon">💧</div>
-      <div>
-        <div class="sb-org">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ</div>
-        <div class="sb-sub">ಕಾಗೆಕೋಡಮಗ್ಗೆ, ಭದ್ರಾವತಿ</div>
-      </div>
-    </div>
-    <button class="sb-close" id="sb-close-btn">✕</button>
-  </div>
+{% include '_site_nav.html' %}
 
-  <div class="sb-user">
-    <div class="sb-avatar"><i class="fa fa-user-shield"></i></div>
-    <div>
-      <div class="sb-uname">Ravikumar A</div>
-      <div class="sb-urole" data-en="Administrator" data-kn="ನಿರ್ವಾಹಕರು">Administrator</div>
-    </div>
-  </div>
-
-  <nav class="sb-nav">
-    <span class="sb-label">Navigation</span>
-
-    <a href="/" class="sb-link active">
-      <i class="fa fa-home ic"></i>
-      <span data-en="Home" data-kn="ಮುಖಪುಟ">Home</span>
-    </a>
-    <a href="/list" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-list ic"></i>
-      <span data-en="List" data-kn="ಪಟ್ಟಿ">List</span>
-    </a>
-    <a href="/allmap" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-map ic"></i>
-      <span data-en="Map" data-kn="ನಕ್ಷೆ">Map</span>
-    </a>
-    <a href="/map" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-map-marker ic"></i>
-      <span data-en="Map-Edit" data-kn="ನಕ್ಷೆ ಸಂಪಾದಿಸಿ">Map-Edit</span>
-    </a>
-    <a href="/document" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-file ic"></i>
-      <span data-en="Documents" data-kn="ದಾಖಲೆಗಳು">Documents</span>
-    </a>
-    <a href="/socinfo" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-info-circle ic"></i>
-      <span data-en="Society Info" data-kn="ಸಂಘದ ಮಾಹಿತಿ">Society Info</span>
-    </a>
-
-    <span class="sb-label" style="margin-top:6px" data-en="Admin Panel" data-kn="ನಿರ್ವಹಣೆ">Admin Panel</span>
-
-    <a href="/dataseepay" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-tint ic"></i>
-      <span data-en="Water Tax Payment" data-kn="ನೀರು ಕರ ಪಾವತಿ">Water Tax Payment</span>
-    </a>
-    <a href="/datapay" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-print ic"></i>
-      <span data-en="Print Tax Records" data-kn="ಕರ ಪಾವತಿ ಮುದ್ರಿಸಿ">Print Tax Records</span>
-    </a>
-    <a href="/dataedit" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-edit ic"></i>
-      <span data-en="Add / Update Account" data-kn="ಖಾತೆ ಸೇರಿಸಿ/ನವೀಕರಿಸಿ">Add / Update Account</span>
-    </a>
-    <a href="/dataindex" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-database ic"></i>
-      <span data-en="Print Full Database" data-kn="ಡೇಟಾಬೇಸ್ ಮುದ್ರಣ">Print Full Database</span>
-    </a>
-    <a href="/news" class="sb-link" onclick="showLoader()">
-      <i class="fa fa-newspaper ic"></i>
-      <span data-en="Manage News" data-kn="ಸುದ್ದಿ ನಿರ್ವಹಣೆ">Manage News</span>
-    </a>
-
-    <span class="sb-label" style="margin-top:6px">Explore</span>
-    <button class="sb-link" onclick="showMo('gal-mo')">
-      <i class="fa fa-image ic"></i>
-      <span data-en="Gallery" data-kn="ಗ್ಯಾಲರಿ">Gallery</span>
-    </button>
-    <button class="sb-link" onclick="showMo('cont-mo')">
-      <i class="fa fa-phone ic"></i>
-      <span data-en="Contacts" data-kn="ಸಂಪರ್ಕ">Contacts</span>
-    </button>
-  </nav>
-
-  <div class="sb-footer">
-    <a href="/logout" class="sb-logout" onclick="showLoader()">
-      <i class="fa fa-sign-out"></i>
-      <span data-en="Logout" data-kn="ಲಾಗ್‌ಔಟ್">Logout</span>
-    </a>
-  </div>
-</aside>
-
-<div id="overlay" onclick="closeSB()"></div>
-
-
-
-<!-- Navbar -->
-<nav class="navbar noprint">
-  <div class="navbar-left">
-    <button id="ham-btn" onclick="toggleSB()"><i class="fa fa-bars"></i></button>
-    <a href="/"><i class="fa fa-home"></i></a>
-    <!-- year select posts to /datapay -->
-    <form action="/datapay" method="post" style="margin:0;">
-      <select name="year" class="year-select" onchange="this.form.submit()">
-        {% for y in dby %}
-          <option value="{{y}}" {% if year==y %}selected{% endif %}>{{y}}</option>
-        {% endfor %}
-      </select>
-    </form>
-  </div>
-  <div class="lang-wrap">
-    <button class="lang-btn" id="len" onclick="setLang('en')">EN</button>
-    <button class="lang-btn on" id="lkn" onclick="setLang('kn')">ಕನ್ನಡ</button>
-  </div>
-</nav>
-
-<!-- The main form wraps BOTH sticky header table AND #newone data table -->
 <form action="/datapayup" onkeydown="return event.key != 'Enter';" method="post" id="main-form">
 
   <!-- Sticky band: org title + search + header columns -->
