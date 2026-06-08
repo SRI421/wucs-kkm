@@ -6,84 +6,35 @@
 <title>ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ — ಭೂ ನಕ್ಷೆ</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="static/carkan.js"></script>
+<script src="{{ url_for('static', filename='js/jquery-2.2.4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='carkan.js') }}"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#b3d9f0}
 :root{--bar:54px;--gl:#16a34a;--teal:#0d9488;--bd:#0d4a72;--bm:#0d7290}
 
 /* ── NAVBAR ── */
-#navbar{position:fixed;top:0;left:0;right:0;height:var(--bar);z-index:900;
-  background:linear-gradient(90deg,#0d3d1f,#14532d 40%,#1a6b3a 65%,#14532d);
-  display:flex;align-items:center;gap:10px;padding:0 14px;
-  box-shadow:0 3px 18px rgba(0,0,0,.45);border-bottom:2px solid rgba(255,255,255,.1)}
-#ham-btn{width:38px;height:38px;flex-shrink:0;background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.2);border-radius:9px;color:#fff;font-size:17px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
-#ham-btn:hover{background:rgba(255,255,255,.22)}
-.nav-logo{width:32px;height:32px;background:linear-gradient(135deg,var(--gl),var(--teal));
-  border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.nav-title{flex:1;color:#fff;font-family:'Noto Sans Kannada','Inter',sans-serif;
-  font-size:13.5px;font-weight:700;line-height:1.25;text-shadow:0 1px 4px rgba(0,0,0,.5)}
-.nav-title small{display:block;font-size:10px;font-weight:400;color:rgba(255,255,255,.6);margin-top:1px}
-.nav-right{display:flex;align-items:center;gap:7px;flex-shrink:0}
-.zoom-pill{display:flex;align-items:center;gap:4px;background:rgba(0,0,0,.3);
-  border:1px solid rgba(255,255,255,.18);border-radius:24px;padding:3px 8px}
 .zbtn{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.16);
   border:1px solid rgba(255,255,255,.28);color:#fff;font-size:17px;font-weight:700;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
   user-select:none;transition:background .1s,transform .08s}
 .zbtn:hover{background:rgba(255,255,255,.3)}.zbtn:active{transform:scale(.82)}
 #zoom-pct{color:#e2f5d0;font-size:11px;font-weight:700;font-family:monospace;min-width:40px;text-align:center}
-.nav-btn{padding:6px 11px;border-radius:20px;font-size:11px;font-weight:600;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:#fff;
-  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:background .15s}
-.nav-btn:hover{background:rgba(255,255,255,.25)}
-.lang-toggle{display:flex;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.15);
-  border-radius:22px;padding:2px}
-.lang-btn{padding:4px 10px;border-radius:18px;font-size:10px;font-weight:700;border:none;
-  cursor:pointer;background:transparent;color:rgba(255,255,255,.55);transition:all .15s}
-.lang-btn.on{background:var(--gl);color:#fff;box-shadow:0 1px 6px rgba(0,0,0,.25)}
 
 /* ── SIDEBAR ── */
-#sidebar{position:fixed;top:0;left:-290px;width:290px;height:100%;background:#071410;
-  z-index:1000;display:flex;flex-direction:column;
-  transition:left .3s cubic-bezier(.4,0,.2,1);box-shadow:5px 0 24px rgba(0,0,0,.5)}
-#sidebar.open{left:0}
-.sb-head{padding:18px 16px 14px;background:linear-gradient(160deg,#0d3d1f,#0a2816);
-  border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;
-  gap:11px;position:relative}
-.sb-logo{width:40px;height:40px;background:linear-gradient(135deg,var(--gl),var(--teal));
-  border-radius:10px;display:flex;align-items:center;justify-content:center;
-  font-size:20px;flex-shrink:0}
-.sb-name{font-size:11px;font-weight:700;color:#a7f3d0;font-family:'Noto Sans Kannada',sans-serif;line-height:1.35}
-.sb-sub{font-size:9.5px;color:rgba(255,255,255,.4);font-family:'Noto Sans Kannada',sans-serif;margin-top:2px}
-.sb-close{position:absolute;top:10px;right:10px;width:28px;height:28px;
-  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
-  border-radius:7px;color:#fff;cursor:pointer;font-size:13px;
-  display:flex;align-items:center;justify-content:center}
-.sb-close:hover{background:rgba(220,50,50,.45)}
-.sb-nav{flex:1;overflow-y:auto;padding:6px 0}
-.sb-div{font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;
-  color:rgba(255,255,255,.25);padding:12px 16px 4px}
-.sb-item{display:flex;align-items:center;gap:12px;padding:10px 16px;color:#b8ddb0;
-  font-size:13px;text-decoration:none;border:none;background:transparent;width:100%;
-  cursor:pointer;text-align:left;transition:background .15s,color .15s;
-  border-left:3px solid transparent}
-.sb-item:hover{background:rgba(22,163,74,.14);color:#fff;border-left-color:rgba(22,163,74,.5)}
-.sb-item.active{background:rgba(22,163,74,.2);color:#4ade80;font-weight:600;border-left-color:#4ade80}
-.sb-item i{width:17px;text-align:center;font-size:13px;opacity:.7}
-#sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);
-  z-index:999;backdrop-filter:blur(2px)}
-#sb-overlay.on{display:block}
 
 /* ── MAP CANVAS ── */
-#map-canvas{position:fixed;top:var(--bar);bottom:0;left:0;right:0;
+#map-canvas{position:fixed;top:var(--th, var(--bar));bottom:0;left:0;right:0;
   overflow:hidden;cursor:grab;touch-action:none;background:#b3d9f0}
 #map-canvas:active{cursor:grabbing}
 #map-drag{position:absolute;top:50%;left:50%;transform-origin:0 0;will-change:transform}
 #map-svg{display:block;overflow:visible}
+.map-zoom-tools{position:fixed;right:14px;top:calc(var(--th, var(--bar)) + 12px);
+  z-index:850;display:flex;align-items:center;gap:6px;background:rgba(5,35,55,.82);
+  border:1px solid rgba(255,255,255,.25);border-radius:26px;padding:6px 8px;
+  box-shadow:0 8px 22px rgba(0,0,0,.25);backdrop-filter:blur(6px)}
+.map-zoom-tools .zbtn{width:30px;height:30px}
+.map-zoom-tools #zoom-pct{min-width:42px}
 
 /* Plot polygons — invisible until hover */
 .plot polygon{
@@ -103,7 +54,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
 }
 
 /* ── MISC UI ── */
-#ajax-bar{position:fixed;top:var(--bar);left:0;right:0;height:3px;z-index:800;
+#ajax-bar{position:fixed;top:var(--th, var(--bar));left:0;right:0;height:3px;z-index:800;
   background:linear-gradient(90deg,#4ade80,#06b6d4,#818cf8,#4ade80);
   background-size:300% 100%;display:none;animation:bar-run 1.4s linear infinite}
 @keyframes bar-run{to{background-position:-300% 0}}
@@ -173,7 +124,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
 #nav-loader{display:none;position:fixed;inset:0;z-index:9998;
   background:rgba(0,0,0,.42);align-items:center;justify-content:center}
 #nav-loader.on{display:flex}
-@media(max-width:520px){.nav-title small,.lang-toggle{display:none}#modal-box{width:99%}}
+@media(max-width:520px){ #modal-box{width:99%} }
 </style>
 </head>
 <body>
@@ -184,6 +135,12 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
 
 <!-- SIDEBAR -->
 {% include '_site_nav.html' %}
+<div class="map-zoom-tools noprint" aria-label="Map zoom controls">
+  <button type="button" class="zbtn" id="btn-zo" aria-label="Zoom out">-</button>
+  <span id="zoom-pct">50%</span>
+  <button type="button" class="zbtn" id="btn-zi" aria-label="Zoom in">+</button>
+  <button type="button" class="zbtn" id="btn-reset" aria-label="Reset zoom">0</button>
+</div>
 <!-- MAP -->
 <div id="map-canvas">
   <div id="map-drag">
@@ -433,6 +390,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
   window.addEventListener('resize', refreshRect, {passive:true});
 
   /* ── RAF batch: only one transform per frame ── */
+  function setZoomLabel() {
+    var zoomPct = document.getElementById('zoom-pct');
+    if (zoomPct) zoomPct.textContent = Math.round(s * 100) + '%';
+  }
   var rafPending = false;
   function scheduleT() {
     if (rafPending) return;
@@ -440,14 +401,14 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
     requestAnimationFrame(function() {
       rafPending = false;
       D.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
-      document.getElementById('zoom-pct').textContent = Math.round(s * 100) + '%';
+      setZoomLabel();
     });
   }
   function applyT(animated) {
     if (animated) {
       D.style.transition = 'transform .32s cubic-bezier(.25,.46,.45,.94)';
       D.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
-      document.getElementById('zoom-pct').textContent = Math.round(s * 100) + '%';
+      setZoomLabel();
       setTimeout(function() { D.style.transition = ''; }, 350);
     } else {
       D.style.transition = '';
@@ -479,18 +440,33 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
   window.ZI = function() { var c = ctr(); zoomAt(c.x, c.y, 1.28); };
   window.ZO = function() { var c = ctr(); zoomAt(c.x, c.y, 0.78); };
   window.ZR = function() { fit(); applyT(true); };
-  document.getElementById('btn-zi').onclick = window.ZI;
-  document.getElementById('btn-zo').onclick = window.ZO;
-  document.getElementById('btn-reset').onclick = window.ZR;
+  var btnZi = document.getElementById('btn-zi');
+  var btnZo = document.getElementById('btn-zo');
+  var btnReset = document.getElementById('btn-reset');
+  if (btnZi) btnZi.onclick = window.ZI;
+  if (btnZo) btnZo.onclick = window.ZO;
+  if (btnReset) btnReset.onclick = window.ZR;
 
-  window.addEventListener('load', function() {
+  var initialMapReady = false;
+  function finishInitialMap() {
+    if (initialMapReady) return;
+    initialMapReady = true;
     requestAnimationFrame(function() { requestAnimationFrame(function() {
-      refreshRect(); fit();
+      refreshRect();
+      fit();
       var lo = document.getElementById('page-loader');
+      if (!lo) return;
       lo.style.opacity = '0';
       setTimeout(function() { lo.style.display = 'none'; }, 480);
     }); });
-  });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', finishInitialMap);
+  } else {
+    finishInitialMap();
+  }
+  window.addEventListener('load', finishInitialMap);
+  setTimeout(finishInitialMap, 4500);
 
   /* ── Mouse wheel — normalize deltaMode, smooth accumulation ── */
   var wheelAcc = 0, wheelRaf = 0;
@@ -630,46 +606,43 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;
 
 var _sel=null;
 function openModal(pid){
-  document.getElementById('modal-wrap').classList.add('open');
-  document.getElementById('m-pid').textContent=pid||'';
+  var modalWrap = document.getElementById('modal-wrap');
+  var modalPid = document.getElementById('m-pid');
+  if (modalWrap) modalWrap.classList.add('open');
+  if (modalPid) modalPid.textContent=pid||'';
   if(_sel){_sel.classList.remove('sel');}
 }
 function closeModal(){
-  document.getElementById('modal-wrap').classList.remove('open');
+  var modalWrap = document.getElementById('modal-wrap');
+  if (modalWrap) modalWrap.classList.remove('open');
   if(_sel){_sel.classList.remove('sel');_sel=null;}
 }
-document.getElementById('mc-btn').addEventListener('click',closeModal);
-document.getElementById('modal-wrap').addEventListener('click',function(e){
+var modalCloseButton = document.getElementById('mc-btn');
+var modalWrap = document.getElementById('modal-wrap');
+if (modalCloseButton) modalCloseButton.addEventListener('click',closeModal);
+if (modalWrap) modalWrap.addEventListener('click',function(e){
   if(e.target===this)closeModal();
 });
-function toggleSB(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sb-overlay').classList.toggle('on');
+function navLoad(){
+  var navLoader = document.getElementById('nav-loader');
+  if (navLoader) navLoader.classList.add('on');
 }
-function closeSB(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sb-overlay').classList.remove('on');
-}
-var _lang='en';
-function setLang(l){
-  _lang=l;
-  document.getElementById('btn-en').classList.toggle('on',l==='en');
-  document.getElementById('btn-kn').classList.toggle('on',l==='kn');
-  document.querySelectorAll('[data-kn][data-en]').forEach(function(el){
-    el.textContent=el.getAttribute('data-'+l);
-  });
-}
-function navLoad(){document.getElementById('nav-loader').classList.add('on');}
 window.addEventListener('pageshow',function(e){
   if(e.persisted){
-    document.getElementById('nav-loader').classList.remove('on');
-    closeSB();
+    var navLoader = document.getElementById('nav-loader');
+    if (navLoader) navLoader.classList.remove('on');
+    if (window.closeSB) window.closeSB();
   }
 });
 $(document)
-  .ajaxStart(function(){document.getElementById('ajax-bar').style.display='block';})
-  .ajaxStop(function(){document.getElementById('ajax-bar').style.display='none';});
-document.addEventListener('DOMContentLoaded',function(){setLang('en');});
+  .ajaxStart(function(){
+    var ajaxBar = document.getElementById('ajax-bar');
+    if (ajaxBar) ajaxBar.style.display='block';
+  })
+  .ajaxStop(function(){
+    var ajaxBar = document.getElementById('ajax-bar');
+    if (ajaxBar) ajaxBar.style.display='none';
+  });
 </script>
 
 <script>
