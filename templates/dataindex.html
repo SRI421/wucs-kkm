@@ -205,6 +205,12 @@
     border: 1.5px solid rgba(255,255,255,.25);
     border-radius: 20px; padding: 3px 13px;
     font-size: 13px; font-weight: 700; color: #fff;
+    cursor: pointer; user-select: none;
+    transition: background var(--ease), border-color var(--ease);
+  }
+  .year-badge-tb:hover {
+    background: rgba(255,255,255,.25);
+    border-color: rgba(255,255,255,.4);
   }
 
   /* Export buttons */
@@ -389,10 +395,16 @@
           <i class="fa fa-print"></i>
           <span data-en="Print / PDF" data-kn="ಮುದ್ರಣ / PDF">Print / PDF</span>
         </button>
-        <span class="year-badge-tb">
+        <span class="year-badge-tb" id="yearBadge" onclick="toggleYearSel()" title="Click to change year">
           <i class="fa fa-calendar" style="margin-right:5px;font-size:11px"></i>
-          {{year}}
+          <span id="yearBadgeText">{{year}}</span>
+          <i class="fa fa-caret-down" style="margin-left:6px;font-size:10px"></i>
         </span>
+        <select class="yr-sel" id="yearSelect" style="display:none" onchange="changeYear(this.value)">
+          {% for y in dby %}
+          <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
+          {% endfor %}
+        </select>
       </div>
       <div class="toolbar-center">
         <div data-en="Water Users Co-operative Society Ltd." data-kn="ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ">ನೀರು ಬಳಕೆದಾರರ ಸಹಕಾರ ಸಂಘ ನಿಯಮಿತ</div>
@@ -561,6 +573,30 @@ function closeSB() {
   document.getElementById('overlay').classList.remove('on');
 }
 document.getElementById('sb-close-btn').addEventListener('click', closeSB);
+
+/* ═══ Year selector (badge → dropdown) ═══ */
+function toggleYearSel() {
+  var badge = document.getElementById('yearBadge');
+  var sel   = document.getElementById('yearSelect');
+  badge.style.display = 'none';
+  sel.style.display = 'inline-block';
+  sel.focus();
+  if (sel.showPicker) { try { sel.showPicker(); } catch (e) {} }
+}
+function changeYear(y) {
+  var url = new URL(window.location.href);
+  url.searchParams.set('year', y);
+  window.location.href = url.toString();
+}
+(function() {
+  var sel = document.getElementById('yearSelect');
+  if (sel) {
+    sel.addEventListener('blur', function() {
+      sel.style.display = 'none';
+      document.getElementById('yearBadge').style.display = 'inline-flex';
+    });
+  }
+})();
 
 /* ═══ Language toggle ═══ */
 var LANG = 'kn';

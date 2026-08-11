@@ -1,9 +1,11 @@
 import os
 import sqlite3
-from flask import Flask, redirect, render_template, request, session, url_for, jsonify
+from flask import Flask, flash, g, redirect, render_template, request, session, url_for, jsonify
 import base64
 from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash
 from contextlib import contextmanager
+from itertools import groupby
 from admin import init_admin
 from flask import send_file
 from datetime import datetime
@@ -44,8 +46,14 @@ def fix_base64_image(data_str):
 @contextmanager
 def get_db():
     """Context manager for database connections"""
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(
+        DB_PATH,
+        timeout=30.0,
+        cached_statements=256,
+    )
     conn.row_factory = sqlite3.Row  # Enable dictionary-like access
+    conn.execute("PRAGMA busy_timeout = 5000")
+    conn.execute("PRAGMA temp_store = MEMORY")
     try:
         yield conn
         conn.commit()
@@ -59,6 +67,62 @@ def get_db():
 def dict_from_row(row):
     """Convert sqlite3.Row to dictionary"""
     return {k: row[k] for k in row.keys()} if row else None
+
+
+_QUERY_INDEXES = (
+    (
+        'farmers_data',
+        'CREATE INDEX IF NOT EXISTS idx_farmers_data_year_pass_id '
+        'ON farmers_data(year, pass, id)'
+    ),
+    (
+        'farmers_data',
+        'CREATE INDEX IF NOT EXISTS idx_farmers_data_year_first_pass_id '
+        'ON farmers_data(year, first, pass, id)'
+    ),
+    (
+        'farmers_data',
+        'CREATE INDEX IF NOT EXISTS idx_farmers_data_pass_id '
+        'ON farmers_data(pass, id)'
+    ),
+    (
+        'farmers_map_data',
+        'CREATE INDEX IF NOT EXISTS idx_farmers_map_data_mapid_id '
+        'ON farmers_map_data(mapid, id)'
+    ),
+    (
+        'farmers_map_data',
+        'CREATE INDEX IF NOT EXISTS idx_farmers_map_data_pass_id '
+        'ON farmers_map_data(pass, id)'
+    ),
+    (
+        'farmers_year_data',
+        'CREATE INDEX IF NOT EXISTS idx_farmers_year_data_y '
+        'ON farmers_year_data(y)'
+    ),
+    (
+        'farmers_years',
+        'CREATE INDEX IF NOT EXISTS idx_farmers_years_years '
+        'ON farmers_years(years)'
+    ),
+)
+
+
+def ensure_query_indexes():
+    """Create only the indexes used by frequent filters, joins, and ordering."""
+    with sqlite3.connect(DB_PATH, timeout=30.0) as conn:
+        existing_tables = {
+            row[0]
+            for row in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+        for table_name, statement in _QUERY_INDEXES:
+            if table_name in existing_tables:
+                conn.execute(statement)
+
+
+ensure_query_indexes()
 
 
 def latest_financial_years(cursor, limit=1):
@@ -92,6 +156,62 @@ def latest_financial_years(cursor, limit=1):
     return [row['year_label'] for row in cursor.fetchall()]
 
 
+def latest_farmer_data_years(cursor, limit=1):
+    """Return newest years that actually contain farmer data rows."""
+    cursor.execute(
+        """
+        SELECT TRIM(year) AS year_label
+        FROM farmers_data
+        WHERE year IS NOT NULL
+          AND TRIM(year) != ''
+        GROUP BY TRIM(year)
+        ORDER BY CAST(SUBSTR(TRIM(year), 1, 4) AS INTEGER) DESC,
+                 TRIM(year) DESC
+        LIMIT ?
+        """,
+        (limit,)
+    )
+    return [row['year_label'] for row in cursor.fetchall()]
+
+def current_user_record():
+    """Return and request-cache the active user without exposing the password."""
+    if hasattr(g, 'current_user'):
+        return g.current_user
+
+    user_id = session.get('user_id')
+    if not user_id:
+        g.current_user = None
+        return None
+
+    with get_db() as conn:
+        row = conn.execute(
+            """
+            SELECT id, name, email, username, is_active, is_super_user, updated_at
+            FROM users
+            WHERE id = ? AND is_active = 1
+            """,
+            (user_id,)
+        ).fetchone()
+
+    g.current_user = dict_from_row(row)
+    return g.current_user
+
+
+@app.before_request
+def refresh_logged_in_user():
+    """Keep authorization in sync with the users table on every request."""
+    if not session.get('logged_in'):
+        return
+
+    user = current_user_record()
+    if not user:
+        session.clear()
+        return
+
+    session['is_super_user'] = bool(user['is_super_user'])
+    session['user_name'] = user['name']
+
+
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
@@ -122,20 +242,47 @@ def home():
     myresult = newsreturn()
     hello, text1, text2, text3 = myresult
 
-    template = 'secured.html' if session.get('logged_in') else 'index.html'
-    return render_template(template, hello=hello, text1=text1, text2=text2, text3=text3)
+    user = current_user_record() if session.get('logged_in') else None
+    template = 'secured.html' if user else 'index.html'
+    return render_template(
+        template,
+        hello=hello,
+        text1=text1,
+        text2=text2,
+        text3=text3,
+        current_user=user,
+    )
 
 
 @app.route('/login', methods=['POST'])
 def do_admin_login():
-    if request.form.get('password') == 'ravi1972' and request.form.get('username') == 'ravikumar':
+    username = (request.form.get('username') or '').strip()
+    password = request.form.get('password') or ''
+
+    with get_db() as conn:
+        user = conn.execute(
+            """
+            SELECT id, name, password, is_active, is_super_user
+            FROM users
+            WHERE username = ?
+            """,
+            (username,)
+        ).fetchone()
+
+    if user and user['is_active'] and check_password_hash(user['password'], password):
+        session.clear()
         session['logged_in'] = True
+        session['user_id'] = user['id']
+        session['user_name'] = user['name']
+        session['is_super_user'] = bool(user['is_super_user'])
+    else:
+        flash('Invalid username or password.', 'error')
     return redirect(url_for('home'))
 
 
 @app.route("/logout")
 def logout():
-    session['logged_in'] = False
+    session.clear()
     return redirect(url_for('home'))
 
 
@@ -1225,15 +1372,11 @@ def userprint():
             with get_db() as conn:
                 cursor = conn.cursor()
 
-                # Get all years
+                # One ordered read supplies both the full list and latest year.
                 cursor.execute("SELECT years FROM farmers_years ORDER BY id")
                 year_rows = cursor.fetchall()
                 ye = [row['years'] for row in year_rows]
-
-                # Get last year
-                cursor.execute("SELECT years FROM farmers_years ORDER BY id DESC LIMIT 1")
-                year_data = cursor.fetchone()
-                y = year_data['years'] if year_data else None
+                y = ye[-1] if ye else None
 
                 # Get data for the pass and year
                 cursor.execute(
@@ -1416,17 +1559,13 @@ def datapayup():
                     round(float(tbal), 2) != round(float(i['balance']), 2)
                 )
                 if pay_changed:
-                    cursor.execute(
-                        "SELECT id FROM farmers_data WHERE year=? AND pass=?",
-                        (year, int(p))
-                    )
-                    ids = [row['id'] for row in cursor.fetchall()]
-                    for rec_id in ids:
-                        updates.append((name, share_form, paid, tbal, rec_id))
+                    updates.append((name, share_form, paid, tbal, year, int(p)))
 
-            # Bulk update paid/balance for current year
+            # Update each changed pass directly; avoids selecting every row ID first.
             if updates:
-                sql = "UPDATE farmers_data SET name=?, share=?, paid=?, balance=? WHERE id=?"
+                sql = """UPDATE farmers_data
+                         SET name=?, share=?, paid=?, balance=?
+                         WHERE year=? AND pass=?"""
                 cursor.executemany(sql, updates)
 
             # Propagate name/share to ALL years for each affected pass
@@ -1517,7 +1656,7 @@ def dataeditup():
     else:
         with get_db() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM farmers_data WHERE year=?", (y,))
+            cursor.execute("SELECT * FROM farmers_data WHERE year=? ORDER BY id", (y,))
             b = [dict_from_row(row) for row in cursor.fetchall()]
 
             # Collect all updates for bulk operation
@@ -1798,7 +1937,7 @@ def yearsup():
             last_year = last_year_row['years']
 
             cursor.execute(
-                "SELECT * FROM farmers_data WHERE year=?",
+                "SELECT * FROM farmers_data WHERE year=? ORDER BY id",
                 (last_year,)
             )
             myresult = [dict_from_row(row) for row in cursor.fetchall()]
@@ -1931,26 +2070,21 @@ def datacorrection():
 
     with get_db() as conn:
         cursor = conn.cursor()
-        # Get distinct passes for the year
+        # One ordered read replaces the previous query-per-pass loop.
         cursor.execute(
-            "SELECT DISTINCT pass FROM farmers_data WHERE year=?",
+            "SELECT id, pass FROM farmers_data WHERE year=? ORDER BY pass, id",
             (year,)
         )
-        passes = [dict_from_row(row) for row in cursor.fetchall()]
+        year_records = cursor.fetchall()
 
-        # Prepare bulk update for first and count fields
+        # Preserve the same lowest-id first-record and per-pass count behavior.
         values = []
-        for pass_data in passes:
-            cursor.execute(
-                "SELECT id FROM farmers_data WHERE pass=? AND year=? ORDER BY id",
-                (pass_data['pass'], year)
-            )
-            b = [dict_from_row(row) for row in cursor.fetchall()]
-
-            for idx, k in enumerate(b):
+        for _, grouped_records in groupby(year_records, key=lambda row: row['pass']):
+            pass_records = list(grouped_records)
+            for idx, record in enumerate(pass_records):
                 first = 1 if idx == 0 else 0
-                count = len(b) if first == 1 else 0
-                values.append((first, count, k['id']))
+                count = len(pass_records) if first == 1 else 0
+                values.append((first, count, record['id']))
 
         # Bulk update
         if values:
@@ -2012,34 +2146,46 @@ Also add at the very top of main.py (with other imports):
 """
 
 from collections import defaultdict
-
-
-def _to_real_acres(val):
-    """
-    Convert the app's field-format value to real decimal acres.
-    Format stored: integer part = acres, two-decimal digits = guntes
-    40 guntes = 1 acre
-    Examples:
-      2.30  →  2 acres 30 guntes  →  2 + 30/40 = 2.750 acres
-      1.10  →  1 acre  10 guntes  →  1 + 10/40 = 1.250 acres
-      0.20  →  0 acres 20 guntes  →  0 + 20/40 = 0.500 acres
-    """
-    if not val:
-        return 0.0
-    try:
-        val = float(val)
-        if val <= 0:
-            return 0.0
-        acres  = int(val)
-        guntes = round((val - acres) * 100)   # e.g. 0.30 → 30
-        return acres + (guntes / 40.0)
-    except (TypeError, ValueError):
-        return 0.0
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
 
 # ──────────────────────────────────────────────────────
 # 1. Year-wise Paid Amount  (bar + trend line)
 # ──────────────────────────────────────────────────────
+def _area_to_guntes(value):
+    """Convert stored Acre.Gunte notation to an integer Gunte total."""
+    if value in (None, ''):
+        return 0
+
+    try:
+        area = Decimal(str(value).strip())
+    except (InvalidOperation, TypeError, ValueError):
+        return 0
+
+    if area <= 0:
+        return 0
+
+    acres = int(area)
+    guntes = int(
+        ((area - Decimal(acres)) * 100).quantize(
+            Decimal('1'), rounding=ROUND_HALF_UP
+        )
+    )
+    return (acres * 40) + guntes
+
+
+def _guntes_to_area(total_guntes):
+    """Return normalized Acre/Gunte components and a display value."""
+    total_guntes = max(0, int(total_guntes or 0))
+    acres, guntes = divmod(total_guntes, 40)
+    return {
+        'acres': acres,
+        'guntes': guntes,
+        'total_guntes': total_guntes,
+        'display': f'{acres} Acre {guntes} Gunte',
+    }
+
+
 @app.route('/api/chart/paid-by-year')
 def api_paid_by_year():
     """SUM(paid) grouped by last 4 financial years (joined table) where first=1."""
@@ -2086,16 +2232,15 @@ def api_crops_area():
     try:
         with get_db() as conn:
             cursor = conn.cursor()
-            latest_years = latest_financial_years(cursor, limit=1)
+            latest_years = latest_farmer_data_years(cursor, limit=1)
             if not latest_years:
-                return jsonify({'labels': [], 'values': [], 'years': []})
+                return jsonify({'labels': [], 'values': [], 'years': [], 'year': None})
 
             placeholders = ','.join('?' for _ in latest_years)
             cursor.execute(f"""
                 SELECT batha, kabu, thota, crop1, area1, crop2, area2
                 FROM   farmers_data
-                WHERE  first = 1
-                  AND  year IN ({placeholders})
+                WHERE  year IN ({placeholders})
             """, latest_years)
             rows = cursor.fetchall()
 
@@ -2106,41 +2251,47 @@ def api_crops_area():
             'thota', 'tota',  'garden'
         }
 
-        total_batha = 0.0
-        total_kabu  = 0.0
-        total_thota = 0.0
-        total_other = 0.0
+        # Aggregate in Gunte (40 Gunte = 1 Acre), never by decimal addition.
+        total_batha = 0
+        total_kabu  = 0
+        total_thota = 0
+        total_other = 0
 
         for row in rows:
-            total_batha += _to_real_acres(row['batha'])
-            total_kabu  += _to_real_acres(row['kabu'])
-            total_thota += _to_real_acres(row['thota'])
+            total_batha += _area_to_guntes(row['batha'])
+            total_kabu  += _area_to_guntes(row['kabu'])
+            total_thota += _area_to_guntes(row['thota'])
 
             # crop1 / area1
             c1 = (row['crop1'] or '').strip().lower()
-            a1 = _to_real_acres(row['area1'])
+            a1 = _area_to_guntes(row['area1'])
             if a1 > 0 and c1 not in main_crop_names:
                 total_other += a1
 
             # crop2 / area2
             c2 = (row['crop2'] or '').strip().lower()
-            a2 = _to_real_acres(row['area2'])
+            a2 = _area_to_guntes(row['area2'])
             if a2 > 0 and c2 not in main_crop_names:
                 total_other += a2
 
         crop_data = [
-            ('ಭತ್ತ',  round(total_batha, 3)),
-            ('ಕಬ್ಬು', round(total_kabu,  3)),
-            ('ತೋಟ',   round(total_thota, 3)),
-            ('ಇತರೆ',  round(total_other, 3)),
+            ('ಭತ್ತ', total_batha),
+            ('ಕಬ್ಬು', total_kabu),
+            ('ತೋಟ', total_thota),
+            ('ಇತರೆ', total_other),
         ]
 
         labels = [c[0] for c in crop_data if c[1] > 0]
         values = [c[1] for c in crop_data if c[1] > 0]
+        areas = [_guntes_to_area(c[1]) for c in crop_data if c[1] > 0]
 
         return jsonify({
             'labels': labels,
+            # Values use the integer base unit; clients should display areas below.
             'values': values,
+            'areas': areas,
+            'formatted_values': [area['display'] for area in areas],
+            'unit': 'gunte',
             'years': latest_years,
             'year': latest_years[0]
         })

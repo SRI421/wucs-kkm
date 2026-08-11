@@ -425,6 +425,11 @@
         <a class="hbtn adm" href="/dataindex"  onclick="showLoader()">
           🗄️ <span data-en="Print Full Database" data-kn="ಸಂಪೂರ್ಣ ಡೇಟಾಬೇಸ್ ಮುದ್ರಣ">Print Full Database</span>
         </a>
+        {% if current_user and current_user.is_super_user %}
+        <a class="hbtn adm" href="{{ url_for('users.index_view') }}" onclick="showLoader()">
+          👥 <span data-en="User Management" data-kn="ಬಳಕೆದಾರರ ನಿರ್ವಹಣೆ">User Management</span>
+        </a>
+        {% endif %}
       </div>
     </div>
   </section>
@@ -452,7 +457,7 @@
           <div class="cc-icon t"><i class="fa fa-pie-chart"></i></div>
           <div>
             <div class="cc-title" data-en="Crops Distribution by Area" data-kn="ಬೆಳೆ ವಿಸ್ತೀರ್ಣ ವಿತರಣೆ">Crops Distribution by Area</div>
-            <div class="cc-sub"  data-en="Total area per crop (acres)" data-kn="ಪ್ರತಿ ಬೆಳೆಗೆ ಒಟ್ಟು ಎಕರೆ">Total area per crop (acres)</div>
+            <div class="cc-sub" id="crop-sub" data-en="Acre–Gunte totals (40 Gunte = 1 Acre)" data-kn="ಎಕರೆ–ಗುಂಟೆ ಒಟ್ಟು (40 ಗುಂಟೆ = 1 ಎಕರೆ)">Acre–Gunte totals (40 Gunte = 1 Acre)</div>
           </div>
         </div>
         <div class="chart-wrap">
@@ -664,6 +669,15 @@ fetchChart('/api/chart/crops-area', function(d) {
   document.getElementById('cl2').style.display = 'none';
   var cv = document.getElementById('ch2');
   cv.style.display = 'block';
+  var cropSub = document.getElementById('crop-sub');
+  if (cropSub && d.year) {
+    var cropEn = 'Acre-Gunte totals - ' + d.year + ' (40 Gunte = 1 Acre)';
+    var cropKnBase = cropSub.getAttribute('data-kn') || 'Latest year';
+    var cropKn = d.year + ' · ' + cropKnBase;
+    cropSub.setAttribute('data-en', cropEn);
+    cropSub.setAttribute('data-kn', cropKn);
+    cropSub.textContent = (LANG === 'kn') ? cropKn : cropEn;
+  }
   charts.crops = { instance: null, knLabels: d.labels };
   charts.crops.instance = new Chart(cv, {
     type:'doughnut',
@@ -676,7 +690,9 @@ fetchChart('/api/chart/crops-area', function(d) {
       plugins:{
         legend:{ position:'bottom', labels:{ boxWidth:10, padding:8, font:{size:10.5} } },
         tooltip:{ callbacks:{ label:function(ctx){
-          return ' '+ctx.label+': '+Number(ctx.raw).toFixed(3)+' '+t('ಎಕರೆ');
+          var area = d.areas && d.areas[ctx.dataIndex];
+          var total = area ? area.display : (Number(ctx.raw)+' Gunte');
+          return ' '+ctx.label+': '+total;
         }}}
       }
     }

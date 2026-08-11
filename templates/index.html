@@ -459,7 +459,7 @@
           <div class="cc-icon t"><i class="fa fa-pie-chart"></i></div>
           <div>
             <div class="cc-title" data-en="Crops Distribution by Area" data-kn="ಬೆಳೆ ವಿಸ್ತೀರ್ಣ ವಿತರಣೆ">Crops Distribution by Area</div>
-            <div class="cc-sub"  data-en="Total area per crop (acres)" data-kn="ಪ್ರತಿ ಬೆಳೆಗೆ ಒಟ್ಟು ಎಕರೆ">Total area per crop (acres)</div>
+            <div class="cc-sub" id="crop-sub" data-en="Acre–Gunte totals (40 Gunte = 1 Acre)" data-kn="ಎಕರೆ–ಗುಂಟೆ ಒಟ್ಟು (40 ಗುಂಟೆ = 1 ಎಕರೆ)">Acre–Gunte totals (40 Gunte = 1 Acre)</div>
           </div>
         </div>
         <div class="chart-wrap">
@@ -764,6 +764,16 @@ fetchChart('/api/chart/crops-area', function(d) {
   var cv = document.getElementById('ch2');
   cv.style.display = 'block';
 
+  var cropSub = document.getElementById('crop-sub');
+  if (cropSub && d.year) {
+    var cropEn = 'Acre-Gunte totals - ' + d.year + ' (40 Gunte = 1 Acre)';
+    var cropKnBase = cropSub.getAttribute('data-kn') || 'Latest year';
+    var cropKn = d.year + ' · ' + cropKnBase;
+    cropSub.setAttribute('data-en', cropEn);
+    cropSub.setAttribute('data-kn', cropKn);
+    cropSub.textContent = (LANG === 'kn') ? cropKn : cropEn;
+  }
+
   charts.crops = { instance: null, knLabels: d.labels, values: d.values };
 
   charts.crops.instance = new Chart(cv, {
@@ -779,7 +789,9 @@ fetchChart('/api/chart/crops-area', function(d) {
         tooltip: {
           callbacks: {
             label: function(ctx) {
-              return ' ' + ctx.label + ': ' + Number(ctx.raw).toFixed(3) + ' ' + t('ಎಕರೆ');
+              var area = d.areas && d.areas[ctx.dataIndex];
+              var total = area ? area.display : (Number(ctx.raw) + ' Gunte');
+              return ' ' + ctx.label + ': ' + total;
             }
           }
         }
